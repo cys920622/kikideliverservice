@@ -1,3 +1,4 @@
+USE MySQL;
 set foreign_key_checks=0;
 
 drop table address;
