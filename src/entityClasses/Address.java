@@ -11,14 +11,7 @@ public class Address {
     private int house_num;
     private String PC;
 
-    public Address(String country, String province, String city, String street_name, int house_num, String pc) {
-        this.country = country;
-        this.province = province;
-        this.city = city;
-        this.street_name = street_name;
-        this.house_num = house_num;
-        PC = pc;
-    }
+    public Address() { }
 
 
     public String getCountry() {
