@@ -89,7 +89,7 @@ create table cash
 
 create table center
     (cID varchar(30) NOT NULL,
-    center_addr varchar(30),
+    center_addr varchar(100),
     PRIMARY KEY(cID)
     );
 
