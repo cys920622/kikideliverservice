@@ -30,7 +30,6 @@ public class AddressBean {
 //            ResultSet rs = stmt.executeQuery(sql);
 //            rowSet = new JdbcRowSetImpl(rs);
 
-
             Class.forName(JDBC_DRIVER);
             rowSet = new JdbcRowSetImpl();
             rowSet.setUrl(DB_URL);
