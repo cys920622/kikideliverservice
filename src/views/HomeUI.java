@@ -18,7 +18,7 @@ public class HomeUI extends JPanel {
 
     public HomeUI() {
         setBorder(new TitledBorder(
-                new EtchedBorder(), "Parcel details"));
+                new EtchedBorder(), "User List"));
         setLayout(new BorderLayout(5, 5));
         add(initButtons(), BorderLayout.CENTER);
     }
@@ -49,10 +49,11 @@ public class HomeUI extends JPanel {
                     //should probably be able to get back all the pID corresponding to dID
                     f.add(new DeliveryUI());
                     f.add(new ParcelUI());
+                    break;
                 case "Clerk":
-                    f.add(new DeliveryUI());
-                    f.add(new ParcelUI());
+                    new ClerkUI();
                     //need to also add cash/credit info
+                    break;
 
                 case "Deliverer":
                     //enters cID at the center its at to retrieve # of deliveries/parcels currently (aggregate)
@@ -60,7 +61,7 @@ public class HomeUI extends JPanel {
                     //can get any info of parcel
                     //can get any info of delivery
                     //given the dID can also check cash/credit to see if paid for??? no? yes?
-
+                    break;
             }
             f.setSize(600, 1200);
             f.setVisible(true);
