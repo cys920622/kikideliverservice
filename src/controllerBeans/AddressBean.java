@@ -47,7 +47,6 @@ public class AddressBean {
             } catch (SQLException e1) {
                 e1.printStackTrace();
             }
-
             e.printStackTrace();
         }
         return addr;

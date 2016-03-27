@@ -13,7 +13,6 @@ public class Address {
 
     public Address() { }
 
-
     public String getCountry() {
         return country;
     }
