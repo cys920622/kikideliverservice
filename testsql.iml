@@ -7,7 +7,7 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="module-library" exported="">
+    <orderEntry type="module-library">
       <library>
         <CLASSES>
           <root url="file://$USER_HOME$/Downloads/mysql-connector-java-5.0.8" />
@@ -20,5 +20,7 @@
       </library>
     </orderEntry>
     <orderEntry type="library" name="mysql-connector-java-5.0" level="project" />
+    <orderEntry type="library" exported="" name="mysql-connector-java-5.1" level="project" />
+    <orderEntry type="library" name="miglayout-4.0-swing" level="project" />
   </component>
 </module>

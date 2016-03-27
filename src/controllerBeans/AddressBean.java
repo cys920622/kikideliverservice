@@ -2,28 +2,44 @@ package controllerBeans;
 
 import com.sun.rowset.JdbcRowSetImpl;
 import entityClasses.Address;
+import views.AddressUI;
+
 import javax.sql.rowset.JdbcRowSet;
-import java.sql.SQLException;
+import javax.xml.transform.Result;
+import java.sql.*;
 
 /**
  * Created by danielchoi on 2016-03-25.
  */
 public class AddressBean {
     static final String JDBC_DRIVER = "com.mysql.jdbc.Driver";
-    static final String DB_URL = "jdbc:mysql://localhost:3306/MySQL";
+    static final String DB_URL = "jdbc:mysql://127.0.0.1:3306/Kiki's_DeliveryService";
     static final String USER = "root";
-    static final String PASS = "Iloveme711";
+    static final String PASS = "password";
     private JdbcRowSet rowSet = null;
 
     public AddressBean() {
+        Connection conn = null;
+        Statement stmt = null;
         try {
             Class.forName(JDBC_DRIVER);
-            rowSet = new JdbcRowSetImpl();
-            rowSet.setUrl(DB_URL);
-            rowSet.setUsername(USER);
-            rowSet.setPassword(PASS);
-            rowSet.setCommand("select * from Address");
-            rowSet.execute();
+            System.out.println("Connecting to database...");
+            conn = DriverManager.getConnection(DB_URL, USER, PASS);
+            System.out.println("Creating statement...");
+            stmt = conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
+            String sql;
+            sql = "Select * from address";
+            ResultSet rs = stmt.executeQuery(sql);
+            rowSet = new JdbcRowSetImpl(rs);
+
+
+//            Class.forName(JDBC_DRIVER);
+//            rowSet = new JdbcRowSetImpl();
+//            rowSet.setUrl(DB_URL);
+//            rowSet.setUsername(USER);
+//            rowSet.setPassword(PASS);
+//            rowSet.setCommand("Select * from address");
+//            rowSet.execute();
         } catch (ClassNotFoundException | SQLException e) {
             e.printStackTrace();
         }
@@ -53,8 +69,26 @@ public class AddressBean {
         return addr;
     }
 
-    public Address update (Address addr) {
+    public Address update (Address addr, String pc, int house_num) {
         try {
+//            rowSet.beforeFirst();
+//            System.out.println("hi");
+//            while (rowSet!=null) {
+//                System.out.println("hi2");
+//                if (addr.getPC().equals(pc) && addr.getHouse_num()==house_num) {
+//                    System.out.println(addr.getPC()+ " " + addr.getHouse_num() + " " + pc + " " + house_num);
+//                    rowSet.updateString("country", addr.getCountry());
+//                    rowSet.updateString("province", addr.getProvince());
+//                    rowSet.updateString("city", addr.getCity());
+//                    rowSet.updateString("street_name", addr.getStreet_name());
+//                    rowSet.updateInt("house_num", addr.getHouse_num());
+//                    rowSet.updateString("PC", addr.getPC());
+//                    rowSet.updateRow();
+//                    rowSet.moveToCurrentRow();
+//                   break;
+//                }
+//                else rowSet.next();
+//            }
             rowSet.updateString("country", addr.getCountry());
             rowSet.updateString("province", addr.getProvince());
             rowSet.updateString("city", addr.getCity());

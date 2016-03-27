@@ -1,4 +1,5 @@
 import views.AddressUI;
+import views.ParcelUI;
 
 import javax.swing.*;
 import java.awt.*;
@@ -12,7 +13,8 @@ public class AppMain {
         f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         f.getContentPane().setLayout(new FlowLayout(FlowLayout.CENTER));
         f.getContentPane().add(new AddressUI());
-        f.setSize(600, 350);
+        f.getContentPane().add(new ParcelUI());
+        f.setSize(600, 700);
         f.setVisible(true);
     }
 }
