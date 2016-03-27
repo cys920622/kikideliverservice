@@ -20,17 +20,24 @@ import java.sql.*;
  */
 public class AskForCentreUI extends JPanel{
     private JTextField cIDField = new JTextField(30);
+    private JTextField center_addrField = new JTextField(50);
 
     private JButton submitButton = new JButton("Submit");
 
     private CenterBean bean = new CenterBean();
+
+    private JTable initTable() {
+        return bean.makeTable();
+    }
 
     public AskForCentreUI() {
         setBorder(new TitledBorder(
                 new EtchedBorder(), "Centre ID"
         ));
         setLayout(new BorderLayout(5, 5));
+        add(initFields(), BorderLayout.NORTH);
         add(initButtons(), BorderLayout.CENTER);
+        add(initTable(), BorderLayout.SOUTH);
     }
 
     private JPanel initButtons() {
@@ -45,38 +52,40 @@ public class AskForCentreUI extends JPanel{
         panel.setLayout(new MigLayout());
         panel.add(new JLabel("Center ID"), "align label");
         panel.add(cIDField, "wrap");
+        panel.add(new JLabel("Center Address"), "align label");
+        panel.add(center_addrField, "wrap");
         return panel;
     }
 
     private Center getFieldData() {
         Center c = new Center();
         c.setcID(cIDField.getText());
+        c.setCenter_addr(center_addrField.getText());
         return c;
     }
 
     private void setFieldData(Center c) {
         cIDField.setText(c.getcID());
+        center_addrField.setText(c.getCenter_addr());
     }
 
     private boolean isEmptyFieldData() {
-        return (cIDField.getText().trim().isEmpty());
+        return (cIDField.getText().trim().isEmpty()
+        && center_addrField.getText().trim().isEmpty());
     }
 
     private class ButtonHandler implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
-            JFrame f = new JFrame();
-            Center c = getFieldData();
             switch (e.getActionCommand()) {
                 case "Submit":
                     if (isEmptyFieldData()) {
                         JOptionPane.showMessageDialog(null,
                                 "Please enter a center ID");
                     }
-                    if (bean.submit(c) != null) {
-                        f.add(new DeliveryUI());
+                    initTable();
+                    }
                     }
             }
 
             }
-        }

@@ -2,7 +2,11 @@ package controllerBeans;
 
 import com.sun.rowset.JdbcRowSetImpl;
 import entityClasses.Center;
+import entityClasses.Parcel;
 import javax.sql.rowset.JdbcRowSet;
+import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
+import java.sql.*;
 import java.sql.SQLException;
 
 /**
@@ -15,21 +19,47 @@ public class CenterBean {
     static final String PASS = "Iloveme711";
     private JdbcRowSet rowSet = null;
 
+    private Connection conn;
+    private Statement stmt;
+    private ResultSet rs;
+
     public CenterBean() {
         try {
             Class.forName(JDBC_DRIVER);
-            rowSet = new JdbcRowSetImpl();
-            rowSet.setUrl(DB_URL);
-            rowSet.setUsername(USER);
-            rowSet.setPassword(PASS);
-            rowSet.setCommand("select * from center");
-            rowSet.execute();
+//            rowSet = new JdbcRowSetImpl();
+//            rowSet.setUrl(DB_URL);
+//            rowSet.setUsername(USER);
+//            rowSet.setPassword(PASS);
+//            rowSet.setCommand("select * from center" +
+//            "order by first asc");
+//            rowSet.execute();
+
+            conn = DriverManager.getConnection(DB_URL, USER, PASS);
+            stmt = conn.createStatement();
+            String sql = "SELECT cID, center_addr, pid FROM Center natural join Parcel ORDER BY cID";
+            rs = stmt.executeQuery(sql);
         } catch (ClassNotFoundException | SQLException e) {
             e.printStackTrace();
         }
     }
 
-    public Center create (Center ctr) {
+    public JTable makeTable() {
+        DefaultTableModel model = new DefaultTableModel(new String[]{"Center ID",
+                "Center Address", "Parcel ID"}, 0);
+        try {
+            while (rs.next()) {
+                String cid = rs.getString("cID");
+                String ca = rs.getString("center_addr");
+                String pid = rs.getString("pID");
+                model.addRow(new Object[]{cid, ca, pid});
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return new JTable(model);
+    }
+
+    public Center create(Center ctr) {
         try {
             rowSet.moveToInsertRow();
             rowSet.updateString("cID", ctr.getcID());
@@ -48,7 +78,7 @@ public class CenterBean {
         return ctr;
     }
 
-    public Center update (Center ctr) {
+    public Center update(Center ctr) {
         try {
             rowSet.updateString("cID", ctr.getcID());
             rowSet.updateString("center_addr", ctr.getCenter_addr());
@@ -91,11 +121,19 @@ public class CenterBean {
         return ctr;
     }
 
-    public Center submit(String cID) {
+    public void submit(Center ctr) {
         try {
-            if rowSet.getString("cID") == cID {
-
+            if (rowSet.getString("cID") == cID) {
+                makeTable();
             }
+        } catch (SQLException e) {
+            try {
+                rowSet.rollback();
+            } catch (SQLException e1) {
+                e1.printStackTrace();
+            }
+            e.printStackTrace();
         }
     }
 }
+
