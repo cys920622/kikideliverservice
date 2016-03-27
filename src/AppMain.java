@@ -1,6 +1,7 @@
 import views.AddressUI;
 import views.ClientsUI;
 import views.ParcelUI;
+import views.DeliveryUI;
 
 import javax.swing.*;
 import java.awt.*;
@@ -16,7 +17,8 @@ public class AppMain {
         f.getContentPane().add(new AddressUI());
         f.getContentPane().add(new ParcelUI());
         f.getContentPane().add(new ClientsUI());
-        f.setSize(600, 1000);
+        f.getContentPane().add(new DeliveryUI());
+        f.setSize(600, 1300);
         f.setVisible(true);
     }
 }
