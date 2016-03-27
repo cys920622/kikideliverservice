@@ -1,5 +1,6 @@
 package views;
 
+import javax.management.Query;
 import javax.swing.*;
 import javax.swing.border.EtchedBorder;
 import javax.swing.border.TitledBorder;
@@ -51,11 +52,13 @@ public class HomeUI extends JPanel {
                     f.add(new DeliveryUI());
                     f.add(new ParcelUI());
                     break;
+
                 case "Clerk":
-                    new ClerkUI();
+                    f.add(new ClerkUI());
+                    break;
 
                     //need to also add cash/credit info
-                    break;
+
 
                 case "Deliverer":
                     //enters cID at the center its at to retrieve # of deliveries/parcels currently (aggregate)
