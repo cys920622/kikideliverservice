@@ -37,7 +37,12 @@ public class AddressUI extends JPanel {
         setLayout(new BorderLayout(5, 5));
         add(initFields(), BorderLayout.NORTH);
         add(initButtons(), BorderLayout.CENTER);
+        add(initTable(), BorderLayout.SOUTH);
         house_numField.setText(String.valueOf(0));
+    }
+
+    private JTable initTable() {
+        return bean.makeTable();
     }
 
     private JPanel initButtons() {

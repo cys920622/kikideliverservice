@@ -5,6 +5,8 @@ import entityClasses.Address;
 import views.AddressUI;
 
 import javax.sql.rowset.JdbcRowSet;
+import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 import javax.xml.transform.Result;
 import java.sql.*;
 
@@ -18,18 +20,12 @@ public class AddressBean {
     static final String PASS = "Iloveme711";
     private JdbcRowSet rowSet = null;
 
+    private Connection conn;
+    private Statement stmt;
+    private ResultSet rs;
+
     public AddressBean() {
         try {
-//            Class.forName(JDBC_DRIVER);
-//            System.out.println("Connecting to database...");
-//            Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
-//            System.out.println("Creating statement...");
-//            Statement stmt = conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
-//            String sql;
-//            sql = "Select * from address";
-//            ResultSet rs = stmt.executeQuery(sql);
-//            rowSet = new JdbcRowSetImpl(rs);
-
             Class.forName(JDBC_DRIVER);
             rowSet = new JdbcRowSetImpl();
             rowSet.setUrl(DB_URL);
@@ -37,9 +33,37 @@ public class AddressBean {
             rowSet.setPassword(PASS);
             rowSet.setCommand("Select * from address");
             rowSet.execute();
+
+//            Class.forName(JDBC_DRIVER);
+//            System.out.println("Connecting to database...");
+            conn = DriverManager.getConnection(DB_URL, USER, PASS);
+            System.out.println("Creating statement...");
+//            Statement stmt = conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
+            stmt = conn.createStatement();
+            String sql = "Select * from address";
+            rs = stmt.executeQuery(sql);
+//            rowSet = new JdbcRowSetImpl(rs);
         } catch (ClassNotFoundException | SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    public JTable makeTable () {
+        DefaultTableModel model = new DefaultTableModel(new String[]{"Country", "Province",
+        "City", "Street name", "Postal code"}, 0);
+        try {
+            while (rs.next()) {
+                String c = rs.getString("country");
+                String p = rs.getString("province");
+                String ci = rs.getString("city");
+                String sn = rs.getString("street_name");
+                String pc = rs.getString("PC");
+                model.addRow(new Object[]{c,p,ci,sn,pc});
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return new JTable(model);
     }
 
     public Address create (Address addr) {
