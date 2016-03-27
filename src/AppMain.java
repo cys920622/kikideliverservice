@@ -14,6 +14,10 @@ public class AppMain {
         JFrame f = new JFrame();
         f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         f.getContentPane().setLayout(new FlowLayout(FlowLayout.CENTER));
+        //
+//        f.getContentPane().add(new HomeUI());
+
+
         f.getContentPane().add(new AddressUI());
         f.getContentPane().add(new ParcelUI());
         f.getContentPane().add(new ClientsUI());
