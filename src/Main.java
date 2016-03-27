@@ -4,11 +4,11 @@ import java.sql.*;
 public class Main {
     // JDBC driver name and database URL
     static final String JDBC_DRIVER = "com.mysql.jdbc.Driver";
-    static final String DB_URL = "jdbc:mysql://127.0.01:3306/Kiki's_DeliveryService";
+    static final String DB_URL = "jdbc:mysql://localhost:3306/Kiki's_DeliveryService";
 
     //  Database credentials
     static final String USER = "root";
-    static final String PASS = "password";
+    static final String PASS = "Iloveme711";
 
     public static void main(String[] args) {
         Connection conn = null;
