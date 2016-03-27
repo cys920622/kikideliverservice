@@ -40,7 +40,7 @@ public class HomeUI extends JPanel {
         @Override
         public void actionPerformed(ActionEvent e) {
             JFrame f = new JFrame();
-            f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            f.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
             f.getContentPane().setLayout(new FlowLayout(FlowLayout.CENTER));
             switch (e.getActionCommand()) {
                 case "Client":
@@ -67,6 +67,8 @@ public class HomeUI extends JPanel {
                     //can get any info of delivery
                     //given the dID can also check cash/credit to see if paid for??? no? yes?
                     f.add(new AskForCentreUI());
+                    f.setSize(1000, 500);
+
                     break;
 
             }

@@ -21,7 +21,7 @@ import java.sql.*;
 public class AskForCentreUI extends JPanel{
     public static JPanel panel;
     private JTextField cIDField = new JTextField(30);
-    private JTextField center_addrField = new JTextField(50);
+    private JTextField center_addrField = new JTextField(40);
 
     private JButton submitButton = new JButton("Submit");
 
@@ -35,7 +35,7 @@ public class AskForCentreUI extends JPanel{
         setLayout(new BorderLayout(5, 5));
         add(initFields(), BorderLayout.NORTH);
         add(initButtons(), BorderLayout.EAST);
-        JTable table = initTable("SELECT * FROM center natural join parcel ORDER BY cID");
+        JTable table = initTable("SELECT * FROM center ORDER BY cID");
         table.setAutoCreateRowSorter(true);
         add(new JScrollPane(table), BorderLayout.CENTER);
     }
@@ -83,7 +83,8 @@ public class AskForCentreUI extends JPanel{
         @Override
         public void actionPerformed(ActionEvent e) {
             JFrame f = new JFrame();
-            f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            JDialog d = new JDialog();
+            f.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
             f.getContentPane().setLayout(new FlowLayout(FlowLayout.CENTER));
 
             switch (e.getActionCommand()) {
@@ -91,17 +92,20 @@ public class AskForCentreUI extends JPanel{
                     if (isEmptyFieldData()) {
                         JOptionPane.showMessageDialog(null,
                                 "Please enter a center ID");
-                    }
-                    System.out.println("center ID = " + cIDField.getText());
-                    JTable submittable = initTable("select cID, pID from center natural " +
-                            "join parcel where cID = '" + cIDField.getText() + "'");
-                    JScrollPane scrollPane = new JScrollPane(submittable);
-                    f.add(scrollPane, BorderLayout.SOUTH);
-                    f.setSize(300, 150);
-                    f.setVisible(true);
+                    } else {
+                        System.out.println("center ID = " + cIDField.getText());
+                        //http://www.java2s.com/Tutorial/Java/0240__Swing/CreatingaJTable.htm
+                        JTable submittable = initTable("select cID, pID from center natural " +
+                                "join parcel where cID = '" + cIDField.getText() + "'");
+                        JScrollPane scrollPane = new JScrollPane(submittable);
+                        JButton back = new JButton("Back");
+                        f.add(scrollPane, BorderLayout.SOUTH);
+                        f.setLocation(100,100);
+                        f.setSize(500, 400);
+                        f.setVisible(true);
 //                    JTable submittable = initTable("select cID, pID from center natural " +
 //                        "join parcel where cID = '" + cIDField.getText() + "'");
-
+                    }
             }
         }
     }
