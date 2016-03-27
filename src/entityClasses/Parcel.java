@@ -10,6 +10,8 @@ public class Parcel {
     private float height;
     private float weight;
     private int dID;
+    private String cID;
+    private String next_cID;
 
     public Parcel() { }
 
@@ -52,4 +54,13 @@ public class Parcel {
     public void setdID(int dID) {
         this.dID = dID;
     }
+
+    public String getcID() {return cID;}
+
+    public void setcID(String cID) {this.cID = cID;}
+
+    public String getNextcID() {return next_cID;}
+
+    public void setNextcID(String next_cID) {this.next_cID = next_cID;}
+
 }

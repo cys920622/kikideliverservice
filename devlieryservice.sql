@@ -24,6 +24,8 @@ create table parcel
 	width float,
 	weight float,
     height float,
+    cID varchar(30),
+    next_cID varchar(30),
 	dID int(6) not null,
 	PRIMARY KEY(pID, dID),
 	FOREIGN KEY(dID) REFERENCES delivery(dID)
@@ -84,6 +86,12 @@ create table cash
 		ON DELETE NO ACTION
 		ON UPDATE CASCADE
 	);
+
+create table center
+    (cID varchar(30) NOT NULL,
+    center_addr varchar(30),
+    PRIMARY KEY(cID)
+    );
 
 
 insert into address
@@ -182,31 +190,47 @@ insert into credit_card
 		'444' , 'Yoony Ok' , '10/17' , 'American Express' , '567890');
 
 insert into parcel
-	values ('123125' , '23.4' , '34.6' , '12.3' , '0.34' , '342350');
+	values ('123125' , '23.4' , '34.6' , '12.3' , '0.34' , 'ubc', 'toronto3', '342350');
 
 insert into parcel
-	values ('342353' , '12.0' , '13.2' , '20.4' , '0.23' , '193030');
+	values ('342353' , '12.0' , '13.2' , '20.4' , '0.23' , 'coquitlam', 'ubc', '193030');
 
 insert into parcel
-	values ('323' , '14.2' , '15.3' , '8.0' , '0.11' , '383899');
+	values ('323' , '14.2' , '15.3' , '8.0' , '0.11' , 'toronto3', 'vancouver1', '383899');
 
 insert into parcel
-	values ('4355' , '34.0' , '20.4' , '15.3' , '1.00' , '301274');
+	values ('4355' , '34.0' , '20.4' , '15.3' , '1.00' ,'burnabysouth', 'burnabynorth', '301274');
 
 insert into parcel
-	values ('234' , '23.5' , '18.3' , '20.3' , '2.32' , '394857');
+	values ('234' , '23.5' , '18.3' , '20.3' , '2.32' , 'toronto3', 'coquitlam', '394857');
 
 insert into parcel
-	values ('564738' , '14.2' , '54.2' , '7.41' , '0.98' , '567890');
+	values ('564738' , '14.2' , '54.2' , '7.41' , '0.98' , 'ubc', 'sfu', '567890');
 
 insert into parcel
-	values ('901234' , '43.7' , '54.2' , '67.3' , '8.34' , '456789');
+	values ('901234' , '43.7' , '54.2' , '67.3' , '8.34' , 'burnabysouth', 'burnabynorth', '456789');
 
 insert into parcel
-	values ('345671' , '57.1' , '52.9' , '98.4' , '6.32' , '345678');
+	values ('345671' , '57.1' , '52.9' , '98.4' , '6.32' , 'toronto3', 'coquitlam', '345678');
 
 insert into parcel
-	values ('092874' , ' 65.9' , '82.6' , '65.2' , '8.30' , '234567');
+	values ('092874' , ' 65.9' , '82.6' , '65.2' , '8.30' , 'surrey3', 'surrey2', '234567');
 
 insert into parcel
-	values ('234875' , '45.6' , '76.2' , '65.9' , '3.48' , '123456');
+	values ('234875' , '45.6' , '76.2' , '65.9' , '3.48' , 'portcoquitlam', 'langley', '123456');
+
+insert into center
+	values ('portcoquitlam', '234 seward ave. port coquitlam v3r 5y7');
+
+insert into center
+	values ('ubc', '3334 university blvd. vancouver v6t 2l4');
+
+insert into center
+	values ('sfu', '1113 simple st. burnaby y3u 8r2');
+
+insert into center
+	values ('burnabysouth', '189 sandy st. burnaby 7h9 9e9');
+
+insert into center
+	values ('burnabynorth', '454 deer lake pkwy. burnaby 3u3 8g0');
+

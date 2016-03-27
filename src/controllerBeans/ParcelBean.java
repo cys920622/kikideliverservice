@@ -50,6 +50,8 @@ public class ParcelBean {
             rowSet.updateFloat("height", parcel.getHeight());
             rowSet.updateFloat("weight", parcel.getWeight());
             rowSet.updateInt("dID", parcel.getdID());
+            rowSet.updateString("cID", parcel.getcID());
+            rowSet.updateString("next_cID", parcel.getNextcID());
             rowSet.insertRow();
             rowSet.moveToCurrentRow();
         } catch (SQLException e) {
@@ -73,6 +75,8 @@ public class ParcelBean {
             rowSet.updateFloat("height", parcel.getHeight());
             rowSet.updateFloat("weight", parcel.getWeight());
             rowSet.updateInt("dID", parcel.getdID());
+            rowSet.updateString("cID", parcel.getcID());
+            rowSet.updateString("next_cID", parcel.getNextcID());
             rowSet.updateRow();
             rowSet.moveToCurrentRow();
         } catch (SQLException e) {
@@ -110,6 +114,8 @@ public class ParcelBean {
             parcel.setHeight(rowSet.getFloat("height"));
             parcel.setWeight(rowSet.getInt("weight"));
             parcel.setdID(rowSet.getInt("dID"));
+            parcel.setcID(rowSet.getString("cID"));
+            parcel.setNextcID(rowSet.getString("next_cID"));
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -126,6 +132,8 @@ public class ParcelBean {
             parcel.setHeight(rowSet.getFloat("height"));
             parcel.setWeight(rowSet.getInt("weight"));
             parcel.setdID(rowSet.getInt("dID"));
+            parcel.setcID(rowSet.getString("cID"));
+            parcel.setNextcID(rowSet.getString("next_cID"));
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -144,6 +152,8 @@ public class ParcelBean {
             parcel.setHeight(rowSet.getFloat("height"));
             parcel.setWeight(rowSet.getInt("weight"));
             parcel.setdID(rowSet.getInt("dID"));
+            parcel.setcID(rowSet.getString("cID"));
+            parcel.setNextcID(rowSet.getString("next_cID"));
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -162,6 +172,8 @@ public class ParcelBean {
             parcel.setHeight(rowSet.getFloat("height"));
             parcel.setWeight(rowSet.getInt("weight"));
             parcel.setdID(rowSet.getInt("dID"));
+            parcel.setcID(rowSet.getString("cID"));
+            parcel.setNextcID(rowSet.getString("next_cID"));
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -178,6 +190,8 @@ public class ParcelBean {
             parcel.setHeight(rowSet.getFloat("height"));
             parcel.setWeight(rowSet.getInt("weight"));
             parcel.setdID(rowSet.getInt("dID"));
+            parcel.setcID(rowSet.getString("cID"));
+            parcel.setNextcID(rowSet.getString("next_cID"));
         } catch (SQLException e) {
             e.printStackTrace();
         }

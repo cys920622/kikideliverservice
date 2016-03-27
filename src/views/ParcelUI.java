@@ -21,6 +21,8 @@ public class ParcelUI extends JPanel{
     private JTextField heightField = new JTextField(10);
     private JTextField weightField = new JTextField(10);
     private JTextField dIDField = new JTextField(6);
+    private JTextField cIDField = new JTextField(6);
+    private JTextField next_cIDField = new JTextField(6);
 
     private JButton createButton = new JButton("New...");
     private JButton updateButton = new JButton("Update");
@@ -44,6 +46,8 @@ public class ParcelUI extends JPanel{
         heightField.setText(String.valueOf(0.0));
         weightField.setText(String.valueOf(0.0));
         dIDField.setText(String.valueOf(0));
+        cIDField.setText("");
+        next_cIDField.setText("");
 
 
     }
@@ -81,6 +85,10 @@ public class ParcelUI extends JPanel{
         panel.add(weightField, "wrap");
         panel.add(new JLabel("Delivery ID"), "align label");
         panel.add(dIDField, "wrap");
+        panel.add(new JLabel("Center ID"), "align label");
+        panel.add(dIDField, "wrap");
+        panel.add(new JLabel("Next Center ID"), "align label");
+        panel.add(dIDField, "wrap");
         return panel;
     }
 
@@ -92,6 +100,8 @@ public class ParcelUI extends JPanel{
         p.setHeight(Float.parseFloat(heightField.getText()));
         p.setWeight(Float.parseFloat(weightField.getText()));
         p.setdID(Integer.parseInt(dIDField.getText()));
+        p.setcID(cIDField.getText());
+        p.setNextcID(next_cIDField.getText());
         return p;
     }
 
@@ -102,6 +112,8 @@ public class ParcelUI extends JPanel{
         heightField.setText(String.valueOf(p.getHeight()));
         weightField.setText(String.valueOf(p.getWeight()));
         dIDField.setText(String.valueOf(p.getdID()));
+        cIDField.setText(p.getcID());
+        next_cIDField.setText(p.getNextcID());
     }
 
     private boolean isEmptyFieldData() {
@@ -110,7 +122,9 @@ public class ParcelUI extends JPanel{
                 && widthField.getText().trim().isEmpty()
                 && heightField.getText().trim().isEmpty()
                 && weightField.getText().trim().isEmpty()
-                && dIDField.getText().trim().isEmpty());
+                && dIDField.getText().trim().isEmpty()
+                && cIDField.getText().trim().isEmpty()
+                && next_cIDField.getText().trim().isEmpty());
     }
 
     private class ButtonHandler implements ActionListener {
@@ -138,6 +152,8 @@ public class ParcelUI extends JPanel{
                     p.setHeight(0);
                     p.setWeight(0);
                     p.setdID(0);
+                    p.setcID("");
+                    p.setNextcID("");
                     setFieldData(p);
                     createButton.setText("Save");
                     break;
