@@ -39,10 +39,10 @@ public class ParcelUI extends JPanel{
         add(initButtons(), BorderLayout.CENTER);
 
         pIDField.setText(String.valueOf(0));
-        lengthField.setText(String.valueOf(0));
-        widthField.setText(String.valueOf(0));
-        heightField.setText(String.valueOf(0));
-        weightField.setText(String.valueOf(0));
+        lengthField.setText(String.valueOf(0.0));
+        widthField.setText(String.valueOf(0.0));
+        heightField.setText(String.valueOf(0.0));
+        weightField.setText(String.valueOf(0.0));
         dIDField.setText(String.valueOf(0));
 
 
@@ -127,7 +127,7 @@ public class ParcelUI extends JPanel{
                         JOptionPane.showMessageDialog(null,
                                 "New Parcel " + String.valueOf(p.getpID()) +
                                         " was created for Delivery " + String.valueOf(p.getdID())
-                                        + " was updated.");
+                                        + " was created.");
                         createButton.setText("New...");
                         break;
                     }
@@ -141,6 +141,7 @@ public class ParcelUI extends JPanel{
                     setFieldData(p);
                     createButton.setText("Save");
                     break;
+
                 case "Update":
                     if (isEmptyFieldData()) {
                         JOptionPane.showMessageDialog(null,
@@ -163,7 +164,7 @@ public class ParcelUI extends JPanel{
                     JOptionPane.showMessageDialog(null,
                             "Parcel " + String.valueOf(p.getpID()) +
                                     " for Delivery " + String.valueOf(p.getdID())
-                                    + " was updated.");
+                                    + " was deleted.");
                     break;
                 case "First":
                     setFieldData(bean.moveFirst());

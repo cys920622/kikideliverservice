@@ -136,7 +136,7 @@ public class AddressUI extends JPanel {
                         JOptionPane.showMessageDialog(null,
                                 "Can't update empty record");
                     }
-                    if (bean.update(a, a.getPC(), a.getHouse_num()) != null) {
+                    if (bean.update(a) != null) {
                         JOptionPane.showMessageDialog(null,
                                 "Address at " + String.valueOf(a.getHouse_num())
                                         + " was updated.");

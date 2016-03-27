@@ -44,12 +44,12 @@ public class ParcelBean {
     public Parcel create (Parcel parcel) {
         try {
             rowSet.moveToInsertRow();
-            rowSet.updateInt("Parcel ID", parcel.getpID());
-            rowSet.updateFloat("Width", parcel.getWidth());
-            rowSet.updateFloat("Length", parcel.getLength());
-            rowSet.updateFloat("Height", parcel.getHeight());
-            rowSet.updateFloat("Weight", parcel.getWeight());
-            rowSet.updateInt("Delivery ID", parcel.getdID());
+            rowSet.updateInt("pID", parcel.getpID());
+            rowSet.updateFloat("width", parcel.getWidth());
+            rowSet.updateFloat("length", parcel.getLength());
+            rowSet.updateFloat("height", parcel.getHeight());
+            rowSet.updateFloat("weight", parcel.getWeight());
+            rowSet.updateInt("dID", parcel.getdID());
             rowSet.insertRow();
             rowSet.moveToCurrentRow();
         } catch (SQLException e) {
@@ -67,12 +67,12 @@ public class ParcelBean {
 
     public Parcel update (Parcel parcel) {
         try {
-            rowSet.updateInt("Parcel ID", parcel.getpID());
-            rowSet.updateFloat("Width", parcel.getWidth());
-            rowSet.updateFloat("Length", parcel.getLength());
-            rowSet.updateFloat("Height", parcel.getHeight());
-            rowSet.updateFloat("Weight", parcel.getWeight());
-            rowSet.updateInt("Delivery ID", parcel.getdID());
+            rowSet.updateInt("pID", parcel.getpID());
+            rowSet.updateFloat("width", parcel.getWidth());
+            rowSet.updateFloat("length", parcel.getLength());
+            rowSet.updateFloat("height", parcel.getHeight());
+            rowSet.updateFloat("weight", parcel.getWeight());
+            rowSet.updateInt("dID", parcel.getdID());
             rowSet.updateRow();
             rowSet.moveToCurrentRow();
         } catch (SQLException e) {

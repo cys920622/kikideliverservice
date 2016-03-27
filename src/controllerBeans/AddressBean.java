@@ -19,27 +19,25 @@ public class AddressBean {
     private JdbcRowSet rowSet = null;
 
     public AddressBean() {
-        Connection conn = null;
-        Statement stmt = null;
         try {
-            Class.forName(JDBC_DRIVER);
-            System.out.println("Connecting to database...");
-            conn = DriverManager.getConnection(DB_URL, USER, PASS);
-            System.out.println("Creating statement...");
-            stmt = conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
-            String sql;
-            sql = "Select * from address";
-            ResultSet rs = stmt.executeQuery(sql);
-            rowSet = new JdbcRowSetImpl(rs);
-
-
 //            Class.forName(JDBC_DRIVER);
-//            rowSet = new JdbcRowSetImpl();
-//            rowSet.setUrl(DB_URL);
-//            rowSet.setUsername(USER);
-//            rowSet.setPassword(PASS);
-//            rowSet.setCommand("Select * from address");
-//            rowSet.execute();
+//            System.out.println("Connecting to database...");
+//            Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
+//            System.out.println("Creating statement...");
+//            Statement stmt = conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
+//            String sql;
+//            sql = "Select * from address";
+//            ResultSet rs = stmt.executeQuery(sql);
+//            rowSet = new JdbcRowSetImpl(rs);
+
+
+            Class.forName(JDBC_DRIVER);
+            rowSet = new JdbcRowSetImpl();
+            rowSet.setUrl(DB_URL);
+            rowSet.setUsername(USER);
+            rowSet.setPassword(PASS);
+            rowSet.setCommand("Select * from address");
+            rowSet.execute();
         } catch (ClassNotFoundException | SQLException e) {
             e.printStackTrace();
         }
@@ -69,7 +67,7 @@ public class AddressBean {
         return addr;
     }
 
-    public Address update (Address addr, String pc, int house_num) {
+    public Address update (Address addr) {
         try {
 //            rowSet.beforeFirst();
 //            System.out.println("hi");
