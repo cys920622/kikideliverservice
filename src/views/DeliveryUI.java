@@ -1,7 +1,7 @@
 package views;
 
-import controllerBeans.AddressBean;
-import entityClasses.Address;
+import controllerBeans.DeliveryBean;
+import entityClasses.Delivery;
 import net.miginfocom.swing.MigLayout;
 
 import javax.swing.*;
@@ -12,15 +12,14 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 /**
- * Created by danielchoi on 2016-03-25.
+ * Created by danielchoi on 2016-03-26.
  */
-public class AddressUI extends JPanel {
-    private JTextField countryField = new JTextField(20);
-    private JTextField provinceField = new JTextField(2);
-    private JTextField cityField = new JTextField(20);
-    private JTextField street_nameField = new JTextField(30);
-    private JTextField house_numField = new JTextField(10);
-    private JTextField PCField = new JTextField(7);
+public class DeliveryUI extends JPanel {
+    private JTextField dIDField = new JTextField(6);
+    private JTextField typeField = new JTextField(20);
+    private JTextField statusField = new JTextField(20);
+    private JTextField sender_IDField = new JTextField(6);
+    private JTextField receiver_IDField = new JTextField(6);
 
     private JButton createButton = new JButton("New...");
     private JButton updateButton = new JButton("Update");
@@ -29,11 +28,11 @@ public class AddressUI extends JPanel {
     private JButton lastButton = new JButton("Last");
     private JButton nextButton = new JButton("Next");
 
-    private AddressBean bean = new AddressBean();
+    private DeliveryBean bean = new DeliveryBean();
 
-    public AddressUI() {
+    public DeliveryUI() {
         setBorder(new TitledBorder(
-                new EtchedBorder(), "Address details"));
+                new EtchedBorder(), "Delivery details"));
         setLayout(new BorderLayout(5, 5));
         add(initFields(), BorderLayout.NORTH);
         add(initButtons(), BorderLayout.CENTER);
@@ -60,74 +59,68 @@ public class AddressUI extends JPanel {
     private JPanel initFields() {
         JPanel panel = new JPanel();
         panel.setLayout(new MigLayout());
-        panel.add(new JLabel("Country"), "align label");
-        panel.add(countryField, "wrap");
-        panel.add(new JLabel("Province"), "align label");
-        panel.add(provinceField, "wrap");
-        panel.add(new JLabel("City"), "align label");
-        panel.add(cityField, "wrap");
-        panel.add(new JLabel("Street name"), "align label");
-        panel.add(street_nameField, "wrap");
-        panel.add(new JLabel("House number"), "align label");
-        panel.add(house_numField, "wrap");
-        panel.add(new JLabel("Postal code"), "align label");
-        panel.add(PCField, "wrap");
+        panel.add(new JLabel("Deliver ID"), "align label");
+        panel.add(dIDField, "wrap");
+        panel.add(new JLabel("Delivery type"), "align label");
+        panel.add(typeField, "wrap");
+        panel.add(new JLabel("Status"), "align label");
+        panel.add(statusField, "wrap");
+        panel.add(new JLabel("Sender ID"), "align label");
+        panel.add(sender_IDField, "wrap");
+        panel.add(new JLabel("Receiver ID"), "align label");
+        panel.add(receiver_IDField, "wrap");
         return panel;
     }
 
-    private Address getFieldData() {
-        Address a = new Address();
-        a.setCountry(countryField.getText());
-        a.setProvince(provinceField.getText());
-        a.setCity(cityField.getText());
-        a.setStreet_name(street_nameField.getText());
-        a.setHouse_num(Integer.parseInt(house_numField.getText()));
-        a.setPC(PCField.getText());
-        return a;
+    private Delivery getFieldData() {
+        Delivery d = new Delivery();
+        d.setdID(Integer.parseInt(dIDField.getText()));
+        d.setType(typeField.getText());
+        d.setStatus(statusField.getText());
+        d.setSender_ID(Integer.parseInt(sender_IDField.getText()));
+        d.setReceiver_ID(Integer.parseInt(receiver_IDField.getText()));
+        return d;
     }
 
-    private void setFieldData(Address a) {
-        countryField.setText(a.getCountry());
-        provinceField.setText(a.getProvince());
-        cityField.setText(a.getCity());
-        street_nameField.setText(a.getStreet_name());
-        house_numField.setText(String.valueOf(a.getHouse_num()));
-        PCField.setText(a.getPC());
+    private void setFieldData(Delivery d) {
+        dIDField.setText(String.valueOf(d.getdID()));
+        typeField.setText(d.getType());
+        statusField.setText(d.getStatus());
+        sender_IDField.setText(String.valueOf(d.getSender_ID()));
+        receiver_IDField.setText(String.valueOf(d.getReceiver_ID()));
     }
 
     private boolean isEmptyFieldData() {
-        return (countryField.getText().trim().isEmpty()
-                && provinceField.getText().trim().isEmpty()
-                && cityField.getText().trim().isEmpty()
-                && street_nameField.getText().trim().isEmpty()
-                && house_numField.getText().trim().isEmpty()
-                && PCField.getText().trim().isEmpty());
+        return (dIDField.getText().trim().isEmpty()
+                && typeField.getText().trim().isEmpty()
+                && statusField.getText().trim().isEmpty()
+                && sender_IDField.getText().trim().isEmpty()
+                && receiver_IDField.getText().trim().isEmpty());
     }
 
     private class ButtonHandler implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
-            Address a = getFieldData();
+            Delivery d = getFieldData();
             switch (e.getActionCommand()) {
                 case "Save":
                     if (isEmptyFieldData()) {
                         JOptionPane.showMessageDialog(null,
                                 "Cannot create empty record");
                     }
-                    if (bean.create(a) != null) {
+                    if (bean.create(d) != null) {
                         JOptionPane.showMessageDialog(null,
-                                "New address created at "+ String.valueOf(a.getHouse_num()));
+                                "New delivery created :"+ String.valueOf(d.getdID()));
                         createButton.setText("New...");
                         break;
                     }
                 case "New...":
-                    a.setCountry("");
-                    a.setProvince("");
-                    a.setCity("");
-                    a.setStreet_name("");
-                    a.setHouse_num(0);
-                    a.setPC("");
-                    setFieldData(a);
+                    d.setdID(0); //TODO: should use a counter here
+                    d.setType(""); //TODO: should use a radio button
+                    d.setStatus("");
+                    d.setSender_ID(0);
+                    d.setReceiver_ID(0);
+                    setFieldData(d);
                     createButton.setText("Save");
                     break;
                 case "Update":
@@ -135,9 +128,9 @@ public class AddressUI extends JPanel {
                         JOptionPane.showMessageDialog(null,
                                 "Can't update empty record");
                     }
-                    if (bean.update(a) != null) {
+                    if (bean.update(d) != null) {
                         JOptionPane.showMessageDialog(null,
-                                "Address at " + String.valueOf(a.getHouse_num())
+                                "Delivery " + String.valueOf(d.getdID())
                                         + " was updated.");
                     }
                     break;
@@ -146,10 +139,10 @@ public class AddressUI extends JPanel {
                         JOptionPane.showMessageDialog(null,
                                 "Can't delete empty record");
                     }
-                    a = bean.getCurrent();
+                    d = bean.getCurrent();
                     bean.delete();
                     JOptionPane.showMessageDialog(null,
-                            "Address at " + String.valueOf(a.getHouse_num())
+                            "Delivery " + String.valueOf(d.getdID())
                                     + " was deleted.");
                     break;
                 case "First":
@@ -169,5 +162,4 @@ public class AddressUI extends JPanel {
             }
         }
     }
-
 }

@@ -23,7 +23,7 @@ public class DeliveryBean {
             rowSet.setUrl(DB_URL);
             rowSet.setUsername(USER);
             rowSet.setPassword(PASS);
-            rowSet.setCommand("select * from Address");
+            rowSet.setCommand("select * from Delivery");
             rowSet.execute();
         } catch (ClassNotFoundException | SQLException e) {
             e.printStackTrace();
