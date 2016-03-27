@@ -60,7 +60,7 @@ public class HomeUI extends JPanel {
                     //can get any info of parcel
                     //can get any info of delivery
                     //given the dID can also check cash/credit to see if paid for??? no? yes?
-
+                    f.add(new DeliveryUI());
             }
             f.setSize(600, 1200);
             f.setVisible(true);
