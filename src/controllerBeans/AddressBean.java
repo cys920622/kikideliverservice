@@ -67,24 +67,6 @@ public class AddressBean {
 
     public Address update (Address addr) {
         try {
-//            rowSet.beforeFirst();
-//            System.out.println("hi");
-//            while (rowSet!=null) {
-//                System.out.println("hi2");
-//                if (addr.getPC().equals(pc) && addr.getHouse_num()==house_num) {
-//                    System.out.println(addr.getPC()+ " " + addr.getHouse_num() + " " + pc + " " + house_num);
-//                    rowSet.updateString("country", addr.getCountry());
-//                    rowSet.updateString("province", addr.getProvince());
-//                    rowSet.updateString("city", addr.getCity());
-//                    rowSet.updateString("street_name", addr.getStreet_name());
-//                    rowSet.updateInt("house_num", addr.getHouse_num());
-//                    rowSet.updateString("PC", addr.getPC());
-//                    rowSet.updateRow();
-//                    rowSet.moveToCurrentRow();
-//                   break;
-//                }
-//                else rowSet.next();
-//            }
             rowSet.updateString("country", addr.getCountry());
             rowSet.updateString("province", addr.getProvince());
             rowSet.updateString("city", addr.getCity());

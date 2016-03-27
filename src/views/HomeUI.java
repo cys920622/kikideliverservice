@@ -13,8 +13,6 @@ import java.awt.event.ActionListener;
 public class HomeUI extends JPanel {
     private JButton clientButton = new JButton("Client");
     private JButton clerkButton = new JButton("Clerk");
-    private JButton packageHandlerButton = new JButton("Package Handler");
-    private JButton distributorButton = new JButton("Distributor");
     private JButton delivererButton = new JButton("Deliverer");
 
 
@@ -32,10 +30,6 @@ public class HomeUI extends JPanel {
         clientButton.addActionListener(new ButtonHandler());
         panel.add(clerkButton);
         clerkButton.addActionListener(new ButtonHandler());
-        panel.add(packageHandlerButton);
-        packageHandlerButton.addActionListener(new ButtonHandler());
-        panel.add(distributorButton);
-        distributorButton.addActionListener(new ButtonHandler());
         panel.add(delivererButton);
         delivererButton.addActionListener(new ButtonHandler());
         return panel;
@@ -60,23 +54,13 @@ public class HomeUI extends JPanel {
                     f.add(new ParcelUI());
                     //need to also add cash/credit info
 
-                case "Package Handler":
-                    //organizes pkgs at each center
-                    //enters cID at the center its at to retrieve # of deliveries/parcels currently
+                case "Deliverer":
+                    //enters cID at the center its at to retrieve # of deliveries/parcels currently (aggregate)
                     //held there along with their dIDs and pIDs
                     //can get any info of parcel
                     //can get any info of delivery
-                    //given the dID can also check cash/credit to see if paid for
+                    //given the dID can also check cash/credit to see if paid for??? no? yes?
 
-
-                case "Distributor":
-                    //delivers pkgs from center to center
-
-                case "Deliverer":
-                    //delivers pkgs from center to receiver
-                    //inputs centerID (cID) to be able to find Parcels or Deliveries
-                    //associated with that cID to then find the address of sender/receiver
-                    //from the dID.. in order to deliver..
             }
             f.setSize(600, 1200);
             f.setVisible(true);
