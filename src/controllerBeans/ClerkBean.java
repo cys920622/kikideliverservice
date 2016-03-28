@@ -5,7 +5,9 @@ import entityClasses.Parcel;
 
 import javax.sql.rowset.JdbcRowSet;
 import javax.swing.*;
+import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
+import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 import javax.xml.transform.Result;
@@ -15,7 +17,7 @@ import java.util.Vector;
 /**
  * Created by stellafang. on 2016-03-27.
  */
-public class ClerkBean implements TableModel {
+public class ClerkBean extends AbstractTableModel {
     static final String JDBC_DRIVER = "com.mysql.jdbc.Driver";
     static final String DB_URL = "jdbc:mysql://127.0.0.1:3306/Kiki's_DeliveryService";
     static final String USER = "root";
@@ -26,6 +28,7 @@ public class ClerkBean implements TableModel {
     private ResultSet rs;
     private ResultSetMetaData rsmd;
     private int numcols, numrows;
+    private DefaultTableModel model;
 
     public ClerkBean() {
         try {
@@ -34,10 +37,7 @@ public class ClerkBean implements TableModel {
             conn = DriverManager.getConnection(DB_URL, USER, PASS);
             System.out.println("Creating statement...");
             stmt = conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
-            //String sql = "Select * from address";
-            //rs = stmt.executeQuery(sql);
-            //rs.last();
-            //numrows = rs.getRow();
+
         } catch (ClassNotFoundException | SQLException e) {
             e.printStackTrace();
         }
@@ -45,7 +45,7 @@ public class ClerkBean implements TableModel {
 
     public JTable makeTable(String sql) {
 
-        DefaultTableModel model = new DefaultTableModel();
+        model = new DefaultTableModel();
         try {
             rs = stmt.executeQuery(sql);
             rsmd = rs.getMetaData();
@@ -74,6 +74,12 @@ public class ClerkBean implements TableModel {
 
     @Override
     public int getRowCount() {
+        try {
+            rs.last();
+            numrows = rs.getRow();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         return numrows;
     }
 
@@ -93,32 +99,36 @@ public class ClerkBean implements TableModel {
 
     @Override
     public Class<?> getColumnClass(int columnIndex) {
-        return null;
+        return getValueAt(0, columnIndex).getClass();
     }
 
     @Override
     public boolean isCellEditable(int rowIndex, int columnIndex) {
-        return true;
+        if (columnIndex < 2) {
+            return false;
+        } else {
+            fireTableCellUpdated(rowIndex,columnIndex);
+            return true;
+        }
     }
 
     @Override
     public Object getValueAt(int rowIndex, int columnIndex) {
-        try {
-            rs.absolute(rowIndex+1);                // Go to the specified row
-            Object o = rs.getObject(columnIndex+1); // Get value of the column
-            if (o == null) return null;
-            else return o.toString();               // Convert it to a string
-        } catch (SQLException e) { return e.toString(); }
+        return model.getValueAt(rowIndex, columnIndex);
     }
 
     @Override
     public void setValueAt(Object aValue, int rowIndex, int columnIndex) {
+        System.out.println("hi");
+        model.setValueAt(aValue, rowIndex, columnIndex);
+        fireTableCellUpdated(rowIndex, columnIndex);
 
     }
 
     @Override
     public void addTableModelListener(TableModelListener l) {
-
+        model.fireTableDataChanged();
+        System.out.println("hey");
     }
 
     @Override

@@ -40,7 +40,7 @@ public class HomeUI extends JPanel {
         @Override
         public void actionPerformed(ActionEvent e) {
             JFrame f = new JFrame();
-            f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            f.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
             f.getContentPane().setLayout(new FlowLayout(FlowLayout.CENTER));
             switch (e.getActionCommand()) {
                 case "Client":
