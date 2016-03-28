@@ -22,7 +22,7 @@ public class ParcelUI extends JPanel{
     private JTextField weightField = new JTextField(10);
     private JTextField dIDField = new JTextField(6);
     private JTextField cIDField = new JTextField(6);
-    private JTextField next_cIDField = new JTextField(6);
+    private JTextField next_cIDField = new JTextField(15);
 
     private JButton createButton = new JButton("New...");
     private JButton updateButton = new JButton("Update");

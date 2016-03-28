@@ -187,19 +187,21 @@ public class CenterBean implements TableModel{
         return ctr;
     }
 
-//    public void submit() {
-//        try {
-//            if (rowSet.getString("cID") == cID) {
-//                makeTable();
-//            }
-//        } catch (SQLException e) {
-//            try {
-//                rowSet.rollback();
-//            } catch (SQLException e1) {
-//                e1.printStackTrace();
-//            }
-//            e.printStackTrace();
-//        }
-//    }
+    public void submit(Integer did) {
+        try {
+            if (rowSet.getInt("dID") == did) {
+                stmt.executeUpdate("UPDATE delivery SET status = 'arrived' where dID = '"
+                + did + "'");
+
+            }
+        } catch (SQLException e) {
+            try {
+                rowSet.rollback();
+            } catch (SQLException e1) {
+                e1.printStackTrace();
+            }
+            e.printStackTrace();
+        }
+    }
 }
 

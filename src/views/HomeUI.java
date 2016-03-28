@@ -15,6 +15,17 @@ public class HomeUI extends JPanel {
     private JButton clientButton = new JButton("Client");
     private JButton clerkButton = new JButton("Clerk");
     private JButton delivererButton = new JButton("Deliverer");
+    public static JFrame f = new JFrame();
+
+//    private static HomeUI home;
+//
+//    public static HomeUI getInstance() {
+//        if (home == null) {
+//            return home = new HomeUI();
+//        } else {
+//            return home;
+//        }
+//    }
 
 
     public HomeUI() {
@@ -39,7 +50,6 @@ public class HomeUI extends JPanel {
     private class ButtonHandler implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
-            JFrame f = new JFrame();
             f.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
             f.getContentPane().setLayout(new FlowLayout(FlowLayout.CENTER));
             switch (e.getActionCommand()) {
@@ -70,7 +80,6 @@ public class HomeUI extends JPanel {
                     //given the dID can also check cash/credit to see if paid for??? no? yes?
                     f.add(new AskForCentreUI());
                     f.setSize(1000, 500);
-
                     break;
 
             }

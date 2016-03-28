@@ -17,21 +17,30 @@ public class ParcelBean {
     static final String PASS = "Iloveme711";
     private JdbcRowSet rowSet = null;
 
+    private Connection conn;
+    private Statement stmt;
+    private ResultSet rs;
+
+
     public ParcelBean() {
         try {
             Class.forName(JDBC_DRIVER);
-            rowSet = new JdbcRowSetImpl();
-            rowSet.setUrl(DB_URL);
-            rowSet.setUsername(USER);
-            rowSet.setPassword(PASS);
-            rowSet.setCommand("select * from parcel");
-            rowSet.execute();
+//            rowSet = new JdbcRowSetImpl();
+//            rowSet.setUrl(DB_URL);
+//            rowSet.setUsername(USER);
+//            rowSet.setPassword(PASS);
+//            rowSet.setCommand("select * from parcel");
+//            rowSet.execute();
+            conn = DriverManager.getConnection(DB_URL, USER, PASS);
+            stmt = conn.createStatement();
+
+
         } catch (ClassNotFoundException | SQLException e) {
             e.printStackTrace();
         }
     }
 
-    public Parcel create (Parcel parcel) {
+    public Parcel create(Parcel parcel) {
         try {
             rowSet.moveToInsertRow();
             rowSet.updateInt("pID", parcel.getpID());
@@ -57,7 +66,7 @@ public class ParcelBean {
         return parcel;
     }
 
-    public Parcel update (Parcel parcel) {
+    public Parcel update(Parcel parcel) {
         try {
             rowSet.updateInt("pID", parcel.getpID());
             rowSet.updateFloat("width", parcel.getWidth());
@@ -188,6 +197,21 @@ public class ParcelBean {
         return parcel;
     }
 
+    public void submit(Integer did) {
+        try {
+//            if (rowSet.getInt("dID") == did) {
+            stmt.executeUpdate("UPDATE delivery SET status = 'arrived' where dID = '"
+                    + did + "'");
 
 
+        } catch (SQLException e) {
+
+//                rowSet.rollback();
+//            } catch (SQLException e1) {
+//                e.printStackTrace();
+//            }
+                e.printStackTrace();
+
+        }
+    }
 }

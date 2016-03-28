@@ -24,9 +24,20 @@ public class AskForCentreUI extends JPanel{
     private JTextField center_addrField = new JTextField(40);
 
     private JButton submitButton = new JButton("Submit");
+//    private JButton back = new JButton(("Back"));
 
 
     private CenterBean bean = new CenterBean();
+
+//    private static AskForCentreUI center;
+//
+//    public static AskForCentreUI getInstance() {
+//        if (center == null) {
+//           return center = new AskForCentreUI();
+//        } else {
+//            return center;
+//        }
+//    }
 
     public AskForCentreUI() {
         setBorder(new TitledBorder(
@@ -49,6 +60,8 @@ public class AskForCentreUI extends JPanel{
         panel.setLayout(new FlowLayout(FlowLayout.CENTER, 3, 3));
         panel.add(submitButton);
         submitButton.addActionListener(new ButtonHandler());
+//        panel.add(back);
+//        back.addActionListener(new ButtonHandler());
         return panel;
     }
     private JPanel initFields() {
@@ -114,6 +127,13 @@ public class AskForCentreUI extends JPanel{
 //                    JTable submittable = initTable("select cID, pID from center natural " +
 //                        "join parcel where cID = '" + cIDField.getText() + "'");
                     }
+//                case "Back":
+//                    HomeUI hui = HomeUI.getInstance();
+//                    hui.setVisible(true);
+//                    HomeUI.f.add(hui);
+//
+//                    setVisible(false);
+
             }
         }
     }

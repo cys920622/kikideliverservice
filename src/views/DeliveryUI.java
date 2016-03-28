@@ -2,6 +2,7 @@ package views;
 
 import controllerBeans.DeliveryBean;
 import entityClasses.Delivery;
+import entityClasses.Parcel;
 import net.miginfocom.swing.MigLayout;
 
 import javax.swing.*;
@@ -20,6 +21,7 @@ public class DeliveryUI extends JPanel {
     private JTextField statusField = new JTextField(20);
     private JTextField sender_IDField = new JTextField(6);
     private JTextField receiver_IDField = new JTextField(6);
+    private JTextField next_cIDField = new JTextField(15);
 
     private JButton createButton = new JButton("New...");
     private JButton updateButton = new JButton("Update");
@@ -63,7 +65,7 @@ public class DeliveryUI extends JPanel {
     private JPanel initFields() {
         JPanel panel = new JPanel();
         panel.setLayout(new MigLayout());
-        panel.add(new JLabel("Deliver ID"), "align label");
+        panel.add(new JLabel("Delivery ID"), "align label");
         panel.add(dIDField, "wrap");
         panel.add(new JLabel("Delivery type"), "align label");
         panel.add(typeField, "wrap");
@@ -73,16 +75,20 @@ public class DeliveryUI extends JPanel {
         panel.add(sender_IDField, "wrap");
         panel.add(new JLabel("Receiver ID"), "align label");
         panel.add(receiver_IDField, "wrap");
+        panel.add(new JLabel("Where delivered to"), "align label");
+        panel.add(next_cIDField, "wrap");
         return panel;
     }
 
     private Delivery getFieldData() {
         Delivery d = new Delivery();
+        Parcel p = new Parcel();
         d.setdID(Integer.parseInt(dIDField.getText()));
         d.setType(typeField.getText());
         d.setStatus(statusField.getText());
         d.setSender_ID(Integer.parseInt(sender_IDField.getText()));
         d.setReceiver_ID(Integer.parseInt(receiver_IDField.getText()));
+        p.setNextcID(next_cIDField.getText());
         return d;
     }
 
