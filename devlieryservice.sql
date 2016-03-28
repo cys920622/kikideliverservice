@@ -7,6 +7,7 @@ drop table delivery;
 drop table clients;
 drop table credit_card;
 drop table cash;
+drop table center;
 
 create table address
 	(country varchar(20),
@@ -63,7 +64,7 @@ create table clients
 create table credit_card
 	(payID int(3) NOT NULL,
 	amount float,
-	onDate date,
+	onDate varchar(10),
 	credit_card_num varchar(30),
 	CSV int,
 	name varchar(30),
@@ -79,7 +80,7 @@ create table credit_card
 create table cash
 	(amount float,
 	payID int(3) NOT NULL,
-	onDate date,
+	onDate varchar(10),
 	dID int(6),
 	PRIMARY KEY(payID),
 	FOREIGN KEY(dID) REFERENCES delivery(dID)

@@ -12,23 +12,13 @@ import java.sql.*;
  */
 public class ParcelBean {
     static final String JDBC_DRIVER = "com.mysql.jdbc.Driver";
-    static final String DB_URL = "jdbc:mysql://localhost:3306/Kiki's_DeliveryService";
+    static final String DB_URL = "jdbc:mysql://127.0.0.1:3306/Kiki's_DeliveryService";
     static final String USER = "root";
-    static final String PASS = "Iloveme711";
+    static final String PASS = "password";
     private JdbcRowSet rowSet = null;
 
     public ParcelBean() {
         try {
-//            Class.forName(JDBC_DRIVER);
-//            System.out.println("Connecting to database...");
-//            Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
-//            System.out.println("Creating statement...");
-//            Statement stmt = conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
-//            String sql;
-//            sql = "Select * from parcel";
-//            ResultSet rs = stmt.executeQuery(sql);
-//            rowSet = new JdbcRowSetImpl(rs);
-
             Class.forName(JDBC_DRIVER);
             rowSet = new JdbcRowSetImpl();
             rowSet.setUrl(DB_URL);

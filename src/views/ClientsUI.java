@@ -39,11 +39,14 @@ public class ClientsUI extends JPanel{
         setLayout(new BorderLayout(5, 5));
         add(initFields(), BorderLayout.NORTH);
         add(initButtons(), BorderLayout.CENTER);
+
+        clIDField.setText(String.valueOf(0));
+        house_numField.setText(String.valueOf(0));
     }
 
     private JPanel initButtons() {
         JPanel panel = new JPanel();
-        panel.setLayout(new FlowLayout(FlowLayout.CENTER, 3, 3));
+        panel.setLayout(new FlowLayout(FlowLayout.CENTER, 4, 4));
         panel.add(createButton);
         createButton.addActionListener(new ButtonHandler());
         panel.add(updateButton);
