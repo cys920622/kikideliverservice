@@ -6,7 +6,11 @@ import entityClasses.Center;
 import javax.swing.*;
 import javax.swing.border.EtchedBorder;
 import javax.swing.border.TitledBorder;
+import javax.swing.plaf.basic.BasicOptionPaneUI;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
 
 /**
  * Created by chuchutrainn on 2016-03-27.
@@ -14,9 +18,17 @@ import java.awt.*;
 public class CenterUI extends JPanel{
     private JButton centerInfo = new JButton("Center Information");
     private JButton browsePackageInfo = new JButton("Package Information");
+    private JTextField didField = new JTextField(6);
+    private JButton submitButton = new JButton("Submit");
 
     private CenterBean bean = new CenterBean();
     private JTable table;
+
+    private JPanel initButtons() {
+        JPanel panel = new JPanel();
+        panel.setLayout(new FlowLayout(FlowLayout.CENTER, 3, 3));
+        return panel;
+    }
 
     public CenterUI(String cid){
         setBorder(new TitledBorder(
@@ -31,7 +43,7 @@ public class CenterUI extends JPanel{
         browseCenterInfo.setSize(browseCenterInfo.getWidth(), browseCenterInfo.getHeight());
         centerInfo.add(browseCenterInfo);
 //        centerInfo.add(new )
-        jtab.add("Center Information", browseCenterInfo);
+        jtab.add("Center Info", browseCenterInfo);
 //        JTable submittable = initTable("select * from center where cID = '" + cid + "'");
 //        JScrollPane scrollPane = new JScrollPane(submittable);
 //        submittable.setSize(submittable.getWidth(), submittable.getHeight());
@@ -44,17 +56,22 @@ public class CenterUI extends JPanel{
                 "natural join parcel where center.cID = '" + cid + "'", "Packages at " + cid);
         browsePackageInfo.setSize(browsePackageInfo.getWidth(), browsePackageInfo.getHeight());
         packageInfo.add(browsePackageInfo);
-        jtab.add("Package at " + cid +" Information", browsePackageInfo);
+        jtab.add("Package at " + cid +" Info", browsePackageInfo);
+
+        //edit package
+        JComponent editDelivery = new JPanel();
+        //editDelivery.setLayout(new GridLayout(1, 1));
+        ClerkUI browseDeliveries = new ClerkUI("select dID, type, status, receiver_id " +
+                " next_cID from parcel natural join delivery " +
+                "where delivery.dID = parcel.dID AND parcel.cID = '" + cid + "'", "Delivery Info");
+        browseDeliveries.setSize(browseDeliveries.getWidth(), browseDeliveries.getHeight());
+        editDelivery.add(browseDeliveries);
+        jtab.add("Edit Delivery Status", editDelivery);
 
 
         add(jtab, BorderLayout.CENTER);
         jtab.setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT);
 
-    }
-
-    private JPanel initButtons() {
-        JPanel panel = new JPanel();
-        return panel;
     }
 
 
