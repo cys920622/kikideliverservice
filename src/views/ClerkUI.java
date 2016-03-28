@@ -26,60 +26,22 @@ public class ClerkUI extends JPanel {
     private JButton browseDeliveries = new JButton("Browse Deliveries");
     private JButton editDeliveries= new JButton("Create or Update Deliveries");
     private ClerkBean bean = new ClerkBean();
+    private JTable table;
 
-    public ClerkUI() {
+    public ClerkUI(String sql, String tableName) {
         setBorder(new TitledBorder(
-                new EtchedBorder(), "Clerk details"));
-        setLayout(new BorderLayout(100, 10));
-        initButtons().setVisible(true);
-        add(initButtons(), BorderLayout.CENTER);
+                new EtchedBorder(), tableName));
+        setLayout(new BorderLayout(1, 1));
+        add(new JScrollPane(initTable(sql)), BorderLayout.PAGE_END);
+
     }
 
-    private JTable initTable(String sql) {
-        return bean.makeTable(sql);
+    public JTable initTable(String sql) {
+        JTable table = bean.makeTable(sql);
+        table.setAutoCreateRowSorter(true);
+        table.setAutoResizeMode(5);
+        return table;
     }
-
-    private JPanel initButtons() {
-        JPanel panel = new JPanel();
-        panel.setLayout(new FlowLayout(FlowLayout.CENTER, 3, 3));
-        panel.add(browseClients);
-        browseClients.addActionListener(new ButtonHandler());
-        panel.add(editClients);
-        editClients.addActionListener(new ButtonHandler());
-        panel.add(browseDeliveries);
-        browseDeliveries.addActionListener(new ButtonHandler());
-        panel.add(editDeliveries);
-        editDeliveries.addActionListener(new ButtonHandler());
-        return panel;
-    }
-
-    private class ButtonHandler implements ActionListener {
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            switch (e.getActionCommand()) {
-                case "Browse Clients":
-                    JTable table1 = initTable("SELECT * FROM clients LEFT JOIN address ON clients.PC=address.PC and clients.house_num=address.house_num");
-                    table1.setAutoCreateRowSorter(true);
-                    table1.getAutoResizeMode();
-                    add(new JScrollPane(table1), BorderLayout.LINE_END);
-                    break;
-                case "Create or Update Clients":
-                    ClientsUI clientsUI = new ClientsUI();
-                    add(clientsUI);
-                    break;
-                case "Browse Deliveries":
-
-                    break;
-                case "Create or Update Deliveries":
-                    break;
-
-                default:
-                    JOptionPane.showMessageDialog(null,
-                            "Invalid command");
-            }
-        }
-    }
-
 
 
 }

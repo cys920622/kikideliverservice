@@ -36,6 +36,10 @@ public class DeliveryUI extends JPanel {
         setLayout(new BorderLayout(5, 5));
         add(initFields(), BorderLayout.NORTH);
         add(initButtons(), BorderLayout.CENTER);
+
+        dIDField.setText(String.valueOf(0));
+        sender_IDField.setText(String.valueOf(0));
+        receiver_IDField.setText(String.valueOf(0));
     }
 
     private JPanel initButtons() {

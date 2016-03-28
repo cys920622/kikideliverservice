@@ -162,6 +162,17 @@ public class ClientsUI extends JPanel{
                             "Client with ID of " + String.valueOf(c.getClID())
                                     + " was deleted.");
                     break;
+                case "First":
+                    setFieldData(bean.moveFirst());
+                    break;
+                case "Last":
+                    setFieldData(bean.moveLast());
+                    break;
+                case "Next":
+                    setFieldData(bean.moveNext());
+                    break;
+                case "Previous":
+                    setFieldData(bean.movePrevious());
             }
         }
     }
