@@ -33,11 +33,15 @@ public class ClerkHomeUI extends JPanel{
         // NEW TAB
         JTabbedPane jtab = new JTabbedPane();
 
+//        "SELECT * " +
+//                "FROM clients " +
+//                "NATURAL LEFT JOIN address"
+//                , "Create New Client and Delivery"
+
         //ADD TAB: BROWSE CLIENTS
         JComponent everythingClients = new JPanel();
         ClerkUI browseClients = new ClerkUI("SELECT * " +
-                "FROM clients " +
-                "NATURAL LEFT JOIN address"
+                "FROM clients"
                 , "Create New Client and Delivery");
         browseClients.setSize(browseClients.getWidth(), browseClients.getHeight());
         everythingClients.add(browseClients);
@@ -45,18 +49,14 @@ public class ClerkHomeUI extends JPanel{
         jtab.add("browse Clients", everythingClients);
 
 
-        //ADD TAB: EDIT CLIENTS
-        JComponent editClients = new ClientsUI();
-        jtab.add("edit Clients", editClients);
-
         //ADD TAB: BROWSE DELIVERIES
         JComponent browseDeliveries = new ClerkUI(
-                "SELECT clID, fname, lname, dID, type, status, sender_ID, receiver_ID " +
+                "SELECT cID, clID, fname, lname, dID, type, status, sender_ID, receiver_ID " +
                         "FROM clients " +
                         "LEFT JOIN delivery " +
                         "ON clients.clID=delivery.sender_ID " +
                         "or clients.clID=delivery.receiver_ID"
-                , "All Deliveries");
+                , "Browse Deliveries");
         jtab.add("browse Deliveries", browseDeliveries);
 
         //ADD TAB: EDIT DELIVERIES
