@@ -1,6 +1,7 @@
 package views;
 
 import controllerBeans.ClientLoginBean;
+import entityClasses.Clients;
 import entityClasses.Delivery;
 import net.miginfocom.swing.MigLayout;
 
@@ -62,25 +63,31 @@ public class ClientLoginUI extends JPanel {
                         ClientLoginBean bean = new ClientLoginBean(cID);
                         ArrayList<Delivery> in_packages = bean.getSentDeliveries();
                         ArrayList<Delivery> out_packages = bean.getReceivedDeliveries();
-                        for (Delivery in_package : in_packages) {
-                            Delivery d = in_package;
-                            int dID = d.getdID();
-                            int sender_ID = d.getSender_ID();
-                            int receiver_ID = d.getReceiver_ID();
-                            String shippingType = d.getType();
-                            System.out.println("SEND:");
-                            System.out.println("dID: " + dID +", Sender ID: " + sender_ID
-                            + ", Receiver ID: " + receiver_ID + ", Type: " + shippingType);
+                        ArrayList<Clients> senders = bean.getSenderClients();
+                        ArrayList<Clients> receivers = bean.getReceiverClients();
+
+                        for (int i = 0; i < in_packages.size(); i++) {
+                            Delivery in_package = in_packages.get(i);
+                            Clients sender = senders.get(i);
+                            int dID = in_package.getdID();
+                            int sender_ID = in_package.getSender_ID();
+                            int receiver_ID = in_package.getReceiver_ID();
+                            String fname = sender.getFname();
+                            String shippingType = in_package.getType();
+                            System.out.println("SEND >>> dID: " + dID + ", Sender ID: " + sender_ID
+                                    + ", Receiver ID: " + receiver_ID + ", Type: " + shippingType + ", TO: "+fname);
                         }
-                        for (Delivery out_package : out_packages) {
-                            Delivery d = out_package;
-                            int dID = d.getdID();
-                            int sender_ID = d.getSender_ID();
-                            int receiver_ID = d.getReceiver_ID();
-                            String shippingType = d.getType();
-                            System.out.println("RECEIVE:");
-                            System.out.println("dID: " + dID +", Sender ID: " + sender_ID
-                                    + ", Receiver ID: " + receiver_ID + ", Type: " + shippingType);
+
+                        for (int i = 0; i < out_packages.size(); i++) {
+                            Delivery out_package = out_packages.get(i);
+                            Clients receiver = receivers.get(i);
+                            int dID = out_package.getdID();
+                            int sender_ID = out_package.getSender_ID();
+                            int receiver_ID = out_package.getReceiver_ID();
+                            String fname = receiver.getFname();
+                            String shippingType = out_package.getType();
+                            System.out.println("RECEIVE >>> dID: " + dID + ", Sender ID: " + sender_ID
+                                    + ", Receiver ID: " + receiver_ID + ", Type: " + shippingType + ", TO: "+fname);
                         }
                     }
                     break;

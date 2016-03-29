@@ -1,6 +1,7 @@
 package controllerBeans;
 
 import com.sun.rowset.JdbcRowSetImpl;
+import entityClasses.Clients;
 import entityClasses.Delivery;
 
 import javax.sql.rowset.JdbcRowSet;
@@ -23,6 +24,8 @@ public class ClientLoginBean {
     private ResultSet receiveDeliveriesRs;
     private ArrayList<Delivery> sentDeliveries = new ArrayList<>();
     private ArrayList<Delivery> receivedDeliveries = new ArrayList<>();
+    private ArrayList<Clients> senderClients = new ArrayList<>();
+    private ArrayList<Clients> receiverClients = new ArrayList<>();
 
     public ClientLoginBean(int clientID) {
         try {
@@ -37,7 +40,7 @@ public class ClientLoginBean {
             System.out.println("ClientLoginBean constructor called");
             conn = DriverManager.getConnection(DB_URL, USER, PASS);
             stmt = conn.createStatement();
-            String sql = "SELECT * FROM delivery WHERE sender_ID = "+clientID;
+            String sql = "SELECT DISTINCT * FROM delivery INNER JOIN clients ON delivery.receiver_ID = clients.clID WHERE sender_ID = "+clientID;
             sentDeliveriesRs = stmt.executeQuery(sql);
             while (sentDeliveriesRs.next()) {
                 Delivery d = new Delivery();
@@ -47,11 +50,13 @@ public class ClientLoginBean {
                 d.setType(sentDeliveriesRs.getString("type"));
                 d.setStatus("TEST");
                 sentDeliveries.add(d);
+
+                Clients c = new Clients();
+                c.setFname(sentDeliveriesRs.getString("fname"));
+                senderClients.add(c);
             }
 
-//            conn = DriverManager.getConnection(DB_URL, USER, PASS);
-//            stmt = conn.createStatement();
-            sql = "SELECT * FROM delivery WHERE receiver_ID=" +clientID;
+            sql = "SELECT DISTINCT * FROM delivery INNER JOIN clients ON delivery.sender_ID = clients.clID WHERE receiver_ID=" +clientID;
             receiveDeliveriesRs = stmt.executeQuery(sql);
             while (receiveDeliveriesRs.next()) {
                 Delivery d = new Delivery();
@@ -61,6 +66,10 @@ public class ClientLoginBean {
                 d.setType(receiveDeliveriesRs.getString("type"));
                 d.setStatus("TEST");
                 receivedDeliveries.add(d);
+
+                Clients c = new Clients();
+                c.setFname(receiveDeliveriesRs.getString("fname"));
+                receiverClients.add(c);
             }
 
         } catch (ClassNotFoundException | SQLException e) {
@@ -74,5 +83,15 @@ public class ClientLoginBean {
 
     public ArrayList<Delivery> getReceivedDeliveries() {
         return receivedDeliveries;
+    }
+
+    // Returns list of Clients the client has sent a delivery to
+    public ArrayList<Clients> getSenderClients() {
+        return senderClients;
+    }
+
+    // Returns list of Clients the client has received a delivery from
+    public ArrayList<Clients> getReceiverClients() {
+        return receiverClients;
     }
 }
