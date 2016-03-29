@@ -58,10 +58,11 @@ public class HomeUI extends JPanel {
                     //should get back parcel info from pID
                     //should get back sender/receiver/status from dID through pID
                     //should probably be able to get back all the pID corresponding to dID
-                    f.add(new AddressUI());
-                    f.add(new DeliveryUI());
-                    f.add(new ParcelUI());
-                    f.setSize(700, 1200);
+//                    f.add(new AddressUI());
+//                    f.add(new DeliveryUI());
+//                    f.add(new ParcelUI());
+                    f.add(new ClientLoginUI());
+                    f.setSize(700, 700);
                     break;
 
                 case "Clerk":
