@@ -1,5 +1,6 @@
 package views;
 
+import controllerBeans.ClerkBean;
 import controllerBeans.ClientsBean;
 import entityClasses.Clients;
 import net.miginfocom.swing.MigLayout;
@@ -82,7 +83,7 @@ public class ClientsUI extends JPanel{
         return panel;
     }
 
-    private Clients getFieldData() {
+    public Clients getFieldData() {
         Clients c = new Clients();
         c.setClID(Integer.parseInt(clIDField.getText()));
         c.setFname(fnameField.getText());
@@ -145,9 +146,10 @@ public class ClientsUI extends JPanel{
                                 "Can't update empty record");
                     }
                     if (bean.update(c) != null) {
-                    JOptionPane.showMessageDialog(null,
+                        JOptionPane.showMessageDialog(null,
                             "Address at " + String.valueOf(c.getHouse_num())
                                     + " was updated.");
+
                 }
                 break;
 
@@ -173,6 +175,9 @@ public class ClientsUI extends JPanel{
                     break;
                 case "Previous":
                     setFieldData(bean.movePrevious());
+                default:
+                    JOptionPane.showMessageDialog(null,
+                            "Invalid command");
             }
         }
     }

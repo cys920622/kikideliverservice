@@ -12,9 +12,9 @@ import java.sql.SQLException;
  */
 public class CashBean {
     static final String JDBC_DRIVER = "com.mysql.jdbc.Driver";
-    static final String DB_URL = "jdbc:mysql://localhost:3306/Kiki's_DeliveryService";
+    static final String DB_URL = "jdbc:mysql://127.0.0.1:3306/Kiki's_DeliveryService";
     static final String USER = "root";
-    static final String PASS = "Iloveme711";
+    static final String PASS = "password";
     private JdbcRowSet rowSet = null;
 
     public CashBean() {
@@ -108,7 +108,6 @@ public class CashBean {
             cash.setPayID(rowSet.getInt("payID"));
             cash.setOnDate(rowSet.getString("onDate"));
             cash.setdID(rowSet.getInt("dID"));
-
         } catch (SQLException e) {
             e.printStackTrace();
         }
