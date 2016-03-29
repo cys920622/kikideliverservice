@@ -109,7 +109,7 @@ public class CenterUI extends JPanel{
 //            f.getContentPane().setLayout(new FlowLayout(FlowLayout.CENTER));
 
             switch (e.getActionCommand()) {
-                case "Submit":
+                case "Update":
                     if (isEmptyFieldData()) {
                         JOptionPane.showMessageDialog(null,
                                 "Please enter a delivery ID");
