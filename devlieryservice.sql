@@ -35,12 +35,14 @@ create table parcel
 	);
 
 create table delivery
-	(dID int(6) not null,
+	(cID varchar(30) not null,
+	dID int(6) not null,
 	type varchar(20),
 	status varchar(20),
 	sender_ID int(6) not null,
-	receiver_ID int(6) not null,
+	receiver_ID varchar(30) not null,
 	PRIMARY KEY(dID),
+	FOREIGN KEY(cID) REFERENCES center(cID),
 	FOREIGN KEY(sender_ID) REFERENCES clients(clID),
 	FOREIGN KEY(receiver_ID) REFERENCES clients(clID)
 		ON DELETE CASCADE
@@ -126,34 +128,34 @@ insert into clients
 	values ('378439' , 'Yoony' , 'Ok' , 'D1M 8E6' , '49' , '604-534-9876');
 
 insert into delivery
-	values ('342350' , 'expedited' , 'just left' , '234324' , '123453');
+	values ('ubc', '342350' , 'expedited' , 'just left' , '234324' , 'peter');
 
 insert into delivery
-	values ('193030' , 'express' , 'in transit' , '3422' , '4933');
+	values ('ubc', '193030' , 'express' , 'in transit' , '3422' , 'jason');
 
 insert into delivery
-	values ('383899' , 'standard' , 'arrived' , '35327' , '20448');
+	values ('ubc', '383899' , 'standard' , 'arrived' , '35327' , 'yoona');
 
 insert into delivery
-	values ('301274' , 'expedited' , 'in transit' , '43334' , '28343');
+	values ('ubc', '301274' , 'expedited' , 'in transit' , '43334' , 'colby');
 
 insert into delivery
-	values ('394857' , 'express' , 'just left' , '234' , '222');
+	values ('ubc', '394857' , 'express' , 'just left' , '234' , 'daniel');
 
 insert into delivery
-	values ('123456' , 'express' , 'just left' , '458384' , '203049');
+	values ('ubc', '123456' , 'express' , 'just left' , '458384' , 'yoony');
 
 insert into delivery
-	values ('234567' , 'expedited' , 'in transit' , '203049' , '393934');
+	values ('ubc', '234567' , 'expedited' , 'in transit' , '203049' , 'ben');
 
 insert into delivery
-	values ('345678' , 'standard' , 'arrived' , '393934' , '139284');
+	values ('ubc', '345678' , 'standard' , 'arrived' , '393934' , 'dan');
 
 insert into delivery
-	values ('456789' , 'express' , 'in transit' , '139284' , '378439');
+	values ('ubc', '456789' , 'express' , 'in transit' , '139284' , 'stella');
 
 insert into delivery
-	values ('567890' , 'expedited' , 'just left' , '378439', '458384');
+	values ('ubc', '567890' , 'expedited' , 'just left' , '378439', 'lansi');
 
 insert into cash
 	values ('15.39' , '678' , '2000-02-28' , '342350');

@@ -38,7 +38,7 @@ public class ClerkHomeUI extends JPanel{
         ClerkUI browseClients = new ClerkUI("SELECT * " +
                 "FROM clients " +
                 "NATURAL LEFT JOIN address"
-                , "All Clients");
+                , "Create New Client and Delivery");
         browseClients.setSize(browseClients.getWidth(), browseClients.getHeight());
         everythingClients.add(browseClients);
         everythingClients.add(new ClientsUI(), new AddressUI());
@@ -66,6 +66,7 @@ public class ClerkHomeUI extends JPanel{
         //ADD TAB: BROWSE PAYMENTS
         JComponent everythingPayments = new JPanel();
         everythingPayments.setLayout(new GridLayout(1,1));
+        everythingPayments.setSize(300,100);
         JComponent browseCreditPayments = new ClerkUI(
                 "SELECT amount, payID, onDate, credit_card.dID, credit_card_num, CSV, name, expiry_date, credit_card.type " +
                         "FROM credit_card " +

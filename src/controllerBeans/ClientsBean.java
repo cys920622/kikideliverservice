@@ -2,6 +2,8 @@ package controllerBeans;
 
 import com.sun.rowset.JdbcRowSetImpl;
 import entityClasses.Clients;
+
+import javax.sql.RowSet;
 import javax.sql.rowset.JdbcRowSet;
 import java.sql.SQLException;
 
@@ -10,10 +12,11 @@ import java.sql.SQLException;
  */
 public class ClientsBean {
     static final String JDBC_DRIVER = "com.mysql.jdbc.Driver";
-    static final String DB_URL = "jdbc:mysql://localhost:3306/Kiki's_DeliveryService";
+    static final String DB_URL = "jdbc:mysql://127.0.0.1:3306/Kiki's_DeliveryService";
     static final String USER = "root";
-    static final String PASS = "Iloveme711";
+    static final String PASS = "password";
     private JdbcRowSet rowSet = null;
+
 
     public ClientsBean() {
         try {
@@ -22,7 +25,7 @@ public class ClientsBean {
             rowSet.setUrl(DB_URL);
             rowSet.setUsername(USER);
             rowSet.setPassword(PASS);
-            rowSet.setCommand("select * from Clients");
+            rowSet.setCommand("select * from clients");
             rowSet.execute();
         } catch (ClassNotFoundException | SQLException e) {
             e.printStackTrace();
@@ -126,7 +129,6 @@ public class ClientsBean {
             if (!rowSet.next()) {
                 rowSet.previous();
             }
-            rowSet.next();
             cl.setClID(rowSet.getInt("clID"));
             cl.setFname(rowSet.getString("fname"));
             cl.setLname(rowSet.getString("lname"));
@@ -172,5 +174,9 @@ public class ClientsBean {
             e.printStackTrace();
         }
         return cl;
+    }
+
+    public void setRowSet(JdbcRowSet rs) {
+        rowSet = rs;
     }
 }

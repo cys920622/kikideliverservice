@@ -31,7 +31,6 @@ public class CenterUI extends JPanel{
     private CenterBean bean = new CenterBean();
     private ParcelBean pBean = new ParcelBean();
 
-    private JTable table;
 
 
     private JPanel initButtons() {
