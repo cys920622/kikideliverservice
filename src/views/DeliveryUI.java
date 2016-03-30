@@ -28,6 +28,7 @@ public class DeliveryUI extends JPanel {
     private JButton firstButton = new JButton("First");
     private JButton lastButton = new JButton("Last");
     private JButton nextButton = new JButton("Next");
+    private JButton previousButton = new JButton("Previous");
 
     private DeliveryBean bean = new DeliveryBean();
 
@@ -58,6 +59,8 @@ public class DeliveryUI extends JPanel {
         lastButton.addActionListener(new ButtonHandler());
         panel.add(nextButton);
         nextButton.addActionListener(new ButtonHandler());
+        panel.add(previousButton);
+        previousButton.addActionListener(new ButtonHandler());
         return panel;
     }
 

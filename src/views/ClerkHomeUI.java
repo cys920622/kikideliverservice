@@ -33,35 +33,46 @@ public class ClerkHomeUI extends JPanel{
         // NEW TAB
         JTabbedPane jtab = new JTabbedPane();
 
-//        "SELECT * " +
-//                "FROM clients " +
-//                "NATURAL LEFT JOIN address"
-//                , "Create New Client and Delivery"
+        //TAB1: START A NEW DELIVERY WITH A NEW OR EXISTING CLIENT
+        //TAB1: CREATE NEW CLIENT OR GRAB EXISTING CLIENT AND ADD NEW DELIVERY
+        JComponent tab1 = new JPanel();
+        tab1.setSize(1200,600);
+        ClerkUI createClient = new ClerkUI("SELECT * " +
+                "FROM clients " +
+                "LEFT JOIN address " +
+                "ON clients.PC=address.PC " +
+                "and clients.house_num=address.house_num"
+                , "Clients Info");
+        createClient.setSize(createClient.getWidth(), createClient.getHeight());
+        tab1.add(createClient);
+        tab1.add(new ClientAddressUI(1));
+        jtab.add("Start a New Delivery", tab1);
+        // ------------------------------------------------------------------------
 
-        //ADD TAB: BROWSE CLIENTS
-        JComponent everythingClients = new JPanel();
-        ClerkUI browseClients = new ClerkUI("SELECT * " +
-                "FROM clients"
-                , "Create New Client and Delivery");
-        browseClients.setSize(browseClients.getWidth(), browseClients.getHeight());
-        everythingClients.add(browseClients);
-        everythingClients.add(new ClientsUI(), new AddressUI());
-        jtab.add("browse Clients", everythingClients);
+        //TAB2: UPDATE EXISTING CLIENTS
+        JComponent tab2 = new JPanel();
+        ClerkUI editClient = new ClerkUI("SELECT * " +
+                "FROM clients " +
+                "LEFT JOIN address " +
+                "ON clients.PC=address.PC " +
+                "and clients.house_num=address.house_num"
+                , "Clients Info");
+        editClient.setSize(editClient.getWidth(), editClient.getHeight());
+        tab2.add(editClient);
+        tab2.add(new ClientAddressUI(2));
+        jtab.add("Update a Client", tab2);
 
 
-        //ADD TAB: BROWSE DELIVERIES
+        //TAB3: BROWSE DELIVERIES AND PARCELS
         JComponent browseDeliveries = new ClerkUI(
-                "SELECT cID, clID, fname, lname, dID, type, status, sender_ID, receiver_ID " +
-                        "FROM clients " +
-                        "LEFT JOIN delivery " +
-                        "ON clients.clID=delivery.sender_ID " +
-                        "or clients.clID=delivery.receiver_ID"
-                , "Browse Deliveries");
+                "SELECT * " +
+                        "FROM delivery " +
+                        "LEFT JOIN parcel " +
+                        "ON delivery.dID=parcel.dID"
+                , "Browse Deliveries and its Parcels");
         jtab.add("browse Deliveries", browseDeliveries);
+        // ------------------------------------------------------------------------
 
-        //ADD TAB: EDIT DELIVERIES
-        JComponent editDeliveries = new DeliveryUI();
-        jtab.add("edit Deliveries", editDeliveries);
 
         //ADD TAB: BROWSE PAYMENTS
         JComponent everythingPayments = new JPanel();

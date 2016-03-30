@@ -200,7 +200,8 @@ public class ParcelBean {
     public void submit(Integer did) {
         try {
 //            if (rowSet.getInt("dID") == did) {
-            stmt.executeUpdate("UPDATE delivery SET status = 'arrived' where dID = '"
+            stmt.executeUpdate("UPDATE delivery " +
+                    "SET status = 'arrived' where dID = '"
                     + did + "'");
 
 

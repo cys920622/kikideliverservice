@@ -30,6 +30,7 @@ public class ParcelUI extends JPanel{
     private JButton firstButton = new JButton("First");
     private JButton lastButton = new JButton("Last");
     private JButton nextButton = new JButton("Next");
+    private JButton previousButton = new JButton("Previous");
 
     private ParcelBean bean = new ParcelBean();
 
@@ -67,6 +68,8 @@ public class ParcelUI extends JPanel{
         lastButton.addActionListener(new ButtonHandler());
         panel.add(nextButton);
         nextButton.addActionListener(new ButtonHandler());
+        panel.add(previousButton);
+        previousButton.addActionListener(new ButtonHandler());
         return panel;
     }
 
@@ -86,9 +89,9 @@ public class ParcelUI extends JPanel{
         panel.add(new JLabel("Delivery ID"), "align label");
         panel.add(dIDField, "wrap");
         panel.add(new JLabel("Center ID"), "align label");
-        panel.add(dIDField, "wrap");
+        panel.add(cIDField, "wrap");
         panel.add(new JLabel("Next Center ID"), "align label");
-        panel.add(dIDField, "wrap");
+        panel.add(next_cIDField, "wrap");
         return panel;
     }
 

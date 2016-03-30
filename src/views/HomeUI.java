@@ -31,13 +31,15 @@ public class HomeUI extends JPanel {
     public HomeUI() {
         setBorder(new TitledBorder(
                 new EtchedBorder(), "User List"));
+        f.setSize(10,10);
         add(initButtons());
     }
 
     private JPanel initButtons() {
+
         JPanel panel = new JPanel();
         //panel.setLayout(new FlowLayout(FlowLayout.CENTER, 3, 3));
-        panel.setSize(10,10);
+        panel.setSize(3,3);
         panel.add(clientButton);
         clientButton.addActionListener(new ButtonHandler());
         panel.add(clerkButton);
@@ -66,7 +68,7 @@ public class HomeUI extends JPanel {
 
                 case "Clerk":
                     f.add(new ClerkHomeUI());
-                    f.setSize(1200, 650);
+                    f.setSize(1300, 600);
                     break;
 
                     //need to also add cash/credit info
