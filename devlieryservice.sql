@@ -1,13 +1,13 @@
-USE `Kiki's_DeliveryService` ;
+USE `kiki's` ;
 set foreign_key_checks=0;
 
 drop table address;
-drop table parcel;
-drop table delivery;
 drop table clients;
+drop table delivery;
 drop table credit_card;
 drop table cash;
 drop table center;
+drop table parcel;
 
 create table address
 	(country varchar(20),
@@ -17,36 +17,6 @@ create table address
 	house_num int NOT NULL,
 	PC varchar(7) NOT NULL,
 	PRIMARY KEY(PC, house_num)
-	);
-
-create table parcel
-	(pID int(6) not null,
-	length float,
-	width float,
-	weight float,
-    height float,
-    cID varchar(30),
-    next_cID varchar(30),
-	dID int(6) not null,
-	PRIMARY KEY(pID, dID),
-	FOREIGN KEY(dID) REFERENCES delivery(dID)
-		ON DELETE CASCADE
-		ON UPDATE CASCADE
-	);
-
-create table delivery
-	(cID varchar(30) not null,
-	dID int(6) not null,
-	type varchar(20),
-	status varchar(20),
-	sender_ID int(6) not null,
-	receiver_ID varchar(30) not null,
-	PRIMARY KEY(dID),
-	FOREIGN KEY(cID) REFERENCES center(cID),
-	FOREIGN KEY(sender_ID) REFERENCES clients(clID),
-	FOREIGN KEY(receiver_ID) REFERENCES clients(clID)
-		ON DELETE CASCADE
-		ON UPDATE CASCADE
 	);
 
 create table clients
@@ -62,7 +32,20 @@ create table clients
 		ON UPDATE CASCADE
 	);
 
-
+create table delivery
+	(
+	dID int(6) not null,
+	type varchar(20),
+	status varchar(20),
+	sender_ID int(6) not null,
+	receiver_ID int(6) not null,
+	PRIMARY KEY(dID),
+	FOREIGN KEY(sender_ID) REFERENCES clients(clID),
+	FOREIGN KEY(receiver_ID) REFERENCES clients(clID)
+		ON DELETE CASCADE
+		ON UPDATE CASCADE
+	);
+    
 create table credit_card
 	(payID int(3) NOT NULL,
 	amount float,
@@ -96,6 +79,21 @@ create table center
     PRIMARY KEY(cID)
     );
 
+create table parcel
+	(pID int(6) not null,
+	length float,
+	width float,
+	weight float,
+    height float,
+    cID varchar(30),
+    next_cID varchar(30),
+	dID int(6) not null,
+	PRIMARY KEY(pID, dID),
+	FOREIGN KEY (cID) REFERENCES center(cID),
+	FOREIGN KEY(dID) REFERENCES delivery(dID)
+		ON DELETE CASCADE
+		ON UPDATE CASCADE
+	);
 
 insert into address
 	values ('Canada' , 'QC' , 'Mont-Joli' , 'Lindsay Rd.' , '304', 'G5H 9R0');
@@ -128,34 +126,34 @@ insert into clients
 	values ('378439' , 'Yoony' , 'Ok' , 'D1M 8E6' , '49' , '604-534-9876');
 
 insert into delivery
-	values ('ubc', '342350' , 'expedited' , 'just left' , '234324' , 'peter');
+	values ('342350' , 'expedited' , 'just left' , '234324' , '0000');
 
 insert into delivery
-	values ('ubc', '193030' , 'express' , 'in transit' , '3422' , 'jason');
+	values ('193030' , 'express' , 'in transit' , '3422' , '4353');
 
 insert into delivery
-	values ('ubc', '383899' , 'standard' , 'arrived' , '35327' , 'yoona');
+	values ('383899' , 'standard' , 'arrived' , '35327' , '4444');
 
 insert into delivery
-	values ('ubc', '301274' , 'expedited' , 'in transit' , '43334' , 'colby');
+	values ('301274' , 'expedited' , 'in transit' , '43334' , '4444');
 
 insert into delivery
-	values ('ubc', '394857' , 'express' , 'just left' , '234' , 'daniel');
+	values ('394857' , 'express' , 'just left' , '234' , '3333');
 
 insert into delivery
-	values ('ubc', '123456' , 'express' , 'just left' , '458384' , 'yoony');
+	values ('123456' , 'express' , 'just left' , '458384' , '3333');
 
 insert into delivery
-	values ('ubc', '234567' , 'expedited' , 'in transit' , '203049' , 'ben');
+	values ('234567' , 'expedited' , 'in transit' , '203049' , '2222');
 
 insert into delivery
-	values ('ubc', '345678' , 'standard' , 'arrived' , '393934' , 'dan');
+	values ('345678' , 'standard' , 'arrived' , '393934' , '0000');
 
 insert into delivery
-	values ('ubc', '456789' , 'express' , 'in transit' , '139284' , 'stella');
+	values ('456789' , 'express' , 'in transit' , '139284' , '0000');
 
 insert into delivery
-	values ('ubc', '567890' , 'expedited' , 'just left' , '378439', 'lansi');
+	values ('567890' , 'expedited' , 'just left' , '378439', '3435');
 
 insert into cash
 	values ('15.39' , '678' , '2000-02-28' , '342350');
