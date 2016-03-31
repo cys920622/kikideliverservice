@@ -51,8 +51,8 @@ public class ClerkUI extends JPanel{
         if (tableWidth < 400) {
             tableWidth = 400;
         }
-        if (tableWidth > 500) {
-            tableWidth = 500;
+        if (tableWidth > 570) {
+            tableWidth = 570;
         }
         return table;
     }

@@ -64,13 +64,17 @@ public class ClerkHomeUI extends JPanel{
 
 
         //TAB3: BROWSE DELIVERIES AND PARCELS
-        JComponent browseDeliveries = new ClerkUI(
+        JComponent tab3 = new JPanel();
+        ClerkUI browseDeliveries = new ClerkUI(
                 "SELECT * " +
                         "FROM delivery " +
                         "LEFT JOIN parcel " +
                         "ON delivery.dID=parcel.dID"
                 , "Browse Deliveries and its Parcels");
-        jtab.add("browse Deliveries", browseDeliveries);
+        tab3.add(browseDeliveries);
+        tab3.add(new DeliveryParcelUI());
+        jtab.add("browse Deliveries", tab3);
+
         // ------------------------------------------------------------------------
 
 
