@@ -37,29 +37,29 @@ public class ClerkHomeUI extends JPanel{
         //TAB1: CREATE NEW CLIENT OR GRAB EXISTING CLIENT AND ADD NEW DELIVERY
         JComponent tab1 = new JPanel();
         tab1.setSize(1200,600);
-        ClerkUI createClient = new ClerkUI("SELECT * " +
+        ClerkUI createClientTable = new ClerkUI("SELECT * " +
                 "FROM clients " +
                 "LEFT JOIN address " +
                 "ON clients.PC=address.PC " +
                 "and clients.house_num=address.house_num"
                 , "Clients Info");
-        createClient.setSize(createClient.getWidth(), createClient.getHeight());
-        tab1.add(createClient);
+        createClientTable.setSize(createClientTable.getWidth(), createClientTable.getHeight());
+        tab1.add(createClientTable);
         tab1.add(new ClientAddressUI(1));
         jtab.add("Start a New Delivery", tab1);
         // ------------------------------------------------------------------------
 
         //TAB2: UPDATE EXISTING CLIENTS
         JComponent tab2 = new JPanel();
-        ClerkUI editClient = new ClerkUI("SELECT * " +
+        ClerkUI editClientTable = new ClerkUI("SELECT * " +
                 "FROM clients " +
                 "LEFT JOIN address " +
                 "ON clients.PC=address.PC " +
                 "and clients.house_num=address.house_num"
                 , "Clients Info");
-        editClient.setSize(editClient.getWidth(), editClient.getHeight());
-        tab2.add(editClient);
-        tab2.add(new ClientAddressUI(2));
+        editClientTable.setSize(editClientTable.getWidth(), editClientTable.getHeight());
+        tab2.add(editClientTable);
+        tab2.add(new ClientAddressUI(3));
         jtab.add("Update a Client", tab2);
 
 

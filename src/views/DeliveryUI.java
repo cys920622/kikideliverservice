@@ -11,6 +11,7 @@ import javax.swing.border.TitledBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Random;
 
 /**
  * Created by danielchoi on 2016-03-26.
@@ -31,6 +32,10 @@ public class DeliveryUI extends JPanel {
     private JButton previousButton = new JButton("Previous");
 
     private DeliveryBean bean = new DeliveryBean();
+    private int randdID = new Random().nextInt((999999-0) +1);
+    private int sender = 0;
+    private int receiver = 0;
+
 
     public DeliveryUI() {
         setBorder(new TitledBorder(
@@ -82,7 +87,6 @@ public class DeliveryUI extends JPanel {
 
     private Delivery getFieldData() {
         Delivery d = new Delivery();
-        Parcel p = new Parcel();
         d.setdID(Integer.parseInt(dIDField.getText()));
         d.setType(typeField.getText());
         d.setStatus(statusField.getText());
@@ -107,6 +111,18 @@ public class DeliveryUI extends JPanel {
                 && receiver_IDField.getText().trim().isEmpty());
     }
 
+    public void setRanddID (int rand) {
+        this.randdID = rand;
+    }
+    public void setSender (int clID) {
+        this.sender = clID;
+
+    }
+
+    public void setReceiver (int clID) {
+        this.receiver = clID;
+
+    }
     private class ButtonHandler implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
@@ -124,11 +140,11 @@ public class DeliveryUI extends JPanel {
                         break;
                     }
                 case "New...":
-                    d.setdID(0); //TODO: should use a counter here
+                    d.setdID(randdID); //TODO: should use a counter here
                     d.setType(""); //TODO: should use a radio button
                     d.setStatus("");
-                    d.setSender_ID(0);
-                    d.setReceiver_ID(0);
+                    d.setSender_ID(sender);
+                    d.setReceiver_ID(receiver);
                     setFieldData(d);
                     createButton.setText("Save");
                     break;
@@ -165,6 +181,7 @@ public class DeliveryUI extends JPanel {
                     break;
                 case "Previous":
                     setFieldData(bean.movePrevious());
+                    break;
                 default:
                     JOptionPane.showMessageDialog(null,
                             "Invalid command");

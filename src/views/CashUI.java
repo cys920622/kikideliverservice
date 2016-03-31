@@ -14,6 +14,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.Date;
 import java.text.DateFormat;
+import java.util.Random;
 
 /**
  * Created by stellafang. on 2016-03-27.
@@ -24,19 +25,25 @@ public class CashUI extends JPanel{
     private JTextField onDateField = new JTextField(10);
     private JTextField dIDField = new JTextField(6);
 
-    private JButton createButton = new JButton("New...");
+    private JButton createButton = new JButton("Start");
     private JButton updateButton = new JButton("Update");
     private JButton deleteButton = new JButton("Delete");
     private JButton firstButton = new JButton("First");
     private JButton lastButton = new JButton("Last");
     private JButton nextButton = new JButton("Next");
+    private JButton previousButton = new JButton("Previous");
 
     private CashBean bean = new CashBean();
 
-    public CashUI() {
+    private Boolean isClerkView = false;
+
+    private int dID = 0;
+
+    public CashUI(Boolean isClerkView) {
         setBorder(new TitledBorder(
-                new EtchedBorder(), "Parcel details"));
+                new EtchedBorder(), "Cash info"));
         setLayout(new BorderLayout(5, 5));
+        this.isClerkView = isClerkView;
         add(initFields(), BorderLayout.NORTH);
         add(initButtons(), BorderLayout.CENTER);
 
@@ -44,34 +51,43 @@ public class CashUI extends JPanel{
         payIDField.setText(String.valueOf(0));
         dIDField.setText(String.valueOf(0));
 
-
     }
 
     private JPanel initButtons() {
         JPanel panel = new JPanel();
         panel.setLayout(new FlowLayout(FlowLayout.CENTER, 3, 3));
-        panel.add(createButton);
-        createButton.addActionListener(new ButtonHandler());
-        panel.add(updateButton);
-        updateButton.addActionListener(new ButtonHandler());
-        panel.add(deleteButton);
-        deleteButton.addActionListener(new ButtonHandler());
-        panel.add(firstButton);
-        firstButton.addActionListener(new ButtonHandler());
-        panel.add(lastButton);
-        lastButton.addActionListener(new ButtonHandler());
-        panel.add(nextButton);
-        nextButton.addActionListener(new ButtonHandler());
+
+        if (!isClerkView) {
+            panel.add(createButton);
+            createButton.addActionListener(new ButtonHandler());
+            panel.add(updateButton);
+            updateButton.addActionListener(new ButtonHandler());
+            panel.add(deleteButton);
+            deleteButton.addActionListener(new ButtonHandler());
+            panel.add(firstButton);
+            firstButton.addActionListener(new ButtonHandler());
+            panel.add(lastButton);
+            lastButton.addActionListener(new ButtonHandler());
+            panel.add(nextButton);
+            nextButton.addActionListener(new ButtonHandler());
+            panel.add(previousButton);
+            previousButton.addActionListener(new ButtonHandler());
+
+        }
+        if (isClerkView){
+            panel.add(createButton);
+            createButton.addActionListener(new ButtonHandler());
+        }
         return panel;
     }
 
     private JPanel initFields() {
         JPanel panel = new JPanel();
         panel.setLayout(new MigLayout());
-        panel.add(new JLabel("Amount"), "align label");
-        panel.add(amountField, "wrap");
         panel.add(new JLabel("Pay ID"), "align label");
         panel.add(payIDField, "wrap");
+        panel.add(new JLabel("Amount"), "align label");
+        panel.add(amountField, "wrap");
         panel.add(new JLabel("Paid on Date"), "align label");
         panel.add(onDateField, "wrap");
         panel.add(new JLabel("Delivery ID"), "align label");
@@ -102,12 +118,18 @@ public class CashUI extends JPanel{
                 && dIDField.getText().trim().isEmpty());
     }
 
+    public void setdID(int dID) {
+        this.dID = dID;
+    }
+
+
     private class ButtonHandler implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
             Cash c = getFieldData();
+            System.out.println(getFieldData());
             switch (e.getActionCommand()) {
-                case "Save":
+                case "Submit":
                     if (isEmptyFieldData()) {
                         JOptionPane.showMessageDialog(null,
                                 "Cannot create empty record");
@@ -117,15 +139,16 @@ public class CashUI extends JPanel{
                                 "Cash transaction " + String.valueOf(c.getPayID()) +
                                         " for delivery" + String.valueOf(c.getdID())
                                         + " was successful");
-                        createButton.setText("New...");
+                        createButton.setText("Start");
                         break;
                     }
-                case "New...":
-                    c.setdID(0);
+                case "Start":
+                    c.setPayID(new Random().nextInt(999));
                     c.setOnDate("");
                     c.setAmount(0);
-                    c.setdID(0);
-                    createButton.setText("Save");
+                    c.setdID(dID);
+                    setFieldData(c);
+                    createButton.setText("Submit");
                     break;
 
                 case "Update":
@@ -163,6 +186,7 @@ public class CashUI extends JPanel{
                     break;
                 case "Previous":
                     setFieldData(bean.movePrevious());
+                    break;
                 default:
                     JOptionPane.showMessageDialog(null,
                             "Invaild command");

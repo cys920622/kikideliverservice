@@ -11,6 +11,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.Date;
+import java.util.Random;
 
 /**
  * Created by stellafang. on 2016-03-27.
@@ -26,19 +27,24 @@ public class CreditCardUI extends JPanel {
     private JTextField expiryField = new JTextField(5);
     private JTextField typeField = new JTextField(255);
 
-    private JButton createButton = new JButton("New...");
+    private JButton createButton = new JButton("Start");
     private JButton updateButton = new JButton("Update");
     private JButton deleteButton = new JButton("Delete");
     private JButton firstButton = new JButton("First");
     private JButton lastButton = new JButton("Last");
     private JButton nextButton = new JButton("Next");
+    private JButton previousButton = new JButton("Previous");
+
+    private Boolean isClerkView = false;
 
     private CreditCardBean bean = new CreditCardBean();
+    private int dID = 0;
 
-    public CreditCardUI() {
+    public CreditCardUI(Boolean isClerkView) {
         setBorder(new TitledBorder(
-                new EtchedBorder(), "Parcel details"));
+                new EtchedBorder(), "Credit Card Info"));
         setLayout(new BorderLayout(5, 5));
+        this.isClerkView = isClerkView;
         add(initFields(), BorderLayout.NORTH);
         add(initButtons(), BorderLayout.CENTER);
 
@@ -52,28 +58,37 @@ public class CreditCardUI extends JPanel {
     private JPanel initButtons() {
         JPanel panel = new JPanel();
         panel.setLayout(new FlowLayout(FlowLayout.CENTER, 3, 3));
-        panel.add(createButton);
-        createButton.addActionListener(new ButtonHandler());
-        panel.add(updateButton);
-        updateButton.addActionListener(new ButtonHandler());
-        panel.add(deleteButton);
-        deleteButton.addActionListener(new ButtonHandler());
-        panel.add(firstButton);
-        firstButton.addActionListener(new ButtonHandler());
-        panel.add(lastButton);
-        lastButton.addActionListener(new ButtonHandler());
-        panel.add(nextButton);
-        nextButton.addActionListener(new ButtonHandler());
+        if (isClerkView) {
+            panel.add(createButton);
+            createButton.addActionListener(new ButtonHandler());
+        }
+        else {
+            panel.add(createButton);
+            createButton.addActionListener(new ButtonHandler());
+            panel.add(updateButton);
+            updateButton.addActionListener(new ButtonHandler());
+            panel.add(deleteButton);
+            deleteButton.addActionListener(new ButtonHandler());
+            panel.add(firstButton);
+            firstButton.addActionListener(new ButtonHandler());
+            panel.add(lastButton);
+            lastButton.addActionListener(new ButtonHandler());
+            panel.add(nextButton);
+            nextButton.addActionListener(new ButtonHandler());
+            panel.add(previousButton);
+            previousButton.addActionListener(new ButtonHandler());
+        }
+
         return panel;
     }
 
     private JPanel initFields() {
         JPanel panel = new JPanel();
         panel.setLayout(new MigLayout());
-        panel.add(new JLabel("Amount"), "align label");
-        panel.add(amountField, "wrap");
         panel.add(new JLabel("Pay ID"), "align label");
         panel.add(payIDField, "wrap");
+        panel.add(new JLabel("Amount"), "align label");
+        panel.add(amountField, "wrap");
         panel.add(new JLabel("Paid on Date"), "align label");
         panel.add(onDateField, "wrap");
         panel.add(new JLabel("Delivery ID"), "align label");
@@ -130,35 +145,41 @@ public class CreditCardUI extends JPanel {
 
     }
 
+    public void setdID(int dID) {
+        this.dID = dID;
+    }
+
     private class ButtonHandler implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
             CreditCard cc = getFieldData();
             switch (e.getActionCommand()) {
-                case "Save":
+                case "Submit":
                     if (isEmptyFieldData()) {
                         JOptionPane.showMessageDialog(null,
                                 "Cannot create empty record");
+                        break;
                     }
                     if (bean.create(cc) != null) {
                         JOptionPane.showMessageDialog(null,
                                 "Credit Card transaction " + String.valueOf(cc.getPayID()) +
                                         " for delivery" + String.valueOf(cc.getdID())
                                         + " was successful");
-                        createButton.setText("New...");
+                        createButton.setText("Start");
                         break;
                     }
-                case "New...":
-                    cc.setdID(0);
+                case "Start":
+                    cc.setPayID(new Random().nextInt((999 - 0) + 1));
                     cc.setOnDate("");
                     cc.setAmount(0);
-                    cc.setdID(0);
+                    cc.setdID(dID);
                     cc.setCredit_card_num("");
                     cc.setCSV(0);
                     cc.setName("");
                     cc.setExpiry_date("");
                     cc.setType("");
-                    createButton.setText("Save");
+                    setFieldData(cc);
+                    createButton.setText("Submit");
                     break;
 
                 case "Update":

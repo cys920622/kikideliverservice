@@ -149,13 +149,19 @@ public class ClientAddressBean {
         return ca;
     }
 
-    public void delete(ClientAddress ca) {
-            //if(ca.getPC()!=null && ca.getHouse_num()!=0){
-//                stmt.executeUpdate("DELETE FROM address " +
-//                        "WHERE PC='"+ca.getPC()+"' and house_num='"+ca.getHouse_num()+"'");
-//                stmt.executeUpdate("DELETE FROM delivery " +
-//                        "WHERE clID = '"+ca.getClID()+ "' ");
-            //}
+    public boolean delete(ClientAddress ca) {
+
+        try {
+            stmt.executeUpdate("DELETE FROM address " +
+                    "WHERE PC='"+ca.getPC()+"' and house_num='"+ca.getHouse_num()+"'");
+            stmt.executeUpdate("DELETE FROM clients " +
+                    "WHERE clID = '"+ca.getClID()+ "' ");
+            return true;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+
 
     }
 

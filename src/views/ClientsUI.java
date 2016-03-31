@@ -26,13 +26,15 @@ public class ClientsUI extends JPanel{
 
     private JButton createButton = new JButton("New...");
     private JButton updateButton = new JButton("Update");
-    private JButton clearButton = new JButton("Clear");
     private JButton deleteButton = new JButton("Delete");
     private JButton firstButton = new JButton("First");
     private JButton lastButton = new JButton("Last");
     private JButton nextButton = new JButton("Next");
 
     private ClientsBean bean = new ClientsBean();
+
+    private int clID = new Random()
+            .nextInt((Integer.MAX_VALUE)+1);
 
     public ClientsUI() {
         setBorder(new TitledBorder(
@@ -52,8 +54,6 @@ public class ClientsUI extends JPanel{
         createButton.addActionListener(new ButtonHandler());
         panel.add(updateButton);
         updateButton.addActionListener(new ButtonHandler());
-        panel.add(clearButton);
-        clearButton.addActionListener(new ButtonHandler());
         panel.add(deleteButton);
         deleteButton.addActionListener(new ButtonHandler());
         panel.add(firstButton);
@@ -112,6 +112,10 @@ public class ClientsUI extends JPanel{
                 && phone_numField.getText().trim().isEmpty());
     }
 
+    public void setclID(int clID) {
+        this.clID = clID;
+    }
+
     private class ButtonHandler implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
@@ -130,8 +134,7 @@ public class ClientsUI extends JPanel{
                     }
 
                 case "New...":
-                    c.setClID(new Random()
-                            .nextInt(Integer.MAX_VALUE) + 1);
+                    c.setClID(clID);
                     c.setFname("");
                     c.setLname("");
                     c.setPC("");
@@ -175,6 +178,7 @@ public class ClientsUI extends JPanel{
                     break;
                 case "Previous":
                     setFieldData(bean.movePrevious());
+                    break;
                 default:
                     JOptionPane.showMessageDialog(null,
                             "Invalid command");

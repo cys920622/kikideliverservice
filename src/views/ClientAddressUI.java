@@ -34,13 +34,16 @@ public class ClientAddressUI extends JPanel{
 
     private JButton createButton = new JButton("Create");
     private JButton updateButton = new JButton("Update");
-    private JButton clearButton = new JButton("Clear");
     private JButton deleteButton = new JButton("Delete");
     private JButton firstButton = new JButton("First");
     private JButton lastButton = new JButton("Last");
     private JButton nextButton = new JButton("Next");
     private JButton previousButton = new JButton("Previous");
     private JButton nextStepButton = new JButton("Next Step");
+    private JButton makePaymentButton = new JButton("Make Payment");
+
+    private int clID = new Random().nextInt(Integer.MAX_VALUE);
+    private int randdID = 0;
 
     private int tabNumber;
     private String tabName;
@@ -73,8 +76,6 @@ public class ClientAddressUI extends JPanel{
         if (tabNumber == 1) {
             panel.add(createButton);
             createButton.addActionListener(new ButtonHandler());
-            panel.add(clearButton);
-            clearButton.addActionListener(new ButtonHandler());
             panel.add(deleteButton);
             deleteButton.addActionListener(new ButtonHandler());
             panel.add(firstButton);
@@ -88,11 +89,25 @@ public class ClientAddressUI extends JPanel{
             panel.add(nextStepButton);
             nextStepButton.addActionListener(new ButtonHandler());
         }
-        if(tabNumber == 2) {
+        if (tabNumber == 2) {
+            panel.add(createButton);
+            createButton.addActionListener(new ButtonHandler());
+            panel.add(deleteButton);
+            deleteButton.addActionListener(new ButtonHandler());
+            panel.add(firstButton);
+            firstButton.addActionListener(new ButtonHandler());
+            panel.add(lastButton);
+            lastButton.addActionListener(new ButtonHandler());
+            panel.add(nextButton);
+            nextButton.addActionListener(new ButtonHandler());
+            panel.add(previousButton);
+            previousButton.addActionListener(new ButtonHandler());
+            panel.add(nextStepButton);
+            nextStepButton.addActionListener(new ButtonHandler());
+        }
+        if(tabNumber == 3) {
             panel.add(updateButton);
             updateButton.addActionListener(new ButtonHandler());
-            panel.add(clearButton);
-            clearButton.addActionListener(new ButtonHandler());
             panel.add(deleteButton);
             deleteButton.addActionListener(new ButtonHandler());
             panel.add(firstButton);
@@ -175,6 +190,15 @@ public class ClientAddressUI extends JPanel{
                 && street_nameField.getText().trim().isEmpty());
     }
 
+    public void setclID(int clID) {
+        this.clID = clID;
+    }
+
+    private void setrandDID(int dID) {
+        this.randdID = dID;
+
+    }
+
     private class ButtonHandler implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
@@ -195,8 +219,7 @@ public class ClientAddressUI extends JPanel{
                     }
 
                 case "Create":
-                    ca.setClID(new Random()
-                            .nextInt(Integer.MAX_VALUE) + 1);
+                    ca.setClID(clID);
                     ca.setFname("");
                     ca.setLname("");
                     ca.setPC("");
@@ -225,20 +248,21 @@ public class ClientAddressUI extends JPanel{
                     break;
 
                 case "Delete":
-                    JOptionPane.showMessageDialog(null,
-                            "Delete all Deliveries associated with " +
-                                    "Client in order " +
-                                    "to delete Client.");
-//                    if (isEmptyFieldData()) {
-//                        JOptionPane.showMessageDialog(null,
-//                                "Can't delete empty record");
-//                    }
-//                    //ca = bean.getCurrent();
-//                    bean.delete(ca);
-//                    JOptionPane.showMessageDialog(null,
-//                            "Client: " + ca.getFname() + " " + ca.getLname() +
-//                                    " with ClientID " + String.valueOf(ca.getClID())
-//                                    + " was deleted successfully.");
+                    if (isEmptyFieldData()) {
+                        JOptionPane.showMessageDialog(null,
+                                "Can't update empty record");
+                    }
+                    else if (!bean.delete(ca)) {
+                        JOptionPane.showMessageDialog(null,
+                                "Client was successfully deleted.");
+                    }
+                    else {
+                        JOptionPane.showMessageDialog(null,
+                                "Delete all Deliveries associated with " +
+                                        "Client in order " +
+                                        "to delete Client.");
+                    }
+
                     break;
                 case "First":
                     setFieldData(bean.moveFirst());
@@ -255,6 +279,7 @@ public class ClientAddressUI extends JPanel{
                     if(ca.getClID()==0) {
                         JOptionPane.showMessageDialog(null,
                                 "Please at least enter a Client ID");
+                        break;
                     }
                     else {
                         setBorder(new TitledBorder(
@@ -266,39 +291,69 @@ public class ClientAddressUI extends JPanel{
 
                         JPanel panel1 = new JPanel();
 
+                        setrandDID(new Random().nextInt((999999 - 0) + 1));
+
                         ClerkUI showCenters = new ClerkUI("SELECT * from center", "Valid Centers");
                         tab1_1.add(panel1.add(showCenters));
 
+
+                        int randreceiver = new Random().nextInt(Integer.MAX_VALUE);
+
                         DeliveryUI deliveryui = new DeliveryUI();
-                        deliveryui.setPreferredSize(new Dimension(620,300));
+                        deliveryui.setRanddID(randdID);
+                        deliveryui.setSender(ca.getClID());
+                        deliveryui.setReceiver(randreceiver);
+                        deliveryui.setPreferredSize(new Dimension(620, 300));
                         tab1_1.add(panel1.add(deliveryui));
                         panel1.setAlignmentY(TOP_ALIGNMENT);
-
 
 
                         JPanel panel2 = new JPanel();
 
                         ClientAddressUI clientAddressUI = new ClientAddressUI(2);
+                        //1 is for tab1, able to create new sender/receiver
+                        clientAddressUI.setclID(randreceiver);
                         clientAddressUI.setPreferredSize(new Dimension(620, 415));
                         tab1_1.add(panel2.add(clientAddressUI));
 
                         ParcelUI parcelUI = new ParcelUI();
+                        parcelUI.setdID(randdID); //give parcel same dID as delivery
                         parcelUI.setPreferredSize(new Dimension(400, 400));
                         tab1_1.add(panel2.add(parcelUI));
 
+                        tab1_1.add(panel2.add(makePaymentButton));
+                        makePaymentButton.addActionListener(new ButtonHandler());
                         panel2.setAlignmentY(BOTTOM_ALIGNMENT);
 
                         tab1_1Frame.add(tab1_1);
                         tab1_1Frame.setVisible(true);
-
-
-
-
-
-
-
-
                     }
+                    break;
+                case "Make Payment":
+                    setBorder(new TitledBorder(
+                            new EtchedBorder(), "Make a Cash or Credit Card payment"));
+                    JFrame tab1_2Frame = new JFrame();
+                    tab1_2Frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+                    tab1_2Frame.setSize(1000, 500);
+                    JComponent tab1_2 = new JPanel();
+
+                    JPanel panel1 = new JPanel();
+
+                    CashUI cashUI = new CashUI(true);
+                    cashUI.setdID(randdID);
+                    cashUI.setPreferredSize(new Dimension(400, 400));
+
+                    CreditCardUI creditCardUI = new CreditCardUI(true);
+                    creditCardUI.setdID(randdID);
+                    creditCardUI.setPreferredSize(new Dimension(400, 400));
+
+                    tab1_2.add(panel1.add(cashUI));
+                    tab1_2.add(panel1.add(creditCardUI));
+
+                    panel1.setAlignmentY(CENTER_ALIGNMENT);
+
+                    tab1_2Frame.add(tab1_2);
+                    tab1_2Frame.setVisible(true);
                     break;
                 default:
                     JOptionPane.showMessageDialog(null,
