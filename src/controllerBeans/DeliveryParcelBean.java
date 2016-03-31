@@ -42,6 +42,7 @@ public class DeliveryParcelBean {
         }
     }
 
+
     public JTable makeTable(String sql) {
         model = new DefaultTableModel();
         try {
@@ -66,4 +67,30 @@ public class DeliveryParcelBean {
         }
         return new JTable(model);
     }
+
+    public JTable Calculate(String sql) {
+        model = new DefaultTableModel();
+        try {
+            rowSet.setCommand(sql);
+            rowSet.execute();
+            rsmd = rowSet.getMetaData();
+            numcols = rsmd.getColumnCount();
+
+            for (int colIndex = 1; colIndex <= numcols; colIndex++) {
+                model.addColumn(rsmd.getColumnName(colIndex));
+            }
+
+            Object[] row = new Object[numcols];
+            while (rowSet.next()) {
+                for (int i=0; i<numcols; i++){
+                    row[i] = rowSet.getObject(i+1);
+                }
+                model.addRow(row);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return new JTable(model);
+    }
+
 }

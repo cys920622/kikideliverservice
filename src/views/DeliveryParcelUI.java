@@ -179,12 +179,27 @@ public class DeliveryParcelUI extends JPanel{
                     frame.setVisible(true);
                     break;
                 case "Calculate total deliveries:":
+                    JOptionPane.showMessageDialog(null,
+                            bean.Calculate("SELECT count(*) " +
+                                    "FROM delivery"));
                     break;
                 case "Calculate total parcels of deliveryID:":
+                    JOptionPane.showMessageDialog(null,
+                            bean.Calculate("SELECT count(*) " +
+                                    "FROM parcel "+
+                                    "WHERE parcel.dID='"+dp.getTotalpID()+"'"));
                     break;
                 case "Calculate total of type:":
+                    JOptionPane.showMessageDialog(null,
+                            bean.Calculate("SELECT count(*) " +
+                                    "FROM delivery "+
+                                    "WHERE delivery.type='"+dp.getTotaltype()+"'"));
                     break;
                 case "Calculate total of status:":
+                    JOptionPane.showMessageDialog(null,
+                            bean.Calculate("SELECT count(*) " +
+                                    "FROM delivery "+
+                                    "WHERE delivery.status='"+dp.getTotalstatus()+"'"));
                     break;
                 default:
                     JOptionPane.showMessageDialog(null,
