@@ -187,7 +187,7 @@ public class AskForCentreUI extends JPanel {
                         cid = cIDField.getText();
                         System.out.println("executing max weight for "+cid);
                         maxWeightFrame.add(initTable("select max(weight) from parcel where cid='" + cid + "' "));
-                        maxWeightFrame.setSize(320, 240);
+                       maxWeightFrame.setSize(320, 240);
                         maxWeightFrame.setVisible(true);
 
                     }
