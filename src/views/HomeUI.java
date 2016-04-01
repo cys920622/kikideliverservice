@@ -61,8 +61,8 @@ public class HomeUI extends JPanel {
                     //should get back sender/receiver/status from dID through pID
                     //should probably be able to get back all the pID corresponding to dID
                     f.add(new AddressUI());
-                    f.add(new DeliveryUI());
-                    f.add(new ParcelUI());
+                    f.add(new DeliveryUI(false, "select * from delivery"));
+                    f.add(new ParcelUI(false, "select * from parcel"));
                     f.setSize(700, 1200);
                     break;
 

@@ -33,7 +33,10 @@ public class ClientAddressBean {
                     "FROM clients " +
                     "LEFT JOIN address " +
                     "ON clients.PC=address.PC " +
-                    "and clients.house_num=address.house_num");
+                    "and clients.house_num=address.house_num " +
+                    "LEFT JOIN delivery " +
+                    "ON clients.clID=delivery.sender_ID or " +
+                    "clients.clID=delivery.receiver_ID");
 
 //
 //            rowSet = new JdbcRowSetImpl();
@@ -64,19 +67,6 @@ public class ClientAddressBean {
                     + ca.getPC() + "', '"+ ca.getHouse_num()+ "', '"+ ca.getPhone_num() +"' )");
 
 
-//            rowSet.moveToInsertRow();
-//            rowSet.updateInt("clID", ca.getClID());
-//            rowSet.updateString("fname", ca.getFname());
-//            rowSet.updateString("lname", ca.getLname());
-//            rowSet.updateString("PC", ca.getPC());
-//            rowSet.updateInt("house_num", ca.getHouse_num());
-//            rowSet.updateString("phone_num", ca.getPhone_num());
-//            rowSet.updateString("country", ca.getCountry());
-//            rowSet.updateString("province", ca.getProvince());
-//            rowSet.updateString("city", ca.getCity());
-//            rowSet.updateString("street_name", ca.getStreet_name());
-//            rowSet.insertRow();
-//            rowSet.moveToCurrentRow();
         } catch (SQLException e) {
             try {
                 rowSet.rollback();
@@ -110,34 +100,7 @@ public class ClientAddressBean {
                     ",street_name='"+ca.getStreet_name()+"'" +
                     "WHERE PC='"+ca.getPC()+"'" +
                     " and house_num='"+ca.getHouse_num()+"'");
-            //rs.updateRow();
 
-//            rs.updateInt("clID", ca.getClID());
-//            rs.updateString("fname", ca.getFname());
-//            rs.updateString("lname", ca.getLname());
-//            rs.updateString("PC", ca.getPC());
-//            rs.updateInt("house_num", ca.getHouse_num());
-//            rs.updateString("phone_num", ca.getPhone_num());
-//            rs.updateString("country", ca.getCountry());
-//            rs.updateString("province", ca.getProvince());
-//            rs.updateString("city", ca.getCity());
-//            rs.updateString("street_name", ca.getStreet_name());
-//            rs.updateRow();
-//            rs.moveToCurrentRow();
-
-
-//            rowSet.updateInt("clID", ca.getClID());
-//            rowSet.updateString("fname", ca.getFname());
-//            rowSet.updateString("lname", ca.getLname());
-//            rowSet.updateString("PC", ca.getPC());
-//            rowSet.updateInt("house_num", ca.getHouse_num());
-//            rowSet.updateString("phone_num", ca.getPhone_num());
-//            rowSet.updateString("country", ca.getCountry());
-//            rowSet.updateString("province", ca.getProvince());
-//            rowSet.updateString("city", ca.getCity());
-//            rowSet.updateString("street_name", ca.getStreet_name());
-//            rowSet.updateRow();
-//            rowSet.moveToCurrentRow();
         } catch (SQLException e) {
             try {
                 rowSet.rollback();
@@ -179,6 +142,8 @@ public class ClientAddressBean {
             ca.setProvince(rs.getString("province"));
             ca.setCity(rs.getString("city"));
             ca.setStreet_name(rs.getString("street_name"));
+
+            ca.setdID(rs.getInt("dID"));
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -199,6 +164,8 @@ public class ClientAddressBean {
             ca.setProvince(rs.getString("province"));
             ca.setCity(rs.getString("city"));
             ca.setStreet_name(rs.getString("street_name"));
+
+            ca.setdID(rs.getInt("dID"));
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -221,6 +188,8 @@ public class ClientAddressBean {
             ca.setProvince(rs.getString("province"));
             ca.setCity(rs.getString("city"));
             ca.setStreet_name(rs.getString("street_name"));
+
+            ca.setdID(rs.getInt("dID"));
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -244,6 +213,8 @@ public class ClientAddressBean {
             ca.setPC(rs.getString("PC"));
             ca.setHouse_num(rs.getInt("house_num"));
             ca.setPhone_num(rs.getString("phone_num"));
+
+            ca.setdID(rs.getInt("dID"));
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -264,6 +235,8 @@ public class ClientAddressBean {
             ca.setProvince(rs.getString("province"));
             ca.setCity(rs.getString("city"));
             ca.setStreet_name(rs.getString("street_name"));
+
+            ca.setdID(rs.getInt("dID"));
         } catch (SQLException e) {
             e.printStackTrace();
         }

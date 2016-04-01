@@ -36,17 +36,17 @@ public class ClerkHomeUI extends JPanel{
         //TAB1: START A NEW DELIVERY WITH A NEW OR EXISTING CLIENT
         //TAB1: CREATE NEW CLIENT OR GRAB EXISTING CLIENT AND ADD NEW DELIVERY
         JComponent tab1 = new JPanel();
-        tab1.setSize(1200,600);
+        tab1.setSize(1200,800);
         ClerkUI createClientTable = new ClerkUI("SELECT * " +
                 "FROM clients " +
                 "LEFT JOIN address " +
                 "ON clients.PC=address.PC " +
                 "and clients.house_num=address.house_num"
-                , "Clients Info");
+                , "Sender Info");
         createClientTable.setSize(createClientTable.getWidth(), createClientTable.getHeight());
         tab1.add(createClientTable);
         tab1.add(new ClientAddressUI(1));
-        jtab.add("Start a New Delivery", tab1);
+        jtab.add("Start a New Delivery or Update a Delivery ", tab1);
         // ------------------------------------------------------------------------
 
         //TAB2: UPDATE EXISTING CLIENTS
@@ -55,11 +55,15 @@ public class ClerkHomeUI extends JPanel{
                 "FROM clients " +
                 "LEFT JOIN address " +
                 "ON clients.PC=address.PC " +
-                "and clients.house_num=address.house_num"
+                "and clients.house_num=address.house_num " +
+                "LEFT JOIN delivery " +
+                "ON clients.clID=delivery.sender_ID or " +
+                "clients.clID=delivery.receiver_ID"
                 , "Clients Info");
         editClientTable.setSize(editClientTable.getWidth(), editClientTable.getHeight());
         tab2.add(editClientTable);
         tab2.add(new ClientAddressUI(3));
+        tab2.setSize(1200,700);
         jtab.add("Update a Client", tab2);
 
 
@@ -102,57 +106,5 @@ public class ClerkHomeUI extends JPanel{
         add(jtab, BorderLayout.CENTER);
         jtab.setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT);
     }
-
-
-//    private JPanel initButtons() {
-//        JPanel panel = new JPanel();
-//        panel.setLayout(new FlowLayout(FlowLayout.CENTER, 3, 3));
-//        panel.add(browseClients);
-//        browseClients.addActionListener(new ButtonHandler());
-//        panel.add(editClients);
-//        editClients.addActionListener(new ButtonHandler());
-//        panel.add(browseDeliveries);
-//        browseDeliveries.addActionListener(new ButtonHandler());
-//        panel.add(editDeliveries);
-//        editDeliveries.addActionListener(new ButtonHandler());
-//        return panel;
-//    }
-
-
-//    private class ButtonHandler implements ActionListener {
-//        @Override
-//        public void actionPerformed(ActionEvent e) {
-//            JFrame f = new JFrame();
-//            f.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-//            f.getContentPane().setLayout(new FlowLayout(FlowLayout.LEADING));
-//            switch (e.getActionCommand()) {
-//                case "Browse Clients":
-//                    ClerkUI clerk = new ClerkUI();
-//                    JTable table1 = clerk.initTable("SELECT * FROM clients LEFT JOIN " +
-//                            "address ON clients.PC=address.PC and clients.house_num=address.house_num");
-//                    table1.setAutoCreateRowSorter(true);
-//                    //table1.getAutoResizeMode();
-//                    //table1.getAutoscrolls();
-//                    f.add(clerk);
-//                    break;
-//                case "Create or Update Clients":
-//                    ClientsUI clientsUI = new ClientsUI();
-//                    add(clientsUI);
-//                    break;
-//                case "Browse Deliveries":
-//
-//                    break;
-//                case "Create or Update Deliveries":
-//                    break;
-//
-//                default:
-//                    JOptionPane.showMessageDialog(null,
-//                            "Invalid command");
-//            }
-//            f.setSize(700, 800);
-//            f.setVisible(true);
-//        }
-//    }
-
 
 }

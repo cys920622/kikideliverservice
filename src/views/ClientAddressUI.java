@@ -31,6 +31,7 @@ public class ClientAddressUI extends JPanel{
     private JTextField provinceField = new JTextField(2);
     private JTextField cityField = new JTextField(20);
     private JTextField street_nameField = new JTextField(30);
+    private JTextField updatedIDField = new JTextField(6);
 
     private JButton createButton = new JButton("Create");
     private JButton updateButton = new JButton("Update");
@@ -59,20 +60,30 @@ public class ClientAddressUI extends JPanel{
         else if (tabNumber == 2) {
             tabName = "Enter Receiver Info";
         }
+        else if (tabNumber == 3) {
+            tabName = "Update a Client Info";
+        }
+        else if (tabNumber == 4) {
+            tabName = "Update the Receiver Info";
+        }
 
         setBorder(new TitledBorder(
                 new EtchedBorder(), tabName));
         setLayout(new BorderLayout(1, 1));
         add(initFields(), BorderLayout.NORTH);
         add(initButtons(), BorderLayout.CENTER);
-        house_numField.setText(String.valueOf(0));
+
+        if(tabNumber == 3) {
+            add(initUpdateDelivery(), BorderLayout.SOUTH);
+        }
         clIDField.setText(String.valueOf(0));
         house_numField.setText(String.valueOf(0));
+        updatedIDField.setText(String.valueOf(0));
     }
 
     private JPanel initButtons() {
         JPanel panel = new JPanel();
-        panel.setLayout(new FlowLayout(FlowLayout.CENTER, 4, 4));
+        panel.setLayout(new FlowLayout(FlowLayout.CENTER, 3, 3));
         if (tabNumber == 1) {
             panel.add(createButton);
             createButton.addActionListener(new ButtonHandler());
@@ -89,7 +100,7 @@ public class ClientAddressUI extends JPanel{
             panel.add(nextStepButton);
             nextStepButton.addActionListener(new ButtonHandler());
         }
-        if (tabNumber == 2) {
+        else if (tabNumber == 2) {
             panel.add(createButton);
             createButton.addActionListener(new ButtonHandler());
             panel.add(deleteButton);
@@ -105,7 +116,21 @@ public class ClientAddressUI extends JPanel{
             panel.add(nextStepButton);
             nextStepButton.addActionListener(new ButtonHandler());
         }
-        if(tabNumber == 3) {
+        else if(tabNumber == 3) {
+            panel.add(updateButton);
+            updateButton.addActionListener(new ButtonHandler());
+            panel.add(deleteButton);
+            deleteButton.addActionListener(new ButtonHandler());
+            panel.add(firstButton);
+            firstButton.addActionListener(new ButtonHandler());
+            panel.add(lastButton);
+            lastButton.addActionListener(new ButtonHandler());
+            panel.add(nextButton);
+            nextButton.addActionListener(new ButtonHandler());
+            panel.add(previousButton);
+            previousButton.addActionListener(new ButtonHandler());
+        }
+        else if (tabNumber == 4) {
             panel.add(updateButton);
             updateButton.addActionListener(new ButtonHandler());
             panel.add(deleteButton);
@@ -120,6 +145,17 @@ public class ClientAddressUI extends JPanel{
             previousButton.addActionListener(new ButtonHandler());
         }
 
+
+        return panel;
+    }
+
+    private JPanel initUpdateDelivery() {
+        JPanel panel = new JPanel();
+        panel.setLayout(new MigLayout());
+        panel.add(new JLabel("Enter Delivery ID to update"), "align label");
+        panel.add(updatedIDField, "wrap");
+        panel.add(nextStepButton, "wrap");
+        nextStepButton.addActionListener(new ButtonHandler());
         return panel;
     }
 
@@ -161,6 +197,7 @@ public class ClientAddressUI extends JPanel{
         ca.setProvince(provinceField.getText());
         ca.setCity(cityField.getText());
         ca.setStreet_name(street_nameField.getText());
+        ca.setdID(Integer.parseInt(updatedIDField.getText()));
         return ca;
     }
 
@@ -175,6 +212,9 @@ public class ClientAddressUI extends JPanel{
         provinceField.setText(ca.getProvince());
         cityField.setText(ca.getCity());
         street_nameField.setText(ca.getStreet_name());
+        street_nameField.setText(ca.getStreet_name());
+        updatedIDField.setText(String.valueOf(ca.getdID()));
+
     }
 
     private boolean isEmptyFieldData() {
@@ -281,9 +321,9 @@ public class ClientAddressUI extends JPanel{
                                 "Please at least enter a Client ID");
                         break;
                     }
-                    else {
-                        setBorder(new TitledBorder(
-                                new EtchedBorder(), "Create new Delivery "));
+                    else if (tabNumber == 1){
+                        //setBorder(new TitledBorder(
+                        //        new EtchedBorder(), "Create or Update a Delivery "));
                         JFrame tab1_1Frame = new JFrame();
                         tab1_1Frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
                         tab1_1Frame.setSize(1500, 780);
@@ -299,7 +339,7 @@ public class ClientAddressUI extends JPanel{
 
                         int randreceiver = new Random().nextInt(Integer.MAX_VALUE);
 
-                        DeliveryUI deliveryui = new DeliveryUI();
+                        DeliveryUI deliveryui = new DeliveryUI(false, "select * from delivery");
                         deliveryui.setRanddID(randdID);
                         deliveryui.setSender(ca.getClID());
                         deliveryui.setReceiver(randreceiver);
@@ -316,7 +356,7 @@ public class ClientAddressUI extends JPanel{
                         clientAddressUI.setPreferredSize(new Dimension(620, 415));
                         tab1_1.add(panel2.add(clientAddressUI));
 
-                        ParcelUI parcelUI = new ParcelUI();
+                        ParcelUI parcelUI = new ParcelUI(false, "select * from parcel");
                         parcelUI.setdID(randdID); //give parcel same dID as delivery
                         parcelUI.setPreferredSize(new Dimension(400, 400));
                         tab1_1.add(panel2.add(parcelUI));
@@ -328,16 +368,65 @@ public class ClientAddressUI extends JPanel{
                         tab1_1Frame.add(tab1_1);
                         tab1_1Frame.setVisible(true);
                     }
+                    else if (tabNumber == 3) {
+                        JFrame tab1_1Frame = new JFrame();
+                        tab1_1Frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+                        tab1_1Frame.setSize(1500, 780);
+                        JComponent tab1_1 = new JPanel();
+
+                        JPanel panel1 = new JPanel();
+
+                        //create field for entering dID to update
+                        //setrandDID(new Random().nextInt((999999 - 0) + 1));
+
+
+                        ClerkUI showCenters = new ClerkUI("SELECT * from center", "Valid Centers");
+                        tab1_1.add(panel1.add(showCenters));
+
+
+                        int randreceiver = new Random().nextInt(Integer.MAX_VALUE);
+
+                        DeliveryUI deliveryui = new DeliveryUI(true, "SELECT * " +
+                                "FROM delivery " +
+                                "WHERE delivery.dID = '"+ca.getdID()+"'");
+                        deliveryui.setRanddID(ca.getdID());
+                        deliveryui.setSender(ca.getClID());
+                        deliveryui.setReceiver(randreceiver);
+                        deliveryui.setPreferredSize(new Dimension(620, 300));
+                        tab1_1.add(panel1.add(deliveryui));
+                        panel1.setAlignmentY(TOP_ALIGNMENT);
+
+
+                        JPanel panel2 = new JPanel();
+
+                        ClientAddressUI clientAddressUI = new ClientAddressUI(4);
+                        //1 is for tab1, able to create new sender/receiver
+                        clientAddressUI.setclID(randreceiver);
+                        clientAddressUI.setPreferredSize(new Dimension(620, 500));
+                        tab1_1.add(panel2.add(clientAddressUI));
+
+                        ParcelUI parcelUI = new ParcelUI(true, "SELECT * " +
+                                "FROM parcel " +
+                                "WHERE parcel.dID = '"+ca.getdID()+"'");
+                        parcelUI.setdID(ca.getdID()); //give parcel same dID as delivery
+                        parcelUI.setPreferredSize(new Dimension(400, 400));
+                        tab1_1.add(panel2.add(parcelUI));
+
+
+                        tab1_1Frame.add(tab1_1);
+                        tab1_1Frame.setVisible(true);
+                    }
                     break;
                 case "Make Payment":
-                    setBorder(new TitledBorder(
-                            new EtchedBorder(), "Make a Cash or Credit Card payment"));
+
                     JFrame tab1_2Frame = new JFrame();
                     tab1_2Frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
                     tab1_2Frame.setSize(1000, 500);
                     JComponent tab1_2 = new JPanel();
 
                     JPanel panel1 = new JPanel();
+                    //panel1.setBorder(new TitledBorder(
+                            //new EtchedBorder(), "Make a Cash or Credit Card payment"));
 
                     CashUI cashUI = new CashUI(true);
                     cashUI.setdID(randdID);

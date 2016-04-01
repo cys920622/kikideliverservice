@@ -1,5 +1,6 @@
 package views;
 
+import com.sun.org.apache.xpath.internal.operations.Bool;
 import controllerBeans.ParcelBean;
 import entityClasses.Parcel;
 import net.miginfocom.swing.MigLayout;
@@ -35,15 +36,20 @@ public class ParcelUI extends JPanel{
 
     private int dID = new Random().nextInt((999999-0) +1);
 
-    private ParcelBean bean = new ParcelBean();
-
+    private ParcelBean bean;
+    private Boolean isUpdateable = false;
     //takes in rand int that is the same as Delivery's dID
-    public ParcelUI() {
+    public ParcelUI(Boolean isUpdateable, String sql) {
         setBorder(new TitledBorder(
                 new EtchedBorder(), "Parcel details"));
         setLayout(new BorderLayout(5, 5));
+        this.isUpdateable = isUpdateable;
+
         add(initFields(), BorderLayout.NORTH);
         add(initButtons(), BorderLayout.CENTER);
+
+
+        bean = new ParcelBean(sql);
 
 
         pIDField.setText(String.valueOf(0));
@@ -61,20 +67,24 @@ public class ParcelUI extends JPanel{
     private JPanel initButtons() {
         JPanel panel = new JPanel();
         panel.setLayout(new FlowLayout(FlowLayout.CENTER, 3, 3));
-        panel.add(createButton);
-        createButton.addActionListener(new ButtonHandler());
-        panel.add(updateButton);
-        updateButton.addActionListener(new ButtonHandler());
-        panel.add(deleteButton);
-        deleteButton.addActionListener(new ButtonHandler());
-        panel.add(firstButton);
-        firstButton.addActionListener(new ButtonHandler());
-        panel.add(lastButton);
-        lastButton.addActionListener(new ButtonHandler());
-        panel.add(nextButton);
-        nextButton.addActionListener(new ButtonHandler());
-        panel.add(previousButton);
-        previousButton.addActionListener(new ButtonHandler());
+        if (isUpdateable) {
+            panel.add(updateButton);
+            updateButton.addActionListener(new ButtonHandler());
+            panel.add(deleteButton);
+            deleteButton.addActionListener(new ButtonHandler());
+            panel.add(firstButton);
+            firstButton.addActionListener(new ButtonHandler());
+            panel.add(lastButton);
+            lastButton.addActionListener(new ButtonHandler());
+            panel.add(nextButton);
+            nextButton.addActionListener(new ButtonHandler());
+            panel.add(previousButton);
+            previousButton.addActionListener(new ButtonHandler());
+        }
+        if (!isUpdateable) {
+            panel.add(createButton);
+            createButton.addActionListener(new ButtonHandler());
+        }
         return panel;
     }
 

@@ -14,6 +14,8 @@ public class ClientAddress {
     private String province;
     private String city;
     private String street_name;
+    private int dID;
+
 
     public ClientAddress() { }
 
@@ -96,4 +98,13 @@ public class ClientAddress {
     public void setStreet_name(String street_name) {
         this.street_name = street_name;
     }
+
+    public int getdID() {
+        return dID;
+    }
+
+    public void setdID(int dID) {
+        this.dID = dID;
+    }
+
 }

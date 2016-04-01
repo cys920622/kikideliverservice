@@ -16,14 +16,15 @@ public class DeliveryBean {
     static final String PASS = "password";
     private JdbcRowSet rowSet = null;
 
-    public DeliveryBean() {
+    public DeliveryBean(String sql) {
         try {
             Class.forName(JDBC_DRIVER);
             rowSet = new JdbcRowSetImpl();
             rowSet.setUrl(DB_URL);
             rowSet.setUsername(USER);
             rowSet.setPassword(PASS);
-            rowSet.setCommand("select * from Delivery");
+            rowSet.setCommand(sql);
+            //rowSet.setCommand("select * from Delivery");
             rowSet.execute();
         } catch (ClassNotFoundException | SQLException e) {
             e.printStackTrace();

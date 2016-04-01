@@ -24,14 +24,15 @@ public class ParcelBean {
     private ResultSet rs;
 
 
-    public ParcelBean() {
+    public ParcelBean(String sql) {
         try {
             Class.forName(JDBC_DRIVER);
             rowSet = new JdbcRowSetImpl();
             rowSet.setUrl(DB_URL);
             rowSet.setUsername(USER);
             rowSet.setPassword(PASS);
-            rowSet.setCommand("select * from parcel");
+            rowSet.setCommand(sql);
+            //rowSet.setCommand("select * from parcel");
             rowSet.execute();
 
             conn = DriverManager.getConnection(DB_URL, USER, PASS);
