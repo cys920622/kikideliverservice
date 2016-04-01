@@ -133,7 +133,7 @@ public class DeliveryParcelUI extends JPanel{
             frame.setSize(900, 400);
             DeliveryParcel dp = getFieldData();
             switch (e.getActionCommand()) {
-                case "Filter by dID:":
+                case "Filter deliveries by delivery ID:":
                     frame.add(initTable("SELECT * " +
                             "FROM delivery " +
                             "LEFT JOIN parcel " +
@@ -142,7 +142,7 @@ public class DeliveryParcelUI extends JPanel{
                             "Parcels belonging to Deliveries with dID: "+ dp.getFilterdID()));
                     frame.setVisible(true);
                     break;
-                case "Filter by type:":
+                case "Filter deliveries by type:":
                     frame.add(initTable("SELECT * " +
                                     "FROM delivery " +
                                     "LEFT JOIN parcel " +
@@ -151,7 +151,7 @@ public class DeliveryParcelUI extends JPanel{
                                     "Deliveries of type: "+ dp.getFiltertype()));
                     frame.setVisible(true);
                     break;
-                case "Filter by status:":
+                case "Filter deliveries by status:":
                     frame.add(initTable("SELECT * " +
                                     "FROM delivery " +
                                     "LEFT JOIN parcel " +
@@ -160,7 +160,7 @@ public class DeliveryParcelUI extends JPanel{
                             "Deliveries of status: "+ dp.getFilterstatus()));
                     frame.setVisible(true);
                     break;
-                case "Filter by sender:":
+                case "Filter deliveries by sender ID:":
                     frame.add(initTable("SELECT * " +
                                     "FROM delivery " +
                                     "LEFT JOIN parcel " +
@@ -169,7 +169,7 @@ public class DeliveryParcelUI extends JPanel{
                             "Deliveries from sender: "+ dp.getFiltersender()));
                     frame.setVisible(true);
                     break;
-                case "Filter by receiver:":
+                case "Filter deliveries by receiver ID:":
                     frame.add(initTable("SELECT * " +
                                     "FROM delivery " +
                                     "LEFT JOIN parcel " +
@@ -178,16 +178,18 @@ public class DeliveryParcelUI extends JPanel{
                             "Deliveries to receiver: "+ dp.getFilterreceiver()));
                     frame.setVisible(true);
                     break;
-                case "Calculate total deliveries:":
+                case "Calculate total deliveries":
+                    System.out.println("hi");
                     JOptionPane.showMessageDialog(null,
                             bean.Calculate("SELECT count(*) " +
                                     "FROM delivery"));
                     break;
-                case "Calculate total parcels of deliveryID:":
+                case "Calculate total parcels of delivery ID:":
                     if (dp.getTotalpID() == 0) {
                         JOptionPane.showMessageDialog(null,
                                 bean.Calculate("SELECT count(*) " +
                                         "FROM parcel "));
+                        break;
                     }
                     else {
                         JOptionPane.showMessageDialog(null,
@@ -196,13 +198,13 @@ public class DeliveryParcelUI extends JPanel{
                                         "WHERE parcel.dID='"+dp.getTotalpID()+"'"));
                     }
                     break;
-                case "Calculate total of type:":
+                case "Calculate total deliveries with type:":
                     JOptionPane.showMessageDialog(null,
                             bean.Calculate("SELECT count(*) " +
                                     "FROM delivery "+
                                     "WHERE delivery.type='"+dp.getTotaltype()+"'"));
                     break;
-                case "Calculate total of status:":
+                case "Calculate total deliveries with status:":
                     JOptionPane.showMessageDialog(null,
                             bean.Calculate("SELECT count(*) " +
                                     "FROM delivery "+

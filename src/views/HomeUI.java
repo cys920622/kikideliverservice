@@ -68,7 +68,7 @@ public class HomeUI extends JPanel {
 
                 case "Clerk":
                     f.add(new ClerkHomeUI());
-                    f.setSize(1300, 600);
+                    f.setSize(1300, 700);
                     break;
 
                     //need to also add cash/credit info
