@@ -6,7 +6,7 @@ import entityClasses.ClientAddress;
 import entityClasses.Clients;
 import javafx.scene.layout.GridPane;
 import net.miginfocom.swing.MigLayout;
-import sun.awt.VariableGridLayout;
+//import sun.awt.VariableGridLayout;
 
 import javax.swing.*;
 import javax.swing.border.Border;
