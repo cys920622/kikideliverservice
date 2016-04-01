@@ -53,6 +53,7 @@ public class CashUI extends JPanel{
 
     }
 
+
     private JPanel initButtons() {
         JPanel panel = new JPanel();
         panel.setLayout(new FlowLayout(FlowLayout.CENTER, 3, 3));

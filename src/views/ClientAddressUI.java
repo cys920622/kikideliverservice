@@ -87,8 +87,6 @@ public class ClientAddressUI extends JPanel{
         if (tabNumber == 1) {
             panel.add(createButton);
             createButton.addActionListener(new ButtonHandler());
-            panel.add(deleteButton);
-            deleteButton.addActionListener(new ButtonHandler());
             panel.add(firstButton);
             firstButton.addActionListener(new ButtonHandler());
             panel.add(lastButton);
@@ -103,8 +101,6 @@ public class ClientAddressUI extends JPanel{
         else if (tabNumber == 2) {
             panel.add(createButton);
             createButton.addActionListener(new ButtonHandler());
-            panel.add(deleteButton);
-            deleteButton.addActionListener(new ButtonHandler());
             panel.add(firstButton);
             firstButton.addActionListener(new ButtonHandler());
             panel.add(lastButton);

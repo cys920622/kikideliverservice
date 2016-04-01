@@ -46,7 +46,7 @@ public class ClerkHomeUI extends JPanel{
         createClientTable.setSize(createClientTable.getWidth(), createClientTable.getHeight());
         tab1.add(createClientTable);
         tab1.add(new ClientAddressUI(1));
-        jtab.add("Start a New Delivery or Update a Delivery ", tab1);
+        jtab.add("Start a New Delivery", tab1);
         // ------------------------------------------------------------------------
 
         //TAB2: UPDATE EXISTING CLIENTS
@@ -64,7 +64,7 @@ public class ClerkHomeUI extends JPanel{
         tab2.add(editClientTable);
         tab2.add(new ClientAddressUI(3));
         tab2.setSize(1200,700);
-        jtab.add("Update a Client", tab2);
+        jtab.add("Update a Client and associated Deliveries", tab2);
 
 
         //TAB3: BROWSE DELIVERIES AND PARCELS
@@ -83,24 +83,37 @@ public class ClerkHomeUI extends JPanel{
 
 
         //ADD TAB: BROWSE PAYMENTS
-        JComponent everythingPayments = new JPanel();
-        everythingPayments.setLayout(new GridLayout(1,1));
-        everythingPayments.setSize(300,100);
+        JComponent tab4 = new JPanel();
+        //JPanel tab4up = new JPanel();
+        //JPanel tab4bottom = new JPanel();
+        //tab4.setLayout(new GridLayout(1, 3));
+        //tab4.setSize(300, 100);
         JComponent browseCreditPayments = new ClerkUI(
                 "SELECT amount, payID, onDate, credit_card.dID, credit_card_num, CSV, name, expiry_date, credit_card.type " +
                         "FROM credit_card " +
                         "LEFT JOIN delivery " +
                         "ON credit_card.dID=delivery.dID"
                 , "Credit Card Payments");
-        everythingPayments.add(browseCreditPayments);
+        browseCreditPayments.setSize(browseCreditPayments.getWidth(), browseCreditPayments.getHeight());
+        tab4.add(browseCreditPayments);
         JComponent browseCashPayments = new ClerkUI(
                 "SELECT amount, payID, onDate, cash.dID " +
                         "FROM cash " +
                         "LEFT JOIN delivery " +
                         "ON cash.dID=delivery.dID"
                 , "Cash Payments");
-        everythingPayments.add(browseCashPayments);
-        jtab.add("browse Payments", everythingPayments);
+        tab4.add(browseCashPayments);
+        browseCashPayments.setSize(browseCashPayments.getWidth(), browseCashPayments.getHeight());
+
+        tab4.add(new CashCreditUI());
+
+//        jtab.add(tab4up);
+//        tab4up.setAlignmentY(TOP_ALIGNMENT);
+//        jtab.add(tab4bottom);
+//        tab4bottom.setAlignmentY(BOTTOM_ALIGNMENT);
+
+        jtab.add("browse Payments", tab4);
+
 
 
         add(jtab, BorderLayout.CENTER);
