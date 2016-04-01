@@ -2,6 +2,7 @@ package controllerBeans;
 
 import com.sun.rowset.JdbcRowSetImpl;
 import entityClasses.Address;
+import entityClasses.Center;
 import entityClasses.Parcel;
 
 import javax.sql.rowset.JdbcRowSet;
@@ -16,21 +17,35 @@ public class ParcelBean {
     static final String USER = "root";
     static final String PASS = "password";
     private JdbcRowSet rowSet = null;
+    private ResultSet rsCenter = null;
 
     private Connection conn;
     private Statement stmt;
     private ResultSet rs;
 
 
-    public ParcelBean() {
+    public ParcelBean(String sql) {
         try {
             Class.forName(JDBC_DRIVER);
-//            rowSet = new JdbcRowSetImpl();
-//            rowSet.setUrl(DB_URL);
-//            rowSet.setUsername(USER);
-//            rowSet.setPassword(PASS);
-//            rowSet.setCommand("select * from parcel");
-//            rowSet.execute();
+            rowSet = new JdbcRowSetImpl();
+            rowSet.setUrl(DB_URL);
+            rowSet.setUsername(USER);
+            rowSet.setPassword(PASS);
+            rowSet.setCommand(sql);
+            //rowSet.setCommand("select * from parcel");
+            rowSet.execute();
+
+            conn = DriverManager.getConnection(DB_URL, USER, PASS);
+            stmt = conn.createStatement();
+            rsCenter = stmt.executeQuery("select * from center");
+
+//            rowSetCenter = new JdbcRowSetImpl();
+//            rowSetCenter.setUrl(DB_URL);
+//            rowSetCenter.setUsername(USER);
+//            rowSetCenter.setPassword(PASS);
+//            rowSetCenter.setCommand("select * from center");
+//            rowSetCenter.execute();
+
             conn = DriverManager.getConnection(DB_URL, USER, PASS);
             stmt = conn.createStatement();
 
@@ -40,19 +55,32 @@ public class ParcelBean {
         }
     }
 
-    public Parcel create(Parcel parcel) {
+    public Parcel create(Parcel parcel, String centerMatch, String nextCenterMatch) {
         try {
-            rowSet.moveToInsertRow();
-            rowSet.updateInt("pID", parcel.getpID());
-            rowSet.updateFloat("width", parcel.getWidth());
-            rowSet.updateFloat("length", parcel.getLength());
-            rowSet.updateFloat("height", parcel.getHeight());
-            rowSet.updateFloat("weight", parcel.getWeight());
-            rowSet.updateInt("dID", parcel.getdID());
-            rowSet.updateString("cID", parcel.getcID());
-            rowSet.updateString("next_cID", parcel.getNextcID());
-            rowSet.insertRow();
-            rowSet.moveToCurrentRow();
+            Boolean isValidCenter = false;
+            Boolean isValidNextCenter = false;
+            while (rsCenter.next() && (!isValidCenter || !isValidNextCenter) ) {
+                if (centerMatch.equals(rsCenter.getString("cID"))) {
+                    isValidCenter = true;
+                }
+                if (nextCenterMatch.equals(rsCenter.getString("cID"))) {
+                    isValidNextCenter = true;
+                }
+            }
+            if (isValidCenter && isValidNextCenter) {
+                rowSet.moveToInsertRow();
+                rowSet.updateInt("pID", parcel.getpID());
+                rowSet.updateFloat("width", parcel.getWidth());
+                rowSet.updateFloat("length", parcel.getLength());
+                rowSet.updateFloat("height", parcel.getHeight());
+                rowSet.updateFloat("weight", parcel.getWeight());
+                rowSet.updateInt("dID", parcel.getdID());
+                rowSet.updateString("cID", parcel.getcID());
+                rowSet.updateString("next_cID", parcel.getNextcID());
+                rowSet.insertRow();
+                rowSet.moveToCurrentRow();
+            } else return null;
+
         } catch (SQLException e) {
             try {
                 rowSet.rollback();
@@ -66,18 +94,32 @@ public class ParcelBean {
         return parcel;
     }
 
-    public Parcel update(Parcel parcel) {
+    public Parcel update(Parcel parcel, String centerMatch, String nextCenterMatch) {
         try {
-            rowSet.updateInt("pID", parcel.getpID());
-            rowSet.updateFloat("width", parcel.getWidth());
-            rowSet.updateFloat("length", parcel.getLength());
-            rowSet.updateFloat("height", parcel.getHeight());
-            rowSet.updateFloat("weight", parcel.getWeight());
-            rowSet.updateInt("dID", parcel.getdID());
-            rowSet.updateString("cID", parcel.getcID());
-            rowSet.updateString("next_cID", parcel.getNextcID());
-            rowSet.updateRow();
-            rowSet.moveToCurrentRow();
+            Boolean isValidCenter = false;
+            Boolean isValidNextCenter = false;
+            while (rsCenter.next() && (!isValidCenter || !isValidNextCenter) ) {
+                if (centerMatch.equals(rsCenter.getString("cID"))) {
+                    isValidCenter = true;
+                }
+                if (nextCenterMatch.equals(rsCenter.getString("cID"))) {
+                    isValidNextCenter = true;
+                }
+            }
+            if (isValidCenter && isValidNextCenter) {
+                rowSet.updateInt("pID", parcel.getpID());
+                rowSet.updateFloat("width", parcel.getWidth());
+                rowSet.updateFloat("length", parcel.getLength());
+                rowSet.updateFloat("height", parcel.getHeight());
+                rowSet.updateFloat("weight", parcel.getWeight());
+                rowSet.updateInt("dID", parcel.getdID());
+
+                rowSet.updateString("cID", parcel.getcID());
+                rowSet.updateString("next_cID", parcel.getNextcID());
+
+                rowSet.updateRow();
+                rowSet.moveToCurrentRow();
+            } else return null;
         } catch (SQLException e) {
             try {
                 rowSet.rollback();
@@ -200,7 +242,8 @@ public class ParcelBean {
     public void submit(Integer did) {
         try {
 //            if (rowSet.getInt("dID") == did) {
-            stmt.executeUpdate("UPDATE delivery SET status = 'arrived' where dID = '"
+            stmt.executeUpdate("UPDATE delivery " +
+                    "SET status = 'arrived' where dID = '"
                     + did + "'");
 
 

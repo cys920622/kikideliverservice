@@ -29,7 +29,7 @@ public class CenterUI extends JPanel{
     private JButton submitButton = new JButton("Update");
 
     private CenterBean bean = new CenterBean();
-    private ParcelBean pBean = new ParcelBean();
+    private ParcelBean pBean = new ParcelBean("select * from parcel");
 
 
 

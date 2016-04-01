@@ -31,13 +31,15 @@ public class HomeUI extends JPanel {
     public HomeUI() {
         setBorder(new TitledBorder(
                 new EtchedBorder(), "User List"));
+        f.setSize(10,10);
         add(initButtons());
     }
 
     private JPanel initButtons() {
+
         JPanel panel = new JPanel();
         //panel.setLayout(new FlowLayout(FlowLayout.CENTER, 3, 3));
-        panel.setSize(10,10);
+        panel.setSize(3,3);
         panel.add(clientButton);
         clientButton.addActionListener(new ButtonHandler());
         panel.add(clerkButton);
@@ -59,14 +61,14 @@ public class HomeUI extends JPanel {
                     //should get back sender/receiver/status from dID through pID
                     //should probably be able to get back all the pID corresponding to dID
                     f.add(new AddressUI());
-                    f.add(new DeliveryUI());
-                    f.add(new ParcelUI());
+                    f.add(new DeliveryUI(false, "select * from delivery"));
+                    f.add(new ParcelUI(false, "select * from parcel"));
                     f.setSize(700, 1200);
                     break;
 
                 case "Clerk":
                     f.add(new ClerkHomeUI());
-                    f.setSize(1200, 650);
+                    f.setSize(1300, 600);
                     break;
 
                     //need to also add cash/credit info

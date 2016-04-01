@@ -33,111 +33,91 @@ public class ClerkHomeUI extends JPanel{
         // NEW TAB
         JTabbedPane jtab = new JTabbedPane();
 
-//        "SELECT * " +
-//                "FROM clients " +
-//                "NATURAL LEFT JOIN address"
-//                , "Create New Client and Delivery"
+        //TAB1: START A NEW DELIVERY WITH A NEW OR EXISTING CLIENT
+        //TAB1: CREATE NEW CLIENT OR GRAB EXISTING CLIENT AND ADD NEW DELIVERY
+        JComponent tab1 = new JPanel();
+        tab1.setSize(1200,800);
+        ClerkUI createClientTable = new ClerkUI("SELECT * " +
+                "FROM clients " +
+                "LEFT JOIN address " +
+                "ON clients.PC=address.PC " +
+                "and clients.house_num=address.house_num"
+                , "Sender Info");
+        createClientTable.setSize(createClientTable.getWidth(), createClientTable.getHeight());
+        tab1.add(createClientTable);
+        tab1.add(new ClientAddressUI(1));
+        jtab.add("Start a New Delivery", tab1);
+        // ------------------------------------------------------------------------
 
-        //ADD TAB: BROWSE CLIENTS
-        JComponent everythingClients = new JPanel();
-        ClerkUI browseClients = new ClerkUI("SELECT * " +
-                "FROM clients"
-                , "Create New Client and Delivery");
-        browseClients.setSize(browseClients.getWidth(), browseClients.getHeight());
-        everythingClients.add(browseClients);
-        everythingClients.add(new ClientsUI(), new AddressUI());
-        jtab.add("browse Clients", everythingClients);
+        //TAB2: UPDATE EXISTING CLIENTS
+        JComponent tab2 = new JPanel();
+        ClerkUI editClientTable = new ClerkUI("SELECT * " +
+                "FROM clients " +
+                "LEFT JOIN address " +
+                "ON clients.PC=address.PC " +
+                "and clients.house_num=address.house_num " +
+                "LEFT JOIN delivery " +
+                "ON clients.clID=delivery.sender_ID or " +
+                "clients.clID=delivery.receiver_ID"
+                , "Clients Info");
+        editClientTable.setSize(editClientTable.getWidth(), editClientTable.getHeight());
+        tab2.add(editClientTable);
+        tab2.add(new ClientAddressUI(3));
+        tab2.setSize(1200,700);
+        jtab.add("Update a Client and associated Deliveries", tab2);
 
 
-        //ADD TAB: BROWSE DELIVERIES
-        JComponent browseDeliveries = new ClerkUI(
-                "SELECT cID, clID, fname, lname, dID, type, status, sender_ID, receiver_ID " +
-                        "FROM clients " +
-                        "LEFT JOIN delivery " +
-                        "ON clients.clID=delivery.sender_ID " +
-                        "or clients.clID=delivery.receiver_ID"
-                , "Browse Deliveries");
-        jtab.add("browse Deliveries", browseDeliveries);
+        //TAB3: BROWSE DELIVERIES AND PARCELS
+        JComponent tab3 = new JPanel();
+        ClerkUI browseDeliveries = new ClerkUI(
+                "SELECT * " +
+                        "FROM delivery " +
+                        "LEFT JOIN parcel " +
+                        "ON delivery.dID=parcel.dID"
+                , "Browse Deliveries and its Parcels");
+        tab3.add(browseDeliveries);
+        tab3.add(new DeliveryParcelUI());
+        jtab.add("browse Deliveries", tab3);
 
-        //ADD TAB: EDIT DELIVERIES
-        JComponent editDeliveries = new DeliveryUI();
-        jtab.add("edit Deliveries", editDeliveries);
+        // ------------------------------------------------------------------------
+
 
         //ADD TAB: BROWSE PAYMENTS
-        JComponent everythingPayments = new JPanel();
-        everythingPayments.setLayout(new GridLayout(1,1));
-        everythingPayments.setSize(300,100);
+        JComponent tab4 = new JPanel();
+        //JPanel tab4up = new JPanel();
+        //JPanel tab4bottom = new JPanel();
+        //tab4.setLayout(new GridLayout(1, 3));
+        //tab4.setSize(300, 100);
         JComponent browseCreditPayments = new ClerkUI(
                 "SELECT amount, payID, onDate, credit_card.dID, credit_card_num, CSV, name, expiry_date, credit_card.type " +
                         "FROM credit_card " +
                         "LEFT JOIN delivery " +
                         "ON credit_card.dID=delivery.dID"
                 , "Credit Card Payments");
-        everythingPayments.add(browseCreditPayments);
+        browseCreditPayments.setSize(browseCreditPayments.getWidth(), browseCreditPayments.getHeight());
+        tab4.add(browseCreditPayments);
         JComponent browseCashPayments = new ClerkUI(
                 "SELECT amount, payID, onDate, cash.dID " +
                         "FROM cash " +
                         "LEFT JOIN delivery " +
                         "ON cash.dID=delivery.dID"
                 , "Cash Payments");
-        everythingPayments.add(browseCashPayments);
-        jtab.add("browse Payments", everythingPayments);
+        tab4.add(browseCashPayments);
+        browseCashPayments.setSize(browseCashPayments.getWidth(), browseCashPayments.getHeight());
+
+        tab4.add(new CashCreditUI());
+
+//        jtab.add(tab4up);
+//        tab4up.setAlignmentY(TOP_ALIGNMENT);
+//        jtab.add(tab4bottom);
+//        tab4bottom.setAlignmentY(BOTTOM_ALIGNMENT);
+
+        jtab.add("browse Payments", tab4);
+
 
 
         add(jtab, BorderLayout.CENTER);
         jtab.setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT);
     }
-
-
-//    private JPanel initButtons() {
-//        JPanel panel = new JPanel();
-//        panel.setLayout(new FlowLayout(FlowLayout.CENTER, 3, 3));
-//        panel.add(browseClients);
-//        browseClients.addActionListener(new ButtonHandler());
-//        panel.add(editClients);
-//        editClients.addActionListener(new ButtonHandler());
-//        panel.add(browseDeliveries);
-//        browseDeliveries.addActionListener(new ButtonHandler());
-//        panel.add(editDeliveries);
-//        editDeliveries.addActionListener(new ButtonHandler());
-//        return panel;
-//    }
-
-
-//    private class ButtonHandler implements ActionListener {
-//        @Override
-//        public void actionPerformed(ActionEvent e) {
-//            JFrame f = new JFrame();
-//            f.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-//            f.getContentPane().setLayout(new FlowLayout(FlowLayout.LEADING));
-//            switch (e.getActionCommand()) {
-//                case "Browse Clients":
-//                    ClerkUI clerk = new ClerkUI();
-//                    JTable table1 = clerk.initTable("SELECT * FROM clients LEFT JOIN " +
-//                            "address ON clients.PC=address.PC and clients.house_num=address.house_num");
-//                    table1.setAutoCreateRowSorter(true);
-//                    //table1.getAutoResizeMode();
-//                    //table1.getAutoscrolls();
-//                    f.add(clerk);
-//                    break;
-//                case "Create or Update Clients":
-//                    ClientsUI clientsUI = new ClientsUI();
-//                    add(clientsUI);
-//                    break;
-//                case "Browse Deliveries":
-//
-//                    break;
-//                case "Create or Update Deliveries":
-//                    break;
-//
-//                default:
-//                    JOptionPane.showMessageDialog(null,
-//                            "Invalid command");
-//            }
-//            f.setSize(700, 800);
-//            f.setVisible(true);
-//        }
-//    }
-
 
 }

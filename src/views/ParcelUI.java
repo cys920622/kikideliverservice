@@ -1,5 +1,6 @@
 package views;
 
+import com.sun.org.apache.xpath.internal.operations.Bool;
 import controllerBeans.ParcelBean;
 import entityClasses.Parcel;
 import net.miginfocom.swing.MigLayout;
@@ -10,6 +11,7 @@ import javax.swing.border.TitledBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Random;
 
 /**
  * Created by stellafang. on 2016-03-26.
@@ -30,15 +32,25 @@ public class ParcelUI extends JPanel{
     private JButton firstButton = new JButton("First");
     private JButton lastButton = new JButton("Last");
     private JButton nextButton = new JButton("Next");
+    private JButton previousButton = new JButton("Previous");
 
-    private ParcelBean bean = new ParcelBean();
+    private int dID = new Random().nextInt((999999-0) +1);
 
-    public ParcelUI() {
+    private ParcelBean bean;
+    private Boolean isUpdateable = false;
+    //takes in rand int that is the same as Delivery's dID
+    public ParcelUI(Boolean isUpdateable, String sql) {
         setBorder(new TitledBorder(
                 new EtchedBorder(), "Parcel details"));
         setLayout(new BorderLayout(5, 5));
+        this.isUpdateable = isUpdateable;
+
         add(initFields(), BorderLayout.NORTH);
         add(initButtons(), BorderLayout.CENTER);
+
+
+        bean = new ParcelBean(sql);
+
 
         pIDField.setText(String.valueOf(0));
         lengthField.setText(String.valueOf(0.0));
@@ -55,18 +67,24 @@ public class ParcelUI extends JPanel{
     private JPanel initButtons() {
         JPanel panel = new JPanel();
         panel.setLayout(new FlowLayout(FlowLayout.CENTER, 3, 3));
-        panel.add(createButton);
-        createButton.addActionListener(new ButtonHandler());
-        panel.add(updateButton);
-        updateButton.addActionListener(new ButtonHandler());
-        panel.add(deleteButton);
-        deleteButton.addActionListener(new ButtonHandler());
-        panel.add(firstButton);
-        firstButton.addActionListener(new ButtonHandler());
-        panel.add(lastButton);
-        lastButton.addActionListener(new ButtonHandler());
-        panel.add(nextButton);
-        nextButton.addActionListener(new ButtonHandler());
+        if (isUpdateable) {
+            panel.add(updateButton);
+            updateButton.addActionListener(new ButtonHandler());
+            panel.add(deleteButton);
+            deleteButton.addActionListener(new ButtonHandler());
+            panel.add(firstButton);
+            firstButton.addActionListener(new ButtonHandler());
+            panel.add(lastButton);
+            lastButton.addActionListener(new ButtonHandler());
+            panel.add(nextButton);
+            nextButton.addActionListener(new ButtonHandler());
+            panel.add(previousButton);
+            previousButton.addActionListener(new ButtonHandler());
+        }
+        if (!isUpdateable) {
+            panel.add(createButton);
+            createButton.addActionListener(new ButtonHandler());
+        }
         return panel;
     }
 
@@ -86,9 +104,9 @@ public class ParcelUI extends JPanel{
         panel.add(new JLabel("Delivery ID"), "align label");
         panel.add(dIDField, "wrap");
         panel.add(new JLabel("Center ID"), "align label");
-        panel.add(dIDField, "wrap");
+        panel.add(cIDField, "wrap");
         panel.add(new JLabel("Next Center ID"), "align label");
-        panel.add(dIDField, "wrap");
+        panel.add(next_cIDField, "wrap");
         return panel;
     }
 
@@ -127,6 +145,10 @@ public class ParcelUI extends JPanel{
                 && next_cIDField.getText().trim().isEmpty());
     }
 
+    public void setdID(int dID) {
+        this.dID = dID;
+    }
+
     private class ButtonHandler implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
@@ -136,8 +158,9 @@ public class ParcelUI extends JPanel{
                     if (isEmptyFieldData()) {
                         JOptionPane.showMessageDialog(null,
                                 "Cannot create empty record");
+                        break;
                     }
-                    if (bean.create(p) != null) {
+                    if (bean.create(p, p.getcID(), p.getNextcID()) != null) {
                         JOptionPane.showMessageDialog(null,
                                 "New Parcel " + String.valueOf(p.getpID()) +
                                         " was created for Delivery " + String.valueOf(p.getdID())
@@ -145,13 +168,18 @@ public class ParcelUI extends JPanel{
                         createButton.setText("New...");
                         break;
                     }
+                    else {
+                        JOptionPane.showMessageDialog(null,
+                                "invalid Center ID was submitted");
+                        break;
+                    }
                 case "New...":
-                    p.setpID(0);
+                    p.setpID(new Random().nextInt((999999-0) +1));
                     p.setLength(0);
                     p.setWidth(0);
                     p.setHeight(0);
                     p.setWeight(0);
-                    p.setdID(0);
+                    p.setdID(dID);
                     p.setcID("");
                     p.setNextcID("");
                     setFieldData(p);
@@ -162,26 +190,35 @@ public class ParcelUI extends JPanel{
                     if (isEmptyFieldData()) {
                         JOptionPane.showMessageDialog(null,
                                 "Can't update empty record");
+                        break;
                     }
-                    if (bean.update(p) != null) {
+                    if (bean.update(p, p.getcID(), p.getNextcID()) != null) {
                         JOptionPane.showMessageDialog(null,
                                 "Parcel " + String.valueOf(p.getpID()) +
                                         " for Delivery " + String.valueOf(p.getdID())
                                         + " was updated.");
+                        break;
                     }
-                    break;
+                    else {
+                        JOptionPane.showMessageDialog(null,
+                                "invalid Center ID was submitted");
+                        break;
+                    }
                 case "Delete":
                     if (isEmptyFieldData()) {
                         JOptionPane.showMessageDialog(null,
                                 "Can't delete empty record");
+                        break;
                     }
-                    p = bean.getCurrent();
-                    bean.delete();
-                    JOptionPane.showMessageDialog(null,
-                            "Parcel " + String.valueOf(p.getpID()) +
-                                    " for Delivery " + String.valueOf(p.getdID())
-                                    + " was deleted.");
-                    break;
+                    else {
+                        p = bean.getCurrent();
+                        bean.delete();
+                        JOptionPane.showMessageDialog(null,
+                                "Parcel " + String.valueOf(p.getpID()) +
+                                        " for Delivery " + String.valueOf(p.getdID())
+                                        + " was deleted.");
+                        break;
+                    }
                 case "First":
                     setFieldData(bean.moveFirst());
                     break;
