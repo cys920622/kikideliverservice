@@ -5,6 +5,9 @@ import entityClasses.Cash;
 import entityClasses.CreditCard;
 
 import javax.sql.rowset.JdbcRowSet;
+import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
+import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 
 /**
@@ -12,10 +15,13 @@ import java.sql.SQLException;
  */
 public class CreditCardBean {
     static final String JDBC_DRIVER = "com.mysql.jdbc.Driver";
-    static final String DB_URL = "jdbc:mysql://localhost:3306/Kiki's_DeliveryService";
+    static final String DB_URL = "jdbc:mysql://localhost/Kiki's_DeliveryService";
     static final String USER = "root";
     static final String PASS = "Iloveme711";
     private JdbcRowSet rowSet = null;
+    private DefaultTableModel model;
+    private ResultSetMetaData rsmd;
+    private int numcols, numrows;
 
     public CreditCardBean() {
         try {
@@ -194,6 +200,56 @@ public class CreditCardBean {
             e.printStackTrace();
         }
         return cc;
+    }
+
+    public JTable Calculate(String sql) {
+        model = new DefaultTableModel();
+        try {
+            rowSet.setCommand(sql);
+            rowSet.execute();
+            rsmd = rowSet.getMetaData();
+            numcols = rsmd.getColumnCount();
+
+            for (int colIndex = 1; colIndex <= numcols; colIndex++) {
+                model.addColumn(rsmd.getColumnName(colIndex));
+            }
+
+            Object[] row = new Object[numcols];
+            while (rowSet.next()) {
+                for (int i=0; i<numcols; i++){
+                    row[i] = rowSet.getObject(i+1);
+                }
+                model.addRow(row);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return new JTable(model);
+    }
+
+    public JTable makeTable(String sql) {
+        model = new DefaultTableModel();
+        try {
+            rowSet.setCommand(sql);
+            rowSet.execute();
+            rsmd = rowSet.getMetaData();
+            numcols = rsmd.getColumnCount();
+
+            for (int colIndex = 1; colIndex <= numcols; colIndex++) {
+                model.addColumn(rsmd.getColumnName(colIndex));
+            }
+
+            Object[] row = new Object[numcols];
+            while (rowSet.next()) {
+                for (int i=0; i<numcols; i++){
+                    row[i] = rowSet.getObject(i+1);
+                }
+                model.addRow(row);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return new JTable(model);
     }
 
 }

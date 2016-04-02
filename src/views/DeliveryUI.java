@@ -11,6 +11,7 @@ import javax.swing.border.TitledBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Random;
 
 /**
  * Created by danielchoi on 2016-03-26.
@@ -21,21 +22,30 @@ public class DeliveryUI extends JPanel {
     private JTextField statusField = new JTextField(20);
     private JTextField sender_IDField = new JTextField(6);
     private JTextField receiver_IDField = new JTextField(6);
-    private JTextField next_cIDField = new JTextField(15);
 
-    private JButton createButton = new JButton("New...");
+    private JButton createButton = new JButton("Start");
     private JButton updateButton = new JButton("Update");
     private JButton deleteButton = new JButton("Delete");
     private JButton firstButton = new JButton("First");
     private JButton lastButton = new JButton("Last");
     private JButton nextButton = new JButton("Next");
+    private JButton previousButton = new JButton("Previous");
 
-    private DeliveryBean bean = new DeliveryBean();
+    private DeliveryBean bean;
+    private int randdID = new Random().nextInt((999999-0) +1);
+    private int sender = 0;
+    private int receiver = 0;
+    private boolean isUpdateable = false;
 
-    public DeliveryUI() {
+
+    public DeliveryUI(Boolean isUpdatable, String sql) {
         setBorder(new TitledBorder(
                 new EtchedBorder(), "Delivery details"));
         setLayout(new BorderLayout(5, 5));
+
+        bean = new DeliveryBean(sql);
+
+        this.isUpdateable = isUpdatable;
         add(initFields(), BorderLayout.NORTH);
         add(initButtons(), BorderLayout.CENTER);
 
@@ -46,19 +56,27 @@ public class DeliveryUI extends JPanel {
 
     private JPanel initButtons() {
         JPanel panel = new JPanel();
-        panel.setLayout(new FlowLayout(FlowLayout.CENTER, 3, 3));
-        panel.add(createButton);
-        createButton.addActionListener(new ButtonHandler());
-        panel.add(updateButton);
-        updateButton.addActionListener(new ButtonHandler());
-        panel.add(deleteButton);
-        deleteButton.addActionListener(new ButtonHandler());
-        panel.add(firstButton);
-        firstButton.addActionListener(new ButtonHandler());
-        panel.add(lastButton);
-        lastButton.addActionListener(new ButtonHandler());
-        panel.add(nextButton);
-        nextButton.addActionListener(new ButtonHandler());
+
+        if(isUpdateable) {
+            panel.add(updateButton);
+            updateButton.addActionListener(new ButtonHandler());
+            panel.add(deleteButton);
+            deleteButton.addActionListener(new ButtonHandler());
+            panel.add(deleteButton);
+            deleteButton.addActionListener(new ButtonHandler());
+            panel.add(firstButton);
+            firstButton.addActionListener(new ButtonHandler());
+            panel.add(lastButton);
+            lastButton.addActionListener(new ButtonHandler());
+            panel.add(nextButton);
+            nextButton.addActionListener(new ButtonHandler());
+            panel.add(previousButton);
+            previousButton.addActionListener(new ButtonHandler());
+        }
+        if (!isUpdateable) {
+            panel.add(createButton);
+            createButton.addActionListener(new ButtonHandler());
+        }
         return panel;
     }
 
@@ -75,20 +93,16 @@ public class DeliveryUI extends JPanel {
         panel.add(sender_IDField, "wrap");
         panel.add(new JLabel("Receiver ID"), "align label");
         panel.add(receiver_IDField, "wrap");
-        panel.add(new JLabel("Where delivered to"), "align label");
-        panel.add(next_cIDField, "wrap");
         return panel;
     }
 
     private Delivery getFieldData() {
         Delivery d = new Delivery();
-        Parcel p = new Parcel();
         d.setdID(Integer.parseInt(dIDField.getText()));
         d.setType(typeField.getText());
         d.setStatus(statusField.getText());
         d.setSender_ID(Integer.parseInt(sender_IDField.getText()));
         d.setReceiver_ID(Integer.parseInt(receiver_IDField.getText()));
-        p.setNextcID(next_cIDField.getText());
         return d;
     }
 
@@ -108,6 +122,18 @@ public class DeliveryUI extends JPanel {
                 && receiver_IDField.getText().trim().isEmpty());
     }
 
+    public void setRanddID (int rand) {
+        this.randdID = rand;
+    }
+    public void setSender (int clID) {
+        this.sender = clID;
+
+    }
+
+    public void setReceiver (int clID) {
+        this.receiver = clID;
+
+    }
     private class ButtonHandler implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
@@ -121,15 +147,15 @@ public class DeliveryUI extends JPanel {
                     if (bean.create(d) != null) {
                         JOptionPane.showMessageDialog(null,
                                 "New delivery created :"+ String.valueOf(d.getdID()));
-                        createButton.setText("New...");
+                        createButton.setText("Start");
                         break;
                     }
-                case "New...":
-                    d.setdID(0); //TODO: should use a counter here
+                case "Start":
+                    d.setdID(randdID); //TODO: should use a counter here
                     d.setType(""); //TODO: should use a radio button
                     d.setStatus("");
-                    d.setSender_ID(0);
-                    d.setReceiver_ID(0);
+                    d.setSender_ID(sender);
+                    d.setReceiver_ID(receiver);
                     setFieldData(d);
                     createButton.setText("Save");
                     break;
@@ -166,6 +192,7 @@ public class DeliveryUI extends JPanel {
                     break;
                 case "Previous":
                     setFieldData(bean.movePrevious());
+                    break;
                 default:
                     JOptionPane.showMessageDialog(null,
                             "Invalid command");

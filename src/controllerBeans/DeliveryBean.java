@@ -11,19 +11,20 @@ import java.sql.SQLException;
  */
 public class DeliveryBean {
     static final String JDBC_DRIVER = "com.mysql.jdbc.Driver";
-    static final String DB_URL = "jdbc:mysql://localhost:3306/Kiki's_DeliveryService";
+    static final String DB_URL = "jdbc:mysql://localhost/Kiki's_DeliveryService";
     static final String USER = "root";
     static final String PASS = "Iloveme711";
     private JdbcRowSet rowSet = null;
 
-    public DeliveryBean() {
+    public DeliveryBean(String sql) {
         try {
             Class.forName(JDBC_DRIVER);
             rowSet = new JdbcRowSetImpl();
             rowSet.setUrl(DB_URL);
             rowSet.setUsername(USER);
             rowSet.setPassword(PASS);
-            rowSet.setCommand("select * from Delivery");
+            rowSet.setCommand(sql);
+            //rowSet.setCommand("select * from Delivery");
             rowSet.execute();
         } catch (ClassNotFoundException | SQLException e) {
             e.printStackTrace();

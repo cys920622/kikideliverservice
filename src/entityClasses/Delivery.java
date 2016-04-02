@@ -51,4 +51,7 @@ public class Delivery {
     public void setReceiver_ID(int receiver_ID) {
         this.receiver_ID = receiver_ID;
     }
+
+
 }
+

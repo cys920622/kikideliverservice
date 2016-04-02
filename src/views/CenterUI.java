@@ -29,9 +29,8 @@ public class CenterUI extends JPanel{
     private JButton submitButton = new JButton("Update");
 
     private CenterBean bean = new CenterBean();
-    private ParcelBean pBean = new ParcelBean();
+    private ParcelBean pBean = new ParcelBean("select * from parcel");
 
-    private JTable table;
 
 
     private JPanel initButtons() {
@@ -109,7 +108,7 @@ public class CenterUI extends JPanel{
 //            f.getContentPane().setLayout(new FlowLayout(FlowLayout.CENTER));
 
             switch (e.getActionCommand()) {
-                case "Submit":
+                case "Update":
                     if (isEmptyFieldData()) {
                         JOptionPane.showMessageDialog(null,
                                 "Please enter a delivery ID");
