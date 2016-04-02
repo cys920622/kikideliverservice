@@ -20,6 +20,9 @@ public class ClientLoginUI extends JPanel {
     private JTextField cIDField = new JTextField(11);
 
     private JButton loginButton = new JButton("Login");
+    private JRadioButton receiveRadioButton = new JRadioButton("Incoming packages");
+    private JRadioButton sendRadioButton = new JRadioButton("Outgoing packages");
+    private ButtonGroup group = new ButtonGroup();
 
     public ClientLoginUI() {
         setBorder(new TitledBorder(
@@ -42,6 +45,10 @@ public class ClientLoginUI extends JPanel {
         panel.setLayout(new FlowLayout(FlowLayout.CENTER, 3, 3));
         panel.add(loginButton);
         loginButton.addActionListener(new ButtonHandler());
+        group.add(receiveRadioButton);
+        group.add(sendRadioButton);
+        panel.add(receiveRadioButton);
+        panel.add(sendRadioButton);
         return panel;
     }
 
@@ -66,6 +73,7 @@ public class ClientLoginUI extends JPanel {
                         ArrayList<Clients> senders = bean.getSenderClients();
                         ArrayList<Clients> receivers = bean.getReceiverClients();
 
+                        // Iterate and print sent delivery information
                         for (int i = 0; i < in_packages.size(); i++) {
                             Delivery in_package = in_packages.get(i);
                             Clients sender = senders.get(i);
@@ -75,9 +83,10 @@ public class ClientLoginUI extends JPanel {
                             String fname = sender.getFname();
                             String shippingType = in_package.getType();
                             System.out.println("SEND >>> dID: " + dID + ", Sender ID: " + sender_ID
-                                    + ", Receiver ID: " + receiver_ID + ", Type: " + shippingType + ", TO: "+fname);
+                                    + ", Receiver ID: " + receiver_ID + ", Type: " + shippingType + ", To: "+fname);
                         }
 
+                        // Iterate and print receive delivery information
                         for (int i = 0; i < out_packages.size(); i++) {
                             Delivery out_package = out_packages.get(i);
                             Clients receiver = receivers.get(i);
@@ -87,7 +96,7 @@ public class ClientLoginUI extends JPanel {
                             String fname = receiver.getFname();
                             String shippingType = out_package.getType();
                             System.out.println("RECEIVE >>> dID: " + dID + ", Sender ID: " + sender_ID
-                                    + ", Receiver ID: " + receiver_ID + ", Type: " + shippingType + ", TO: "+fname);
+                                    + ", Receiver ID: " + receiver_ID + ", Type: " + shippingType + ", From: "+fname);
                         }
                     }
                     break;

@@ -37,10 +37,9 @@ public class ClientLoginBean {
 //            rowSet.setCommand("SELECT * FROM clients");
 //            rowSet.execute();
 
-            System.out.println("ClientLoginBean constructor called");
             conn = DriverManager.getConnection(DB_URL, USER, PASS);
             stmt = conn.createStatement();
-            String sql = "SELECT DISTINCT * FROM delivery INNER JOIN clients ON delivery.receiver_ID = clients.clID WHERE sender_ID = "+clientID;
+            String sql = "SELECT DISTINCT * FROM delivery, clients WHERE delivery.receiver_ID = clients.clID AND sender_ID = "+clientID;
             sentDeliveriesRs = stmt.executeQuery(sql);
             while (sentDeliveriesRs.next()) {
                 Delivery d = new Delivery();
@@ -56,7 +55,7 @@ public class ClientLoginBean {
                 senderClients.add(c);
             }
 
-            sql = "SELECT DISTINCT * FROM delivery INNER JOIN clients ON delivery.sender_ID = clients.clID WHERE receiver_ID=" +clientID;
+            sql = "SELECT DISTINCT * FROM delivery, clients WHERE delivery.sender_ID = clients.clID AND receiver_ID = " +clientID;
             receiveDeliveriesRs = stmt.executeQuery(sql);
             while (receiveDeliveriesRs.next()) {
                 Delivery d = new Delivery();
