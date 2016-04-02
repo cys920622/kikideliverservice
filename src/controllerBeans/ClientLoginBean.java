@@ -103,7 +103,7 @@ public class ClientLoginBean {
     public JTable getClientIDQueryAsJTable(int clID) {
         DefaultTableModel model = new DefaultTableModel(new String[]{"Delivery ID", "Delivery type",
         "Status", "Sender", "Return address", "Receiver", "Destination address", "Parcel weight",
-        "Parcel dimensions", "Payment"}, 0);
+        "Parcel dimensions"}, 0);
         String sql = "SELECT DISTINCT * " +
                 "FROM delivery D, clients S, address SA, clients R, address RA, parcel P " +
                 "WHERE D.sender_ID=S.clID AND D.receiver_ID=R.clID AND " +
@@ -127,7 +127,6 @@ public class ClientLoginBean {
                         rs.getString("P.weight")+"kg",
                         rs.getString("P.length")+ "cm x "+
                                 rs.getString("P.width")+ "cm x "+rs.getString("P.height")+"cm",
-                        "???"
                 });
             }
         } catch (SQLException e) {
@@ -147,7 +146,7 @@ public class ClientLoginBean {
             for (int row = 0; row < table.getRowCount(); row++) {
                 TableCellRenderer renderer = table.getCellRenderer(row, column);
                 Component comp = table.prepareRenderer(renderer, row, column);
-                width = Math.max(comp.getPreferredSize().width +1 , width);
+                width = Math.max(comp.getPreferredSize().width +20 , width);
             }
             columnModel.getColumn(column).setPreferredWidth(width);
         }
@@ -261,6 +260,65 @@ public class ClientLoginBean {
                 "P.dID=D.dID AND " +
                 "P.pID = " + pID;
         populateJPanel(panel, sql);
+        return panel;
+    }
+
+    public JPanel getPaymentAsPanel(int dID) {
+        JPanel panel = new JPanel();
+        panel.setBorder(new TitledBorder(
+                new EtchedBorder(), "Query result"));
+        String sql = "SELECT DISTINCT * " +
+                "FROM delivery D, cash C " +
+                "WHERE D.dID=C.dID AND " +
+                "C.dID = " + dID;
+        try {
+            ResultSet rs = stmt.executeQuery(sql);
+            if (rs.next()) {
+                panel.setLayout(new MigLayout());
+                panel.add(new JLabel("Delivery ID: "), "align label");
+                panel.add(new JLabel(rs.getString("D.dID")), "wrap");
+                panel.add(new JLabel(" "), "wrap"); // spacer
+                panel.add(new JLabel("Payment type: "), "align label");
+                panel.add(new JLabel("cash"), "wrap");
+                panel.add(new JLabel("Payment ID: "), "align label");
+                panel.add(new JLabel(rs.getString("C.payID")), "wrap");
+                panel.add(new JLabel("Date: "), "align label");
+                panel.add(new JLabel(rs.getString("C.onDate")), "wrap");
+                panel.add(new JLabel("Amount: "), "align label");
+                panel.add(new JLabel("$"+rs.getString("C.amount")), "wrap");
+            } else {
+                System.out.println("No cash payment found");
+                sql = "SELECT DISTINCT * " +
+                        "FROM delivery D, credit_card C " +
+                        "WHERE D.dID=C.dID AND " +
+                        "C.dID = " + dID;
+                rs = stmt.executeQuery(sql);
+                rs.next();
+                panel.setLayout(new MigLayout());
+                panel.add(new JLabel("Delivery ID: "), "align label");
+                panel.add(new JLabel(rs.getString("D.dID")), "wrap");
+                panel.add(new JLabel(" "), "wrap"); // spacer
+                panel.add(new JLabel("Payment type: "), "align label");
+                panel.add(new JLabel("credit"), "wrap");
+                panel.add(new JLabel("Payment ID: "), "align label");
+                panel.add(new JLabel(rs.getString("C.payID")), "wrap");
+                panel.add(new JLabel("Date: "), "align label");
+                panel.add(new JLabel(rs.getString("C.onDate")), "wrap");
+                panel.add(new JLabel("Amount: "), "align label");
+                panel.add(new JLabel("$"+rs.getString("C.amount")), "wrap");
+                panel.add(new JLabel("Card number: "), "align label");
+                String cardNum = rs.getString("C.credit_card_num");
+                panel.add(new JLabel("****"+cardNum.substring(cardNum.length()-3)), "wrap");
+                panel.add(new JLabel("Cardholder: "), "align label");
+                panel.add(new JLabel(rs.getString("C.name")), "wrap");
+                panel.add(new JLabel("Card type: "), "align label");
+                panel.add(new JLabel(rs.getString("C.type")), "wrap");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            panel.setLayout(new MigLayout());
+            panel.add(new JLabel("No results."), "align label");
+        }
         return panel;
     }
 
