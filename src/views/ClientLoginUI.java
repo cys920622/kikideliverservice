@@ -82,6 +82,19 @@ public class ClientLoginUI extends JPanel {
                     } else {
                         int cID = Integer.parseInt(cIDField.getText());
                         System.out.println("Client ID :" + cID);
+                        JFrame child = new JFrame();
+                        JPanel childPanel = new JPanel();
+                        childPanel.setLayout(new BorderLayout());
+                        childPanel.setBorder(new TitledBorder(
+                                new EtchedBorder(), "Query results"));
+//                        childPanel.setSize(1000, 600);
+                        JTable resultTable = bean.getClientIDQueryAsJTable(cID);
+                        JScrollPane tablePane = new JScrollPane(resultTable);
+                        childPanel.add(tablePane);
+                        child.add(childPanel);
+                        child.pack();
+                        child.setSize(resultTable.getPreferredSize().width+20, 300);
+                        child.setVisible(true);
 //                        ClientLoginBean bean = new ClientLoginBean(cID);
 //                        ArrayList<Delivery> in_packages = bean.getSentDeliveries();
 //                        ArrayList<Delivery> out_packages = bean.getReceivedDeliveries();
@@ -112,7 +125,7 @@ public class ClientLoginUI extends JPanel {
 //                            String shippingType = out_package.getType();
 //                            System.out.println("RECEIVE >>> dID: " + dID + ", Sender ID: " + sender_ID
 //                                    + ", Receiver ID: " + receiver_ID + ", Type: " + shippingType + ", From: "+fname);
-//                        }
+//
                     }
                     break;
                 case "Find by Delivery ID":

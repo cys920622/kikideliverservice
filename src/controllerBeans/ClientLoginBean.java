@@ -10,6 +10,9 @@ import javax.swing.*;
 import javax.swing.border.EtchedBorder;
 import javax.swing.border.TitledBorder;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableCellRenderer;
+import javax.swing.table.TableColumnModel;
+import java.awt.*;
 import java.sql.*;
 import java.util.ArrayList;
 
@@ -83,7 +86,7 @@ public class ClientLoginBean {
     }
 
     public void testConnection() {
-            String sql = "SELECT DISTINCT * FROM delivery, clients WHERE delivery.receiver_ID = clients.clID AND sender_ID = 139284";
+            String sql = "SELECT DISTINCT * FROM delivery";
         try {
             sentDeliveriesRs = stmt.executeQuery(sql);
             while (sentDeliveriesRs.next()) {
@@ -94,6 +97,59 @@ public class ClientLoginBean {
             }
         } catch (SQLException e) {
             e.printStackTrace();
+        }
+    }
+
+    public JTable getClientIDQueryAsJTable(int clID) {
+        DefaultTableModel model = new DefaultTableModel(new String[]{"Delivery ID", "Delivery type",
+        "Status", "Sender", "Return address", "Receiver", "Destination address", "Parcel weight",
+        "Parcel dimensions", "Payment"}, 0);
+        String sql = "SELECT DISTINCT * " +
+                "FROM delivery D, clients S, address SA, clients R, address RA, parcel P " +
+                "WHERE D.sender_ID=S.clID AND D.receiver_ID=R.clID AND " +
+                "SA.PC=S.PC AND SA.house_num=S.house_num AND " +
+                "RA.PC=R.PC AND RA.house_num=R.house_num AND " +
+                "P.dID=D.dID AND " +
+                "(S.clID = " + clID + " OR R.clID = " + clID+")";
+        try {
+            ResultSet rs = stmt.executeQuery(sql);
+            while (rs.next()) {
+                model.addRow(new Object[]{
+                        rs.getString("D.dID"),
+                        rs.getString("D.type"),
+                        rs.getString("D.status"),
+                        rs.getString("S.fname") + " " + rs.getString("S.lname"),
+                        rs.getString("SA.house_num")+" "+rs.getString("SA.street_name")+ ", "+
+                                rs.getString("SA.city")+ " "+rs.getString("SA.province")+", "+rs.getString("SA.country"),
+                        rs.getString("R.fname")+" "+rs.getString("R.lname"),
+                        rs.getString("RA.house_num")+" "+rs.getString("RA.street_name")+ ", "+
+                                rs.getString("RA.city")+ " "+rs.getString("RA.province")+", "+rs.getString("RA.country"),
+                        rs.getString("P.weight")+"kg",
+                        rs.getString("P.length")+ "cm x "+
+                                rs.getString("P.width")+ "cm x "+rs.getString("P.height")+"cm",
+                        "???"
+                });
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        JTable resultTable = new JTable(model);
+        resultTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+        resizeColumnWidth(resultTable);
+        return resultTable;
+    }
+
+    // http://stackoverflow.com/questions/17627431/auto-resizing-the-jtable-column-widths
+    public void resizeColumnWidth(JTable table) {
+        final TableColumnModel columnModel = table.getColumnModel();
+        for (int column = 0; column < table.getColumnCount(); column++) {
+            int width = 50; // Min width
+            for (int row = 0; row < table.getRowCount(); row++) {
+                TableCellRenderer renderer = table.getCellRenderer(row, column);
+                Component comp = table.prepareRenderer(renderer, row, column);
+                width = Math.max(comp.getPreferredSize().width +1 , width);
+            }
+            columnModel.getColumn(column).setPreferredWidth(width);
         }
     }
 
@@ -137,6 +193,7 @@ public class ClientLoginBean {
         }
         return panel;
     }
+
     public JPanel getDeliveryQueryAsJPanel(int dID) {
         JPanel panel = new JPanel();
         panel.setBorder(new TitledBorder(
