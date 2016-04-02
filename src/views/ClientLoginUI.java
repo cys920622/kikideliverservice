@@ -122,10 +122,12 @@ public class ClientLoginUI extends JPanel {
                     } else {
                         int dID = Integer.parseInt(dIDField.getText());
                         System.out.println("Delivery ID :" + dID);
-                        JPanel resultPanel = bean.getDeliveryQueryAsJPanel(dID);
-                        add(resultPanel);
+                        JFrame child = new JFrame();
+                        child.add(bean.getDeliveryQueryAsJPanel(dID));
+                        child.pack();
+                        child.setVisible(true);
 //                        bean.testConnection();
-                        parent.dispose();
+//                        parent.dispose();
                     }
                     break;
                 case "Find by Parcel ID":

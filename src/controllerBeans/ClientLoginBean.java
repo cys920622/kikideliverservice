@@ -98,16 +98,12 @@ public class ClientLoginBean {
     public JPanel getDeliveryQueryAsJPanel(int dID) {
         DefaultTableModel model = new DefaultTableModel(new String[]{"Blah"}, 0);
         JPanel panel = new JPanel();
-//        String sql = "SELECT DISTINCT * " +
-//                "FROM delivery D, clients S, address SA, clients R, address RA, parcel P " +
-//                "WHERE D.sender_ID=S.clID AND D.receiver_ID=R.clID AND P.dID=D.dID AND " +
-//                    "SA.PC=S.PC AND SA.house_num=S.house_num AND RA.PC=R.PC AND " +
-//                    "RA.house_num=R.house_num AND D.dID = " + dID;
         String sql = "SELECT DISTINCT * " +
                 "FROM delivery D, clients S, address SA, clients R, address RA, parcel P " +
                 "WHERE D.sender_ID=S.clID AND D.receiver_ID=R.clID AND " +
-//                "SA.PC=S.PC AND SA.house_num=S.house_num AND " +
+                "SA.PC=S.PC AND SA.house_num=S.house_num AND " +
                 "RA.PC=R.PC AND RA.house_num=R.house_num AND " +
+                "P.dID=D.dID AND " +
                 "D.dID = " + dID;
         try {
             ResultSet rs = stmt.executeQuery(sql);
@@ -120,9 +116,31 @@ public class ClientLoginBean {
             panel.add(new JLabel(rs.getString("D.dID")), "wrap");
             panel.add(new JLabel("Delivery type: "), "align label");
             panel.add(new JLabel(rs.getString("D.type")), "wrap");
+            panel.add(new JLabel("Status: "), "align label");
+            panel.add(new JLabel(rs.getString("D.status")), "wrap");
+            panel.add(new JLabel(" "), "wrap"); // spacer
+            panel.add(new JLabel("Sender: "), "align label");
+            panel.add(new JLabel(rs.getString("S.fname")+" "+rs.getString("S.lname")), "wrap");
+            panel.add(new JLabel("Return address: "), "align label");
+            panel.add(new JLabel(rs.getString("SA.house_num")+" "+rs.getString("SA.street_name")+ ", "+
+                    rs.getString("SA.city")+ " "+rs.getString("SA.province")+", "+rs.getString("SA.country")), "wrap");
+            panel.add(new JLabel(" "), "wrap"); // spacer
+            panel.add(new JLabel("Receiver: "), "align label");
+            panel.add(new JLabel(rs.getString("R.fname")+" "+rs.getString("R.lname")), "wrap");
+            panel.add(new JLabel("Destination address: "), "align label");
+            panel.add(new JLabel(rs.getString("RA.house_num")+" "+rs.getString("RA.street_name")+ ", "+
+                    rs.getString("RA.city")+ " "+rs.getString("RA.province")+", "+rs.getString("RA.country")), "wrap");
+            panel.add(new JLabel(" "), "wrap"); // spacer
+            panel.add(new JLabel("Parcel weight: "), "align label");
+            panel.add(new JLabel(rs.getString("P.weight")+"kg"), "wrap");
+            panel.add(new JLabel("Parcel dimensions: "), "align label");
+            panel.add(new JLabel(rs.getString("P.length")+ "cm x "+
+                    rs.getString("P.width")+ "cm x "+rs.getString("P.height")+"cm"), "wrap");
 
         } catch (SQLException e) {
             e.printStackTrace();
+            panel.setLayout(new MigLayout());
+            panel.add(new JLabel("No results."), "align label");
         }
         return panel;
     }
