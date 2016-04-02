@@ -131,6 +131,16 @@ public class ClientLoginUI extends JPanel {
                     }
                     break;
                 case "Find by Parcel ID":
+                    if (isEmptyFieldData(pIDField)) {
+                        JOptionPane.showMessageDialog(null,
+                                "Please enter the delivery ID");
+                    } else {
+                        int pID = Integer.parseInt(pIDField.getText());
+                        JFrame child = new JFrame();
+                        child.add(bean.getParcelQueryAsJPanel(pID));
+                        child.pack();
+                        child.setVisible(true);
+                    }
                     break;
             }
         }
