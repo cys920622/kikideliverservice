@@ -12,7 +12,7 @@ public class AppMain {
         f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         f.getContentPane().setLayout(new FlowLayout(FlowLayout.CENTER));
-        f.getContentPane().add(new HomeUI());
+        f.getContentPane().add(new HomeUI(f));
         f.setSize(600, 600);
         
         // daniel's idea below

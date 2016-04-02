@@ -15,7 +15,7 @@ public class HomeUI extends JPanel {
     private JButton clientButton = new JButton("Client");
     private JButton clerkButton = new JButton("Clerk");
     private JButton delivererButton = new JButton("Deliverer");
-    public static JFrame f = new JFrame();
+    private JFrame parent;
 
 //    private static HomeUI home;
 //
@@ -28,10 +28,10 @@ public class HomeUI extends JPanel {
 //    }
 
 
-    public HomeUI() {
+    public HomeUI(JFrame parent) {
+        this.parent = parent;
         setBorder(new TitledBorder(
                 new EtchedBorder(), "User List"));
-        f.setSize(10,10);
         add(initButtons());
     }
 
@@ -52,8 +52,10 @@ public class HomeUI extends JPanel {
     private class ButtonHandler implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
-            f.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-            f.getContentPane().setLayout(new FlowLayout(FlowLayout.CENTER));
+            parent.dispose();
+            JFrame child = new JFrame();
+            child.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+            child.getContentPane().setLayout(new FlowLayout(FlowLayout.CENTER));
             switch (e.getActionCommand()) {
                 case "Client":
                     //need to only be able to input pID
@@ -63,13 +65,13 @@ public class HomeUI extends JPanel {
 //                    f.add(new AddressUI());
 //                    f.add(new DeliveryUI());
 //                    f.add(new ParcelUI());
-                    f.add(new ClientLoginUI());
-                    f.setSize(700, 700);
+                    child.add(new ClientLoginUI(child));
+                    child.setSize(700, 700);
                     break;
 
                 case "Clerk":
-                    f.add(new ClerkHomeUI());
-                    f.setSize(1300, 700);
+                    child.add(new ClerkHomeUI());
+                    child.setSize(1300, 700);
                     break;
 
                     //need to also add cash/credit info
@@ -81,12 +83,12 @@ public class HomeUI extends JPanel {
                     //can get any info of parcel
                     //can get any info of delivery
                     //given the dID can also check cash/credit to see if paid for??? no? yes?
-                    f.add(new AskForCentreUI());
-                    f.setSize(1300, 600);
+                    child.add(new AskForCentreUI());
+                    child.setSize(1300, 600);
                     break;
 
             }
-            f.setVisible(true);
+            child.setVisible(true);
         }
 
     }
