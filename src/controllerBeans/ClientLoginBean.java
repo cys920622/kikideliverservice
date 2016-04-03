@@ -71,9 +71,11 @@ public class ClientLoginBean {
         DefaultTableModel model = new DefaultTableModel(new String[]{"Delivery ID", "Delivery type",
                 "Status", "Sender", "Return address", "Receiver", "Destination address", "Parcel ID", "Parcel weight",
                 "Parcel dimensions"}, 0);
+        int countObjects = 0;
         try {
             ResultSet rs = stmt.executeQuery(sql);
             while (rs.next()) {
+                countObjects++;
                 model.addRow(new Object[]{
                         rs.getString("D.dID"),
                         rs.getString("D.type"),
@@ -92,6 +94,11 @@ public class ClientLoginBean {
             }
         } catch (SQLException e) {
             e.printStackTrace();
+        }
+        if (countObjects == 0) {
+//            JOptionPane.showMessageDialog(null,
+//                    "No results.");
+            return null;
         }
         JTable resultTable = new JTable(model);
         resultTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
@@ -196,7 +203,7 @@ public class ClientLoginBean {
                     rs.getString("P.width")+ "cm x "+rs.getString("P.height")+"cm"), "wrap");
 
         } catch (SQLException e) {
-            e.printStackTrace();
+//            e.printStackTrace();
             panel.setLayout(new MigLayout());
             panel.add(new JLabel("No results."), "align label");
         }
@@ -288,7 +295,7 @@ public class ClientLoginBean {
                 panel.add(new JLabel(rs.getString("C.type")), "wrap");
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+//            e.printStackTrace();
             panel.setLayout(new MigLayout());
             panel.add(new JLabel("No results."), "align label");
         }

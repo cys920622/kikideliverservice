@@ -35,6 +35,11 @@ public class ClientResultUI extends JPanel {
                     new EtchedBorder(), "Query results: showing all parcels in delivery ID: "+cID));
             resultTable = bean.getDeliveryIDQueryAsJTable(cID);
         }
+        if (resultTable == null) {
+            JOptionPane.showMessageDialog(null,
+                    "No results.");
+            return;
+        }
         JScrollPane tablePane = new JScrollPane(resultTable);
         add(tablePane);
         paymentButton.addActionListener(new ButtonHandler());
@@ -70,6 +75,13 @@ public class ClientResultUI extends JPanel {
     }
 
     public int getTableWidth() {
-        return resultTable.getPreferredSize().width+20;
+        int width;
+        try {
+            width = resultTable.getPreferredSize().width+20;
+        } catch (NullPointerException e) {
+//            e.printStackTrace();
+            return 0;
+        }
+        return width;
     }
 }

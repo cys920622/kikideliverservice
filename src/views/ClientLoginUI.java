@@ -78,45 +78,68 @@ public class ClientLoginUI extends JPanel {
                 case "Find by Client ID":
                     if (isEmptyFieldData(cIDField)) {
                         JOptionPane.showMessageDialog(null,
-                                "Please enter your client ID");
+                                "Error: please enter your client ID");
                     } else {
-                        int cID = Integer.parseInt(cIDField.getText());
-                        System.out.println("Client ID :" + cID);
-                        JFrame child = new JFrame();
-                        ClientResultUI childPanel = new ClientResultUI(parent, bean, cID, "cID");
-                        child.add(childPanel);
-                        child.pack();
-                        child.setSize(childPanel.getTableWidth(), 300);
-                        child.setVisible(true);
+                        try {
+                            int cID = Integer.parseInt(cIDField.getText());
+                            System.out.println("Client ID :" + cID);
+                            JFrame child = new JFrame();
+                            ClientResultUI childPanel = new ClientResultUI(parent, bean, cID, "cID");
+                            child.add(childPanel);
+                            child.pack();
+                            int width = childPanel.getTableWidth();
+                            if (width == 0) {
+                                break;
+                            }
+                            child.setSize(width, 300);
+                            child.setVisible(true);
+                        } catch (NumberFormatException e1) {
+                            JOptionPane.showMessageDialog(null,
+                                    "Error: input must be numbers only");
+                            e1.printStackTrace();
+                        }
                     }
                     break;
                 case "Find by Delivery ID":
                     if (isEmptyFieldData(dIDField)) {
                         JOptionPane.showMessageDialog(null,
-                                "Please enter the delivery ID");
+                                "Error: please enter the delivery ID");
                     } else {
-                        int dID = Integer.parseInt(dIDField.getText());
-                        System.out.println("Delivery ID :" + dID);
-                        JFrame child = new JFrame();
-                        ClientResultUI childPanel = new ClientResultUI(parent, bean, dID, "dID");
-                        child.add(childPanel);
-                        child.pack();
-                        child.setSize(childPanel.getTableWidth(), 300);
-                        child.setVisible(true);
+
+                        try {
+                            int dID = Integer.parseInt(dIDField.getText());
+                            System.out.println("Delivery ID :" + dID);
+                            JFrame child = new JFrame();
+                            ClientResultUI childPanel = new ClientResultUI(parent, bean, dID, "dID");
+                            child.add(childPanel);
+                            child.pack();
+                            child.setSize(childPanel.getTableWidth(), 300);
+                            child.setVisible(true);
 //                        bean.testConnection();
 //                        parent.dispose();
+                        } catch (NumberFormatException e1) {
+                            e1.printStackTrace();
+                            JOptionPane.showMessageDialog(null,
+                                    "Error: input must be numbers only");
+                        }
                     }
                     break;
                 case "Find by Parcel ID":
                     if (isEmptyFieldData(pIDField)) {
                         JOptionPane.showMessageDialog(null,
-                                "Please enter the delivery ID");
+                                "Error: please enter the parcel ID");
                     } else {
-                        int pID = Integer.parseInt(pIDField.getText());
-                        JFrame child = new JFrame();
-                        child.add(bean.getParcelQueryAsJPanel(pID));
-                        child.pack();
-                        child.setVisible(true);
+                        try {
+                            int pID = Integer.parseInt(pIDField.getText());
+                            JFrame child = new JFrame();
+                            child.add(bean.getParcelQueryAsJPanel(pID));
+                            child.pack();
+                            child.setVisible(true);
+                        } catch (NumberFormatException e1) {
+                            e1.printStackTrace();
+                            JOptionPane.showMessageDialog(null,
+                                    "Error: input must be numbers only");
+                        }
                     }
                     break;
             }
