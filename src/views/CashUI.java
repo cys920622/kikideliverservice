@@ -96,6 +96,35 @@ public class CashUI extends JPanel{
         return panel;
     }
 
+    private Boolean checkFieldData() {
+        try {
+            Integer.parseInt(payIDField.getText());
+            if (payIDField.getText().length()>3) {
+                JOptionPane.showMessageDialog(null, "The pay ID can only be max 3 numbers long");
+                return false;
+            }
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(null, "The delivery ID can only be a number");
+            return false;
+        }
+
+        try {
+            Integer.parseInt(amountField.getText());
+            if (amountField.getText().length()>6) {
+                JOptionPane.showMessageDialog(null, "The delivery ID can only be max 6 numbers long");
+                return false;
+            }
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(null, "The delivery ID can only be a number");
+            return false;
+        }
+
+
+
+
+        return true;
+    }
+
     private Cash getFieldData() {
         Cash c = new Cash();
         c.setPayID(Integer.parseInt(payIDField.getText()));

@@ -181,21 +181,95 @@ public class ClientAddressUI extends JPanel{
         return panel;
     }
 
-    public ClientAddress getFieldData() {
-        ClientAddress ca = new ClientAddress();
-        ca.setClID(Integer.parseInt(clIDField.getText()));
-        ca.setFname(fnameField.getText());
-        ca.setLname(lnameField.getText());
-        ca.setPC(PCField.getText());
-        ca.setHouse_num(Integer.parseInt(house_numField.getText()));
-        ca.setPhone_num(phone_numField.getText());
-        ca.setCountry(countryField.getText());
-        ca.setProvince(provinceField.getText());
-        ca.setCity(cityField.getText());
-        ca.setStreet_name(street_nameField.getText());
-        ca.setdID(Integer.parseInt(updatedIDField.getText()));
-        return ca;
+
+    public Boolean checkFieldData() {
+        try {
+            Integer.parseInt(clIDField.getText());
+            if ( clIDField.getText().length() > 11) {
+                JOptionPane.showMessageDialog(null, "ClID can only be 11 numbers long");
+                return false;
+            }
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(null, "The Client ID can only be a number");
+            return false;
+        }
+
+        try {
+            Integer.parseInt(house_numField.getText());
+            if ( house_numField.getText().length() > 11) {
+                JOptionPane.showMessageDialog(null, "ClID can only be max 11 numbers long");
+                return false;
+            }
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(null, "The house number can only be a number");
+            return false;
+        }
+
+        if (fnameField.getText().length()>30) {
+            JOptionPane.showMessageDialog(null, "First name can only be max 30 characters long");
+            return false;
+        }
+//        if (fnameField.getText().matches(".*\\d+.*")) {
+//            JOptionPane.showMessageDialog(null, "First Name cannot include numbers");
+//        }
+
+        if (lnameField.getText().length()>30) {
+            JOptionPane.showMessageDialog(null, "Last name can only be max 30 characters long");
+            return false;
+        }
+
+//        else if (lnameField.getText().matches(".*\\d+.*")) {
+//            JOptionPane.showMessageDialog(null, "First Name cannot include numbers");
+//        }
+
+        if (PCField.getText().length()>7) {
+            JOptionPane.showMessageDialog(null, "Postal Code can only be 7 characters long");
+            return false;
+        }
+
+        if (countryField.getText().length()>20) {
+            JOptionPane.showMessageDialog(null, "Postal Code can only be max 20 characters long");
+            return false;
+        }
+//        if (countryField.getText().matches(".*\\d+.*")) {
+//            JOptionPane.showMessageDialog(null, "First Name cannot include numbers");
+//        }
+
+        if (provinceField.getText().length() > 2) {
+            JOptionPane.showMessageDialog(null, "Province can only be 2 letters long");
+            return false;
+        }
+
+        if (provinceField.getText().length() > 20) {
+            JOptionPane.showMessageDialog(null, "City can only be max 20 characters long");
+            return false;
+        }
+
+        if (provinceField.getText().length() > 30) {
+            JOptionPane.showMessageDialog(null, "Street name can only be max 30 characters long");
+            return false;
+        }
+        return true;
     }
+
+    public ClientAddress getFieldData() {
+        if (checkFieldData()) {
+            ClientAddress ca = new ClientAddress();
+            ca.setClID(Integer.parseInt(clIDField.getText()));
+            ca.setFname(fnameField.getText());
+            ca.setLname(lnameField.getText());
+            ca.setPC(PCField.getText());
+            ca.setHouse_num(Integer.parseInt(house_numField.getText()));
+            ca.setPhone_num(phone_numField.getText());
+            ca.setCountry(countryField.getText());
+            ca.setProvince(provinceField.getText());
+            ca.setCity(cityField.getText());
+            ca.setStreet_name(street_nameField.getText());
+            ca.setdID(Integer.parseInt(updatedIDField.getText()));
+            return ca;
+        } else return null;
+    }
+
 
     private void setFieldData(ClientAddress ca) {
         clIDField.setText(String.valueOf(ca.getClID()));
@@ -242,6 +316,13 @@ public class ClientAddressUI extends JPanel{
             switch (e.getActionCommand()) {
 
                 case "Save":
+                    if(clIDField.getText().isEmpty() ||
+                            PCField.getText().isEmpty() ||
+                            house_numField.getText().isEmpty()) {
+                        JOptionPane.showMessageDialog(null,
+                                "Please at least enter a client ID, postal code, and house number");
+
+                    }
                     if (isEmptyFieldData()) {
                         JOptionPane.showMessageDialog(null,
                                 "Cannot create empty client");
@@ -311,6 +392,7 @@ public class ClientAddressUI extends JPanel{
                     break;
                 case "Previous":
                     setFieldData(bean.movePrevious());
+                    break;
                 case "Next Step":
                     if(ca.getClID()==0) {
                         JOptionPane.showMessageDialog(null,
@@ -372,10 +454,6 @@ public class ClientAddressUI extends JPanel{
 
                         JPanel panel1 = new JPanel();
 
-                        //create field for entering dID to update
-                        //setrandDID(new Random().nextInt((999999 - 0) + 1));
-
-
                         ClerkUI showCenters = new ClerkUI("SELECT * from center", "Valid Centers");
                         tab1_1.add(panel1.add(showCenters));
 
@@ -421,8 +499,6 @@ public class ClientAddressUI extends JPanel{
                     JComponent tab1_2 = new JPanel();
 
                     JPanel panel1 = new JPanel();
-                    //panel1.setBorder(new TitledBorder(
-                            //new EtchedBorder(), "Make a Cash or Credit Card payment"));
 
                     CashUI cashUI = new CashUI(true);
                     cashUI.setdID(randdID);

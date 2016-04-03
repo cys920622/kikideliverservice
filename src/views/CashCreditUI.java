@@ -95,6 +95,8 @@ public class CashCreditUI extends JPanel{
         CreditCard c = new CreditCard();
         c.setdID(Integer.parseInt(filterdIDCreditField.getText()));
         c.setPayID(Integer.parseInt(filterpayIDCreditField.getText()));
+        //c.setType(creditTypeField.getText());
+        //c.setOnDate(dateTypeField.getText());
         return c;
     }
 
@@ -176,8 +178,8 @@ public class CashCreditUI extends JPanel{
                 case "Filter credit card transactions by payID:":
                     frame.add(initCreditTable("SELECT * " +
                                     "FROM credit_card " +
-                                    "WHERE credit_card='" + cc.getPayID() + "'",
-                            "Credit Card transaction of payID: "+ cc.getPayID()));
+                                    "WHERE credit_card.payID='" + cc.getPayID() + "'",
+                            "Credit Card transaction of payID: " + cc.getPayID()));
                     frame.setVisible(true);
                     break;
                 case "Calculate average cash amount":
@@ -220,3 +222,7 @@ public class CashCreditUI extends JPanel{
 
 
 }
+//SELECT passengers.passport_no, COUNT(flight_no) AS 'number_of_flights'
+//        FROM passengers LEFT JOIN reserves ON passengers.passport_no =    reserves.passport_no
+//        GROUP BY passengers.passport_no
+//        HAVING COUNT(​*) = (SELECT COUNT(*​) FROM flights);

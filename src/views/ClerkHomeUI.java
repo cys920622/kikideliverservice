@@ -16,21 +16,11 @@ import java.awt.event.ActionListener;
  * Created by stellafang. on 2016-03-27.
  */
 public class ClerkHomeUI extends JPanel{
-//    private JButton browseClients = new JButton("Browse Clients");
-//    private JButton editClients = new JButton("Create or Update Clients");
-//    private JButton browseDeliveries = new JButton("Browse Deliveries");
-//    private JButton editDeliveries= new JButton("Create or Update Deliveries");
-    private ClerkBean bean = new ClerkBean();
 
     public ClerkHomeUI() {
-        //new GridLayout(1,1);
         setBorder(new TitledBorder(
                 new EtchedBorder(), "Clerk view"));
-        setLayout(new BorderLayout(1, 1));
-        //setSize(1200, 600);
-        //setLayout(new BorderLayout(1,1));
-//        initButtons().setVisible(true);
-//        add(initButtons(), BorderLayout.CENTER);
+        setLayout(new BorderLayout(5, 5));
 
         // NEW TAB
         JTabbedPane jtab = new JTabbedPane();
@@ -79,6 +69,7 @@ public class ClerkHomeUI extends JPanel{
                 , "Browse Deliveries and its Parcels");
         tab3.add(browseDeliveries);
         tab3.add(new DeliveryParcelUI());
+        tab3.setSize(1200, 800);
         jtab.add("browse Deliveries", tab3);
 
         // ------------------------------------------------------------------------

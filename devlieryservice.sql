@@ -234,4 +234,3 @@ insert into center
 
 insert into center
 	values ('burnabynorth', '454 deer lake pkwy. burnaby 3u3 8g0');
-
