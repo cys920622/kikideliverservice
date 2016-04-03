@@ -266,7 +266,7 @@ public class ClientLoginBean {
     public JPanel getPaymentAsPanel(int dID) {
         JPanel panel = new JPanel();
         panel.setBorder(new TitledBorder(
-                new EtchedBorder(), "Query result"));
+                new EtchedBorder(), "Payment details for delivery "+dID));
         String sql = "SELECT DISTINCT * " +
                 "FROM delivery D, cash C " +
                 "WHERE D.dID=C.dID AND " +

@@ -20,13 +20,13 @@ public class ClientResultUI extends JPanel {
     private JTable resultTable;
     private int selectedDelivery = 0;
     private int cID;
-    private JButton paymentButton = new JButton("Payment info");
+    private JButton paymentButton = new JButton("Fetch payment info");
     public ClientResultUI(JFrame f, ClientLoginBean bean, int cID) {
         parent = f;
         this.bean = bean;
         setLayout(new BorderLayout());
         setBorder(new TitledBorder(
-                new EtchedBorder(), "Query results"));
+                new EtchedBorder(), "Query results: packages to/from client ID: "+cID));
         resultTable = bean.getClientIDQueryAsJTable(cID);
         JScrollPane tablePane = new JScrollPane(resultTable);
         add(tablePane);
