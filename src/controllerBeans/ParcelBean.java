@@ -6,6 +6,8 @@ import entityClasses.Center;
 import entityClasses.Parcel;
 
 import javax.sql.rowset.JdbcRowSet;
+import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 import java.sql.*;
 
 /**
@@ -16,12 +18,18 @@ public class ParcelBean {
     static final String DB_URL = "jdbc:mysql://localhost/Kiki's_DeliveryService";
     static final String USER = "root";
     static final String PASS = "Iloveme711";
-    private JdbcRowSet rowSet = null;
     private ResultSet rsCenter = null;
 
     private Connection conn;
     private Statement stmt;
     private ResultSet rs;
+
+    private ResultSetMetaData rsmd;
+    private int numcols, numrows;
+    private DefaultTableModel model;
+
+    private JdbcRowSet rowSet;
+
 
 
     public ParcelBean(String sql) {
@@ -257,4 +265,35 @@ public class ParcelBean {
 
         }
     }
+
+    public JTable makeTable(String sql) {
+        model = new DefaultTableModel();
+        try {
+            rowSet.setCommand(sql);
+            rowSet.execute();
+//            rowSet.addRowSetListener(this);
+            rsmd = rowSet.getMetaData();
+            numcols = rsmd.getColumnCount();
+
+            for (int colIndex = 1; colIndex <= numcols; colIndex++) {
+                model.addColumn(rsmd.getColumnName(colIndex));
+            }
+
+            Object[] row = new Object[numcols];
+            while (rowSet.next()) {
+                for (int i=0; i<numcols; i++){
+                    row[i] = rowSet.getObject(i+1);
+                }
+                model.addRow(row);
+            }
+
+
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return new JTable(model);
+    }
+
+
 }

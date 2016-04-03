@@ -64,35 +64,35 @@ public class ClerkBean extends AbstractTableModel implements TableModelListener,
         model = new DefaultTableModel();
         try {
             rowSet.setCommand(sql);
-            rowSet.execute();
-            rowSet.addRowSetListener(this);
-            rsmd = rowSet.getMetaData();
-            numcols = rsmd.getColumnCount();
+    rowSet.execute();
+    rowSet.addRowSetListener(this);
+    rsmd = rowSet.getMetaData();
+    numcols = rsmd.getColumnCount();
 
 //            rs = stmt.executeQuery(sql);
 //            rsmd = rs.getMetaData();
 //            numcols = rsmd.getColumnCount();
 
 
-            for (int colIndex = 1; colIndex <= numcols; colIndex++) {
-                model.addColumn(rsmd.getColumnName(colIndex));
-            }
+    for (int colIndex = 1; colIndex <= numcols; colIndex++) {
+        model.addColumn(rsmd.getColumnName(colIndex));
+    }
 
-            Object[] row = new Object[numcols];
-            while (rowSet.next()) {
-                for (int i=0; i<numcols; i++){
-                    row[i] = rowSet.getObject(i+1);
-                }
-                model.addRow(row);
-            }
+    Object[] row = new Object[numcols];
+    while (rowSet.next()) {
+        for (int i=0; i<numcols; i++){
+            row[i] = rowSet.getObject(i+1);
+        }
+        model.addRow(row);
+    }
 
 
 
-        } catch (SQLException e) {
-            e.printStackTrace();
+} catch (SQLException e) {
+        e.printStackTrace();
         }
         return new JTable(model);
-    }
+        }
 
 
 

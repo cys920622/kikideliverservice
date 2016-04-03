@@ -27,6 +27,10 @@ public class CenterUI extends JPanel{
     private JButton browsePackageInfo = new JButton("Package Information");
     private JTextField didField = new JTextField(6);
     private JButton submitButton = new JButton("Update");
+    private JRadioButton centerAddress = new JRadioButton("Center Address");
+    private JRadioButton parcelsHere = new JRadioButton("Parcel at Center");
+    private JRadioButton deliveredParcel = new JRadioButton("Delivered Parcel?");
+    private ButtonGroup group = new ButtonGroup();
 
     private CenterBean bean = new CenterBean();
     private ParcelBean pBean = new ParcelBean("select * from parcel");
@@ -36,6 +40,16 @@ public class CenterUI extends JPanel{
     private JPanel initButtons() {
         JPanel panel = new JPanel();
         panel.setLayout(new FlowLayout(FlowLayout.CENTER, 3, 3));
+        panel.setSize(480, 240);
+//        group.add(centerAddress);
+//        group.add(parcelsHere);
+//        group.add(deliveredParcel);
+//        panel.add(centerAddress, "wrap");
+//        centerAddress.addActionListener(new ButtonHandler());
+//        panel.add(parcelsHere, "wrap");
+//        parcelsHere.addActionListener(new ButtonHandler());
+//        panel.add(deliveredParcel, "wrap");
+//        deliveredParcel.addActionListener(new ButtonHandler());
         return panel;
     }
 
@@ -44,8 +58,6 @@ public class CenterUI extends JPanel{
         setBorder(new TitledBorder(
                 new EtchedBorder(), "Center ID: " + cid));
         JTabbedPane jtab = new JTabbedPane();
-
-
 
         //given center information
         JComponent centerInfo = new JPanel();
@@ -98,6 +110,7 @@ public class CenterUI extends JPanel{
     }
 
     private int did;
+    private String cid;
 
     private class ButtonHandler implements ActionListener {
         @Override
@@ -108,15 +121,16 @@ public class CenterUI extends JPanel{
 //            f.getContentPane().setLayout(new FlowLayout(FlowLayout.CENTER));
 
             switch (e.getActionCommand()) {
-                case "Update":
-                    if (isEmptyFieldData()) {
-                        JOptionPane.showMessageDialog(null,
-                                "Please enter a delivery ID");
-                    } else {
+                case "Center Address":
+//                    if (isEmptyFieldData()) {
+//                        JOptionPane.showMessageDialog(null,
+//                                "Please enter a delivery ID");
+//                    } else {
                         did = Integer.parseInt(didField.getText());
                         System.out.println("Delivery ID: " + did);
                         pBean.submit(did);
                         JOptionPane.showMessageDialog(null,
+//                                "Address of " + cid + "is: ");
                                 "Delivery of " + String.valueOf(p.getdID())
                                         + " was updated to arrived.");
                         break;
@@ -126,14 +140,14 @@ public class CenterUI extends JPanel{
 
         }
     }
+//    private JTable initTable(String sql) {
+//        JTable table = bean.makeTable(sql);
+//        table.setAutoCreateRowSorter(true);
+//        table.setAutoResizeMode(5);
+//        return table;
+//    }
+//
+//
+//}
 
 
-    private JTable initTable(String sql) {
-        JTable table = bean.makeTable(sql);
-        table.setAutoCreateRowSorter(true);
-        table.setAutoResizeMode(5);
-        return table;
-    }
-
-
-}
