@@ -10,6 +10,7 @@ import javax.swing.event.ListSelectionListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Objects;
 
 /**
  * Created by danielchoi on 2016-04-02.
@@ -21,13 +22,19 @@ public class ClientResultUI extends JPanel {
     private int selectedDelivery = 0;
     private int cID;
     private JButton paymentButton = new JButton("Fetch payment info");
-    public ClientResultUI(JFrame f, ClientLoginBean bean, int cID) {
+    public ClientResultUI(JFrame f, ClientLoginBean bean, int cID, String queryType) {
         parent = f;
         this.bean = bean;
         setLayout(new BorderLayout());
-        setBorder(new TitledBorder(
-                new EtchedBorder(), "Query results: packages to/from client ID: "+cID));
-        resultTable = bean.getClientIDQueryAsJTable(cID);
+        if (Objects.equals(queryType, "cID")) {
+            setBorder(new TitledBorder(
+                    new EtchedBorder(), "Query results: packages to/from client ID: "+cID));
+            resultTable = bean.getClientIDQueryAsJTable(cID);
+        } else {
+            setBorder(new TitledBorder(
+                    new EtchedBorder(), "Query results: showing all parcels in delivery ID: "+cID));
+            resultTable = bean.getDeliveryIDQueryAsJTable(cID);
+        }
         JScrollPane tablePane = new JScrollPane(resultTable);
         add(tablePane);
         paymentButton.addActionListener(new ButtonHandler());

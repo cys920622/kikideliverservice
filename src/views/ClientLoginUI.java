@@ -83,7 +83,7 @@ public class ClientLoginUI extends JPanel {
                         int cID = Integer.parseInt(cIDField.getText());
                         System.out.println("Client ID :" + cID);
                         JFrame child = new JFrame();
-                        ClientResultUI childPanel = new ClientResultUI(parent, bean, cID);
+                        ClientResultUI childPanel = new ClientResultUI(parent, bean, cID, "cID");
                         child.add(childPanel);
                         child.pack();
                         child.setSize(childPanel.getTableWidth(), 300);
@@ -98,8 +98,10 @@ public class ClientLoginUI extends JPanel {
                         int dID = Integer.parseInt(dIDField.getText());
                         System.out.println("Delivery ID :" + dID);
                         JFrame child = new JFrame();
-                        child.add(bean.getDeliveryQueryAsJPanel(dID));
+                        ClientResultUI childPanel = new ClientResultUI(parent, bean, dID, "dID");
+                        child.add(childPanel);
                         child.pack();
+                        child.setSize(childPanel.getTableWidth(), 300);
                         child.setVisible(true);
 //                        bean.testConnection();
 //                        parent.dispose();
