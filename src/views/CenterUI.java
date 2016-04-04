@@ -22,35 +22,46 @@ import java.awt.event.KeyListener;
 /**
  * Created by chuchutrainn on 2016-03-27.
  */
-public class CenterUI extends JPanel{
+public class CenterUI extends JPanel {
     private JButton centerInfo = new JButton("Center Information");
     private JButton browsePackageInfo = new JButton("Package Information");
     private JTextField didField = new JTextField(6);
     private JButton submitButton = new JButton("Update");
+    private JRadioButton centerAddress = new JRadioButton("Center Address");
+    private JRadioButton parcelsHere = new JRadioButton("Parcel at Center");
+    private JRadioButton deliveredParcel = new JRadioButton("Delivered Parcel?");
+    private ButtonGroup group = new ButtonGroup();
 
     private CenterBean bean = new CenterBean();
     private ParcelBean pBean = new ParcelBean("select * from parcel");
 
 
-
     private JPanel initButtons() {
         JPanel panel = new JPanel();
         panel.setLayout(new FlowLayout(FlowLayout.CENTER, 3, 3));
+        panel.setSize(480, 240);
+//        group.add(centerAddress);
+//        group.add(parcelsHere);
+//        group.add(deliveredParcel);
+//        panel.add(centerAddress, "wrap");
+//        centerAddress.addActionListener(new ButtonHandler());
+//        panel.add(parcelsHere, "wrap");
+//        parcelsHere.addActionListener(new ButtonHandler());
+//        panel.add(deliveredParcel, "wrap");
+//        deliveredParcel.addActionListener(new ButtonHandler());
         return panel;
     }
 
-    public CenterUI(String cid){
+    public CenterUI(String cid) {
         add(initButtons(), BorderLayout.CENTER);
         setBorder(new TitledBorder(
                 new EtchedBorder(), "Center ID: " + cid));
         JTabbedPane jtab = new JTabbedPane();
 
-
-
         //given center information
         JComponent centerInfo = new JPanel();
         ClerkUI browseCenterInfo = new ClerkUI("select * from center " +
-                "where cID = '" + cid + "'", cid +" Information");
+                "where cID = '" + cid + "'", cid + " Information");
         browseCenterInfo.setSize(browseCenterInfo.getWidth(), browseCenterInfo.getHeight());
         centerInfo.add(browseCenterInfo);
 //        centerInfo.add(new )
@@ -65,9 +76,9 @@ public class CenterUI extends JPanel{
         ClerkUI browsePackageInfo = new ClerkUI("select pID, length, width, height, " +
                 "next_cID, dID from center " +
                 "natural join parcel where center.cID = '" + cid + "'", "Packages at " + cid);
-        browsePackageInfo.setSize(browsePackageInfo.getWidth()+100, browsePackageInfo.getHeight());
+        browsePackageInfo.setSize(browsePackageInfo.getWidth() + 100, browsePackageInfo.getHeight());
         packageInfo.add(browsePackageInfo);
-        jtab.add("Package at " + cid +" Info", browsePackageInfo);
+        jtab.add("Package at " + cid + " Info", browsePackageInfo);
 
         //edit package
         JComponent editDelivery = new JPanel();
@@ -75,7 +86,7 @@ public class CenterUI extends JPanel{
         ClerkUI browseDeliveries = new ClerkUI("select dID, type, status, receiver_id " +
                 " next_cID from center natural join delivery natural join parcel " +
                 "where delivery.dID = parcel.dID AND parcel.cID = '" + cid + "'", "Delivery Info");
-        browseDeliveries.setSize(browseDeliveries.getWidth()+100, browseDeliveries.getHeight());
+        browseDeliveries.setSize(browseDeliveries.getWidth() + 100, browseDeliveries.getHeight());
         editDelivery.add(browseDeliveries);
         editDelivery.add(didField);
         editDelivery.add(submitButton);
@@ -98,6 +109,7 @@ public class CenterUI extends JPanel{
     }
 
     private int did;
+    private String cid;
 
     private class ButtonHandler implements ActionListener {
         @Override
@@ -109,31 +121,34 @@ public class CenterUI extends JPanel{
 
             switch (e.getActionCommand()) {
                 case "Update":
+                    did = Integer.parseInt(didField.getText().trim());
                     if (isEmptyFieldData()) {
                         JOptionPane.showMessageDialog(null,
                                 "Please enter a delivery ID");
+                    } else if (did < 1 || did > 20) {
+                        JOptionPane.showMessageDialog(null,
+                                "Please enter an existing dID");
                     } else {
-                        did = Integer.parseInt(didField.getText());
                         System.out.println("Delivery ID: " + did);
                         pBean.submit(did);
                         JOptionPane.showMessageDialog(null,
+//                                "Address of " + cid + "is: ");
                                 "Delivery of " + String.valueOf(p.getdID())
                                         + " was updated to arrived.");
-                        break;
-
                     }
+                    break;
             }
-
         }
     }
-
-
-    private JTable initTable(String sql) {
-        JTable table = bean.makeTable(sql);
-        table.setAutoCreateRowSorter(true);
-        table.setAutoResizeMode(5);
-        return table;
-    }
-
-
 }
+//    private JTable initTable(String sql) {
+//        JTable table = bean.makeTable(sql);
+//        table.setAutoCreateRowSorter(true);
+//        table.setAutoResizeMode(5);
+//        return table;
+//    }
+//
+//
+//}
+
+

@@ -23,6 +23,7 @@ public class AskForCentreUI extends JPanel {
     JDesktopPane desktopPane = new JDesktopPane();
     JInternalFrame intFrame = new JInternalFrame("Number of parcels at this location");
     JInternalFrame maxWeightFrame = new JInternalFrame("Max weight of parcel at this location");
+    JInternalFrame divisionFrame = new JInternalFrame("Any deliveries that have parcels at all centers?");
 
     public static JPanel panel;
     private JTextField cIDField = new JTextField(30);
@@ -33,6 +34,8 @@ public class AskForCentreUI extends JPanel {
     private JButton submitButton = new JButton("Submit");
     private JButton searchButton = new JButton("Search for Number of Parcels");
     private JButton maxWeightButton = new JButton("Search for Max Weight of Parcel");
+    private JButton divisionButton = new JButton("Search for deliveries that have parcels at all centers");
+    private JButton allParcelButton = new JButton("View all parcels information");
 //    private JButton back = new JButton(("Back"));
 
 
@@ -65,10 +68,19 @@ public class AskForCentreUI extends JPanel {
         maxWeightFrame.setLocation(100,100);
         maxWeightFrame.setVisible(false);
 
+        divisionFrame.setMaximizable(true);
+        divisionFrame.setIconifiable(true);
+        divisionFrame.setClosable(true);
+        divisionFrame.setSize(320, 240);
+        divisionFrame.setLocation(100,100);
+        divisionFrame.setVisible(false);
+
         desktopPane.add(intFrame);
         desktopPane.add(maxWeightFrame);
+        desktopPane.add(divisionFrame);
         add(intFrame);
         add(maxWeightFrame);
+        add(divisionFrame);
 
         setLayout(new BorderLayout(5, 5));
         add(initFields(), BorderLayout.NORTH);
@@ -86,12 +98,16 @@ public class AskForCentreUI extends JPanel {
         JPanel panel = new JPanel();
         panel.setLayout(new MigLayout());
 //        panel.setLayout(new FlowLayout(FlowLayout.CENTER, 3, 3));
-        panel.add(submitButton);
+        panel.add(submitButton, "wrap");
         submitButton.addActionListener(new ButtonHandler());
-        panel.add(searchButton);
+        panel.add(searchButton, "wrap");
         searchButton.addActionListener(new ButtonHandler());
-        panel.add(maxWeightButton);
+        panel.add(maxWeightButton, "wrap");
         maxWeightButton.addActionListener(new ButtonHandler());
+        panel.add(divisionButton, "wrap");
+        divisionButton.addActionListener(new ButtonHandler());
+        panel.add(allParcelButton, "wrap");
+        allParcelButton.addActionListener(new ButtonHandler());
 //        panel.add(back);
 //        back.addActionListener(new ButtonHandler());
         return panel;
@@ -121,6 +137,10 @@ public class AskForCentreUI extends JPanel {
         center_addrField.setText(c.getCenter_addr());
     }
 
+    private boolean isAlpha(String name) {
+        return name.matches("[a-zA-Z]+");
+    }
+
     private boolean isEmptyFieldDatacID() {
         return (cIDField.getText().trim().isEmpty());
     }
@@ -128,10 +148,16 @@ public class AskForCentreUI extends JPanel {
 
     private String cid;
 
+    private boolean isValidcID() {
+        return !(cIDField.getText().trim().equals("ubc") || cIDField.getText().trim().equals("burnabysouth") || cIDField.getText().trim().equals("burnabynorth")
+        || cIDField.getText().trim().equals("surrey") || cIDField.getText().trim().equals("portcoquitlam"));
+    }
+
     private class ButtonHandler implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
             JFrame f = new JFrame(cid);
+            JFrame pars = new JFrame();
             JDialog d = new JDialog();
             f.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
             f.getContentPane().setLayout(new FlowLayout(FlowLayout.CENTER));
@@ -143,6 +169,10 @@ public class AskForCentreUI extends JPanel {
                     if (isEmptyFieldDatacID()) {
                         JOptionPane.showMessageDialog(null,
                                 "Please enter a center ID");
+                    } else if (isValidcID()) {
+                        System.out.println("isValidcID: " + isValidcID());
+                        JOptionPane.showMessageDialog(null,
+                        "Please enter an existing center ID");
                     } else {
                         System.out.println("center ID = " + cIDField.getText());
                         cid = cIDField.getText();
@@ -152,7 +182,6 @@ public class AskForCentreUI extends JPanel {
                         f.setSize(700, 1200);
                         f.setVisible(true);
 //                        panel.setVisible(false);
-                        break;
 //                        JTable submittable = initTable("select cID, pID from center natural " +
 //                                "join parcel where cID = '" + cIDField.getText() + "'");
 //                        JScrollPane scrollPane = new JScrollPane(submittable);
@@ -164,10 +193,16 @@ public class AskForCentreUI extends JPanel {
 //                    JTable submittable = initTable("select cID, pID from center natural " +
 //                        "join parcel where cID = '" + cIDField.getText() + "'");
                     }
+                    break;
+
                 case "Search for Number of Parcels":
                     if (isEmptyFieldDatacID()) {
                         JOptionPane.showMessageDialog(null,
-                                "Please enter a Center ID");
+                                "Please enter a center ID");
+                    } else if (isValidcID()) {
+                        System.out.println("isValidcID: " + isValidcID());
+                        JOptionPane.showMessageDialog(null,
+                                "Please enter an existing center ID");
                     } else {
                         cid = cIDField.getText();
                         System.out.println("get number of parcels for center ID = " + cid);
@@ -179,18 +214,41 @@ public class AskForCentreUI extends JPanel {
                         intFrame.setSize(320, 480);
                         intFrame.setVisible(true);
                     }
+                    break;
+
                 case "Search for Max Weight of Parcel":
                     if (isEmptyFieldDatacID()) {
                         JOptionPane.showMessageDialog(null,
-                                "Please enter a Center ID");
+                                "Please enter a center ID");
+                    } else if (isValidcID()) {
+                        System.out.println("isValidcID: " + isValidcID());
+                        JOptionPane.showMessageDialog(null,
+                                "Please enter an existing center ID");
                     } else {
                         cid = cIDField.getText();
                         System.out.println("executing max weight for "+cid);
                         maxWeightFrame.add(initTable("select max(weight) from parcel where cid='" + cid + "' "));
                        maxWeightFrame.setSize(320, 240);
                         maxWeightFrame.setVisible(true);
-
                     }
+                    break;
+
+                case "Search for deliveries that have parcels at all centers":
+                    divisionFrame.add(initTable("select delivery.did, count(cid) \n" +
+                            "from parcel left join delivery on parcel.did = delivery.did \n" +
+                            "group by delivery.did \n" +
+                            "having count(*) = (select count(*) from center);"));
+                    divisionFrame.setSize(480, 240);
+                    divisionFrame.setVisible(true);
+                    break;
+
+                case "View all parcels information":
+                    System.out.println("Executing all parcels information");
+                    pars.add(new ViewParcelsUI());
+                    pars.setSize(550, 550);
+                    pars.setVisible(true);
+                    break;
+
 //                case "Back":
 //                    HomeUI hui = HomeUI.getInstance();
 //                    hui.setVisible(true);
