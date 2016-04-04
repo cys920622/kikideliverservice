@@ -137,12 +137,21 @@ public class AskForCentreUI extends JPanel {
         center_addrField.setText(c.getCenter_addr());
     }
 
+    private boolean isAlpha(String name) {
+        return name.matches("[a-zA-Z]+");
+    }
+
     private boolean isEmptyFieldDatacID() {
         return (cIDField.getText().trim().isEmpty());
     }
     private boolean isSearchingForParcelEmpty() { return (parcelAtThatCenterField.getText().trim().isEmpty()); }
 
     private String cid;
+
+    private boolean isValidcID() {
+        return !(cIDField.getText().trim().equals("ubc") || cIDField.getText().trim().equals("burnabysouth") || cIDField.getText().trim().equals("burnabynorth")
+        || cIDField.getText().trim().equals("surrey") || cIDField.getText().trim().equals("portcoquitlam"));
+    }
 
     private class ButtonHandler implements ActionListener {
         @Override
@@ -160,6 +169,10 @@ public class AskForCentreUI extends JPanel {
                     if (isEmptyFieldDatacID()) {
                         JOptionPane.showMessageDialog(null,
                                 "Please enter a center ID");
+                    } else if (isValidcID()) {
+                        System.out.println("isValidcID: " + isValidcID());
+                        JOptionPane.showMessageDialog(null,
+                        "Please enter an existing center ID");
                     } else {
                         System.out.println("center ID = " + cIDField.getText());
                         cid = cIDField.getText();
@@ -169,7 +182,6 @@ public class AskForCentreUI extends JPanel {
                         f.setSize(700, 1200);
                         f.setVisible(true);
 //                        panel.setVisible(false);
-                        break;
 //                        JTable submittable = initTable("select cID, pID from center natural " +
 //                                "join parcel where cID = '" + cIDField.getText() + "'");
 //                        JScrollPane scrollPane = new JScrollPane(submittable);
@@ -181,10 +193,16 @@ public class AskForCentreUI extends JPanel {
 //                    JTable submittable = initTable("select cID, pID from center natural " +
 //                        "join parcel where cID = '" + cIDField.getText() + "'");
                     }
+                    break;
+
                 case "Search for Number of Parcels":
                     if (isEmptyFieldDatacID()) {
                         JOptionPane.showMessageDialog(null,
-                                "Please enter a Center ID");
+                                "Please enter a center ID");
+                    } else if (isValidcID()) {
+                        System.out.println("isValidcID: " + isValidcID());
+                        JOptionPane.showMessageDialog(null,
+                                "Please enter an existing center ID");
                     } else {
                         cid = cIDField.getText();
                         System.out.println("get number of parcels for center ID = " + cid);
@@ -196,18 +214,24 @@ public class AskForCentreUI extends JPanel {
                         intFrame.setSize(320, 480);
                         intFrame.setVisible(true);
                     }
+                    break;
+
                 case "Search for Max Weight of Parcel":
                     if (isEmptyFieldDatacID()) {
                         JOptionPane.showMessageDialog(null,
-                                "Please enter a Center ID");
+                                "Please enter a center ID");
+                    } else if (isValidcID()) {
+                        System.out.println("isValidcID: " + isValidcID());
+                        JOptionPane.showMessageDialog(null,
+                                "Please enter an existing center ID");
                     } else {
                         cid = cIDField.getText();
                         System.out.println("executing max weight for "+cid);
                         maxWeightFrame.add(initTable("select max(weight) from parcel where cid='" + cid + "' "));
                        maxWeightFrame.setSize(320, 240);
                         maxWeightFrame.setVisible(true);
-
                     }
+                    break;
 
                 case "Search for deliveries that have parcels at all centers":
                     divisionFrame.add(initTable("select delivery.did, count(cid) \n" +
@@ -216,12 +240,14 @@ public class AskForCentreUI extends JPanel {
                             "having count(*) = (select count(*) from center);"));
                     divisionFrame.setSize(480, 240);
                     divisionFrame.setVisible(true);
+                    break;
 
                 case "View all parcels information":
                     System.out.println("Executing all parcels information");
                     pars.add(new ViewParcelsUI());
                     pars.setSize(550, 550);
                     pars.setVisible(true);
+                    break;
 
 //                case "Back":
 //                    HomeUI hui = HomeUI.getInstance();
