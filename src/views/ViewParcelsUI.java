@@ -28,7 +28,7 @@ public class ViewParcelsUI extends JPanel {
     private JInternalFrame cIDFrame = new JInternalFrame("Showing associated cIDs of all parcels");
     private JInternalFrame next_cIDFrame = new JInternalFrame("Showing associated next_cIDs of all parcels");
     private JInternalFrame dIDFrame = new JInternalFrame("Showing associated dID of all parcels");
-
+    private JScrollPane scroll = new JScrollPane();
 
     private JPanel initButtons() {
         cb.addElement("pID");
@@ -55,9 +55,10 @@ public class ViewParcelsUI extends JPanel {
 
         pIDFrame.setIconifiable(true);
         pIDFrame.setClosable(true);
-        pIDFrame.setSize(320, 320);
+        pIDFrame.setSize(240, 480);
         pIDFrame.setVisible(false);
         pIDFrame.setLocation(50, 50);
+        pIDFrame.setResizable(true);
         add(pIDFrame);
 
         lengthFrame.setIconifiable(true);
@@ -65,6 +66,7 @@ public class ViewParcelsUI extends JPanel {
         lengthFrame.setSize(320, 320);
         lengthFrame.setVisible(false);
         lengthFrame.setLocation(50, 50);
+        lengthFrame.setResizable(true);
         add(lengthFrame);
 
         widthFrame.setIconifiable(true);
@@ -72,6 +74,7 @@ public class ViewParcelsUI extends JPanel {
         widthFrame.setSize(320, 320);
         widthFrame.setVisible(false);
         widthFrame.setLocation(50, 50);
+        widthFrame.setResizable(true);
         add(widthFrame);
 
         weightFrame.setIconifiable(true);
@@ -79,6 +82,7 @@ public class ViewParcelsUI extends JPanel {
         weightFrame.setSize(320, 320);
         weightFrame.setVisible(false);
         weightFrame.setLocation(50, 50);
+        weightFrame.setResizable(true);
         add(weightFrame);
 
         heightFrame.setIconifiable(true);
@@ -86,6 +90,7 @@ public class ViewParcelsUI extends JPanel {
         heightFrame.setSize(320, 320);
         heightFrame.setVisible(false);
         heightFrame.setLocation(50, 50);
+        heightFrame.setResizable(true);
         add(heightFrame);
 
         cIDFrame.setIconifiable(true);
@@ -93,6 +98,7 @@ public class ViewParcelsUI extends JPanel {
         cIDFrame.setSize(320, 320);
         cIDFrame.setVisible(false);
         cIDFrame.setLocation(50, 50);
+        cIDFrame.setResizable(true);
         add(cIDFrame);
 
         next_cIDFrame.setIconifiable(true);
@@ -100,6 +106,7 @@ public class ViewParcelsUI extends JPanel {
         next_cIDFrame.setSize(320, 320);
         next_cIDFrame.setVisible(false);
         next_cIDFrame.setLocation(50, 50);
+        next_cIDFrame.setResizable(true);
         add(next_cIDFrame);
 
         dIDFrame.setIconifiable(true);
@@ -107,6 +114,7 @@ public class ViewParcelsUI extends JPanel {
         dIDFrame.setSize(320, 320);
         next_cIDFrame.setLocation(50, 50);
         dIDFrame.setVisible(false);
+        dIDFrame.setResizable(true);
         add(dIDFrame);
 
 

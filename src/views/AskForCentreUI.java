@@ -246,7 +246,8 @@ public class AskForCentreUI extends JPanel {
 //                        iFrame.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 //                        add(intFrame);
                         intFrame.add(initTable("SELECT count(pID) from parcel where parcel.cid= '" + cid + "' "));
-                        intFrame.setSize(320, 480);
+                        intFrame.setSize(480, 480);
+                        intFrame.setResizable(true);
                         intFrame.setVisible(true);
                     }
                     break;
@@ -266,22 +267,27 @@ public class AskForCentreUI extends JPanel {
                             maxWeightFrameUBC.add(initTable("select max(weight) from parcel where cid='" + cid + "' "));
                             maxWeightFrameUBC.setSize(320, 240);
                             maxWeightFrameUBC.setVisible(true);
+                            maxWeightFrameUBC.setResizable(true);
                         } else if (cid.equals("surrey")) {
                             maxWeightFrameSurrey.add(initTable("select max(weight) from parcel where cid='" + cid + "' "));
                             maxWeightFrameSurrey.setSize(320, 240);
                             maxWeightFrameSurrey.setVisible(true);
+                            maxWeightFrameSurrey.setResizable(true);
                         } else if (cid.equals("burnabysouth")) {
                             maxWeightFrameBurnabySouth.add(initTable("select max(weight) from parcel where cid='" + cid + "' "));
                             maxWeightFrameBurnabySouth.setSize(320, 240);
                             maxWeightFrameBurnabySouth.setVisible(true);
+                            maxWeightFrameBurnabySouth.setResizable(true);
                         } else if (cid.equals("burnabynorth")) {
                             maxWeightFrameBurnabyNorth.add(initTable("select max(weight) from parcel where cid='" + cid + "' "));
                             maxWeightFrameBurnabyNorth.setSize(320, 240);
                             maxWeightFrameBurnabyNorth.setVisible(true);
+                            maxWeightFrameBurnabyNorth.setResizable(true);
                         } else if (cid.equals("portcoquitlam")) {
                             maxWeightFramePortCoquitlam.add(initTable("select max(weight) from parcel where cid='" + cid + "' "));
                             maxWeightFramePortCoquitlam.setSize(320, 240);
                             maxWeightFramePortCoquitlam.setVisible(true);
+                            maxWeightFramePortCoquitlam.setResizable(true);
                         }
                     }
                     break;
