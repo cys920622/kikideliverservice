@@ -31,10 +31,10 @@ public class CashCreditUI extends JPanel{
     private JButton filterpayIDCreditButton = new JButton("Filter credit card transactions by payID:");
     private JButton avgCashAmountButton = new JButton("Calculate average cash amount");
     private JButton avgCreditAmountButton = new JButton("Calculate average credit card amount");
-    private JButton maxCashAmountButton = new JButton("Calculate maximum cash amount:");
-    private JButton maxCreditAmountButton = new JButton("Calculate maximum credit card amount:");
-    private JButton minCashAmountButton = new JButton("Calculate minimum cash amount:");
-    private JButton minCreditAmountButton = new JButton("Calculate minimum credit card amount:");
+    private JButton maxCashAmountButton = new JButton("Calculate maximum cash amount");
+    private JButton maxCreditAmountButton = new JButton("Calculate maximum credit card amount");
+    private JButton minCashAmountButton = new JButton("Calculate minimum cash amount");
+    private JButton minCreditAmountButton = new JButton("Calculate minimum credit card amount");
 
 
     private CashBean cbean = new CashBean();
@@ -210,6 +210,7 @@ public class CashCreditUI extends JPanel{
                 case "Filter cash transactions by delivery ID:":
                     if (filterdIDCashField.getText().trim().equals("0")){
                         JOptionPane.showMessageDialog(null, "Please enter a valid delivery ID");
+                        break;
                     }
                     frame.add(initCashTable("SELECT * " +
                                     "FROM cash " +
@@ -222,6 +223,7 @@ public class CashCreditUI extends JPanel{
                 case "Filter cash transactions by payID:":
                     if (filterpayIDCashField.getText().trim().equals("0")){
                         JOptionPane.showMessageDialog(null, "Please enter a valid pay ID");
+                        break;
                     }
                     frame.add(initCashTable("SELECT * " +
                                     "FROM cash " +
@@ -232,6 +234,7 @@ public class CashCreditUI extends JPanel{
                 case "Filter credit card transactions by delivery ID:":
                     if (filterdIDCreditField.getText().trim().equals("0")){
                         JOptionPane.showMessageDialog(null, "Please enter a valid delivery ID");
+                        break;
                     }
                     frame.add(initCreditTable("SELECT * " +
                                     "FROM credit_card " +
@@ -244,6 +247,7 @@ public class CashCreditUI extends JPanel{
                 case "Filter credit card transactions by payID:":
                     if (filterpayIDCreditField.getText().trim().equals("0")){
                         JOptionPane.showMessageDialog(null, "Please enter a valid pay ID");
+                        break;
                     }
                     frame.add(initCreditTable("SELECT * " +
                                     "FROM credit_card " +
@@ -262,22 +266,22 @@ public class CashCreditUI extends JPanel{
                             ccbean.Calculate("SELECT avg(amount) " +
                                     "FROM credit_card"));
                     break;
-                case "Calculate maximum cash amount:":
+                case "Calculate maximum cash amount":
                     JOptionPane.showMessageDialog(null,
                             cbean.Calculate("SELECT MAX(amount) " +
                                     "FROM cash "));
                     break;
-                case "Calculate maximum credit card amount:":
+                case "Calculate maximum credit card amount":
                     JOptionPane.showMessageDialog(null,
                             ccbean.Calculate("SELECT MAX(amount) " +
                                     "FROM credit_card "));
                     break;
-                case "Calculate minimum cash amount:":
+                case "Calculate minimum cash amount":
                     JOptionPane.showMessageDialog(null,
                             cbean.Calculate("SELECT MIN(amount) " +
                                     "FROM cash "));
                     break;
-                case "Calculate minimum credit card amount:":
+                case "Calculate minimum credit card amount":
                     JOptionPane.showMessageDialog(null,
                             ccbean.Calculate("SELECT MIN(amount) " +
                                     "FROM credit_card "));
