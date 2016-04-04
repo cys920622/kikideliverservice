@@ -27,9 +27,9 @@ import java.util.Vector;
  */
 public class ClerkBean extends AbstractTableModel implements TableModelListener, RowSetListener{
     static final String JDBC_DRIVER = "com.mysql.jdbc.Driver";
-    static final String DB_URL = "jdbc:mysql://127.0.0.1:3306/kiki's";
+    static final String DB_URL = "jdbc:mysql://localhost/Kiki's_DeliveryService";
     static final String USER = "root";
-    static final String PASS = "password";
+    static final String PASS = "Iloveme711";
 
     private Connection conn;
     private Statement stmt;
