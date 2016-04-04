@@ -99,68 +99,47 @@ public class DeliveryParcelUI extends JPanel{
 
     public Boolean checkFieldData() {
             try {
-                Integer.parseInt(filterdIDField.getText());
                 if (filterdIDField.getText().length()>6) {
                     JOptionPane.showMessageDialog(null, "The delivery ID can only be max 6 numbers long");
                     return false;
                 }
+                Integer.parseInt(filterdIDField.getText());
             } catch (NumberFormatException e) {
                 JOptionPane.showMessageDialog(null, "The delivery ID can only be a number");
                 return false;
             }
 
-
-
             try {
-                Integer.parseInt(filtersender_IDField.getText());
                 if (filtersender_IDField.getText().length() > 6) {
                     JOptionPane.showMessageDialog(null, "The sender ID can only be max 6 numbers long");
                     return false;
                 }
+                Integer.parseInt(filtersender_IDField.getText());
             } catch (NumberFormatException e) {
                 JOptionPane.showMessageDialog(null, "The sender ID can only be a number");
                 return false;
             }
 
-
-
-
             try {
-                Integer.parseInt(filterreceiver_IDField.getText());
                 if ( filterreceiver_IDField.getText().length() > 6) {
                     JOptionPane.showMessageDialog(null, "The receiver ID can only be max 6 numbers long");
                     return false;
                 }
+                Integer.parseInt(filterreceiver_IDField.getText());
             } catch (NumberFormatException e) {
                 JOptionPane.showMessageDialog(null, "The receiver ID can only be a number");
                 return false;
             }
-
-
             try {
-                Integer.parseInt(totalpIDField.getText());
                 if ( totalpIDField.getText().length() > 6) {
                     JOptionPane.showMessageDialog(null, "The parcel ID can only be max 6 numbers long");
                     return false;
                 }
+                Integer.parseInt(totalpIDField.getText());
             } catch (NumberFormatException e) {
                 JOptionPane.showMessageDialog(null, "The parcel ID can only be a number");
                 return false;
             }
-
-
-
-        if((filtertypeField.getText().length()>20 && !filtertypeField.getText().isEmpty())||
-                (totaltypeField.getText().length()>20 && !totaltypeField.getText().isEmpty())) {
-            JOptionPane.showMessageDialog(null, "The delivery type can only max 20 characters long");
-            return false;
-        }
-
-        if((filterstatusField.getText().length()>20 && !filterstatusField.getText().isEmpty())
-                || (totalstatusField.getText().length()>20 && !totalstatusField.getText().isEmpty())) {
-            JOptionPane.showMessageDialog(null, "The delivery status can only max 20 characters long");
-            return false;
-        }
 
         return true;
     }
@@ -240,6 +219,9 @@ public class DeliveryParcelUI extends JPanel{
                     frame.setVisible(true);
                     break;
                 case "Filter deliveries by delivery ID:":
+                    if (filterdIDField.getText().trim().equals("0")){
+                        JOptionPane.showMessageDialog(null, "Please enter a valid delivery ID");
+                    }
                     frame.add(initTable("SELECT * " +
                             "FROM delivery " +
                             "LEFT JOIN parcel " +
@@ -249,6 +231,11 @@ public class DeliveryParcelUI extends JPanel{
                     frame.setVisible(true);
                     break;
                 case "Filter deliveries by type:":
+                    String filtertype = filtertypeField.getText().toLowerCase();
+                    if(!filtertype.equals("standard")&&!filtertype.equals("expedited")&&!filtertype.equals("express")) {
+                        JOptionPane.showMessageDialog(null, "The valid delivery types are: standard, expedited, express");
+                        break;
+                    }
                     frame.add(initTable("SELECT * " +
                                     "FROM delivery " +
                                     "LEFT JOIN parcel " +
@@ -258,6 +245,11 @@ public class DeliveryParcelUI extends JPanel{
                     frame.setVisible(true);
                     break;
                 case "Filter deliveries by status:":
+                    String filterstatus = filterstatusField.getText().toLowerCase();
+                    if(!filterstatus.equals("in transit")&&!filterstatus.equals("delivered")&&!filterstatus.equals("just left")) {
+                        JOptionPane.showMessageDialog(null, "The valid delivery statuses are: in transit, delivered, just left");
+                        break;
+                    }
                     frame.add(initTable("SELECT * " +
                                     "FROM delivery " +
                                     "LEFT JOIN parcel " +
@@ -267,6 +259,10 @@ public class DeliveryParcelUI extends JPanel{
                     frame.setVisible(true);
                     break;
                 case "Filter deliveries by sender ID:":
+                    if (filtersender_IDField.getText().trim().equals("0")){
+                        JOptionPane.showMessageDialog(null, "Please enter a valid sender ID");
+                        break;
+                    }
                     frame.add(initTable("SELECT * " +
                                     "FROM delivery " +
                                     "LEFT JOIN parcel " +
@@ -276,6 +272,10 @@ public class DeliveryParcelUI extends JPanel{
                     frame.setVisible(true);
                     break;
                 case "Filter deliveries by receiver ID:":
+                    if (filterreceiver_IDField.getText().trim().equals("0")){
+                        JOptionPane.showMessageDialog(null, "Please enter a valid receiver ID");
+                        break;
+                    }
                     frame.add(initTable("SELECT * " +
                                     "FROM delivery " +
                                     "LEFT JOIN parcel " +
@@ -291,26 +291,32 @@ public class DeliveryParcelUI extends JPanel{
                                     "FROM delivery"));
                     break;
                 case "Calculate total parcels of delivery ID:":
-                    if (dp.getTotalpID() == 0) {
-                        JOptionPane.showMessageDialog(null,
-                                bean.Calculate("SELECT count(*) " +
-                                        "FROM parcel "));
+                    if (totalpIDField.getText().trim().equals("0")){
+                        JOptionPane.showMessageDialog(null, "Please enter a valid delivery ID");
                         break;
                     }
-                    else {
                         JOptionPane.showMessageDialog(null,
                                 bean.Calculate("SELECT count(*) " +
                                         "FROM parcel "+
                                         "WHERE parcel.dID='"+dp.getTotalpID()+"'"));
-                    }
                     break;
                 case "Calculate total deliveries with type:":
+                    String totaltype = totaltypeField.getText().toLowerCase();
+                    if(!totaltype.equals("standard")&&!totaltype.equals("expedited")&&!totaltype.equals("express")) {
+                        JOptionPane.showMessageDialog(null, "The valid delivery types are: standard, expedited, express");
+                        break;
+                    }
                     JOptionPane.showMessageDialog(null,
                             bean.Calculate("SELECT count(*) " +
                                     "FROM delivery "+
                                     "WHERE delivery.type='"+dp.getTotaltype()+"'"));
                     break;
                 case "Calculate total deliveries with status:":
+                    String totalstatus = totalstatusField.getText().toLowerCase();
+                    if(!totalstatus.equals("in transit")&&!totalstatus.equals("delivered")&&!totalstatus.equals("just left")) {
+                        JOptionPane.showMessageDialog(null, "The valid delivery statuses are: in transit, delivered, just left");
+                        break;
+                    }
                     JOptionPane.showMessageDialog(null,
                             bean.Calculate("SELECT count(*) " +
                                     "FROM delivery " +

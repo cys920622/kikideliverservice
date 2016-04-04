@@ -65,17 +65,9 @@ public class ClientAddressBean {
                     "(clID, fname, lname, PC, house_num, phone_num)" +
                     "VALUES ('"+ ca.getClID()+ "', '" +ca.getFname()+ "', '"+ ca.getLname() + "', '"
                     + ca.getPC() + "', '"+ ca.getHouse_num()+ "', '"+ ca.getPhone_num() +"' )");
-
-
         } catch (SQLException e) {
-            try {
-                rowSet.rollback();
-                ca = null;
-            } catch (SQLException e1) {
-                e1.printStackTrace();
-            }
-
             e.printStackTrace();
+            return null;
         }
         return ca;
     }
@@ -106,6 +98,7 @@ public class ClientAddressBean {
                 rowSet.rollback();
             } catch (SQLException e1) {
                 e1.printStackTrace();
+                return null;
             }
             e.printStackTrace();
         }

@@ -83,21 +83,78 @@ public class CashCreditUI extends JPanel{
         return panel;
     }
 
+    public Boolean checkCashFieldData() {
+        try {
+            Integer.parseInt(filterpayIDCashField.getText());
+            if (filterpayIDCashField.getText().length()>3) {
+                JOptionPane.showMessageDialog(null, "The pay ID can only be max 3 numbers long");
+                return false;
+            }
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(null, "The pay ID can only be a number");
+            return false;
+        }
+
+        try {
+            Integer.parseInt(filterdIDCashField.getText());
+            if (filterdIDCashField.getText().length() > 6) {
+                JOptionPane.showMessageDialog(null, "The delivery ID can only be max 6 numbers long");
+                return false;
+            }
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(null, "The delivery ID can only be a number");
+            return false;
+        }
+
+        return true;
+    }
+
 
     private Cash getCashFieldData() {
-        Cash c = new Cash();
-        c.setdID(Integer.parseInt(filterdIDCashField.getText()));
-        c.setPayID(Integer.parseInt(filterpayIDCashField.getText()));
-        return c;
+        if(checkCashFieldData()) {
+            Cash c = new Cash();
+            c.setdID(Integer.parseInt(filterdIDCashField.getText()));
+            c.setPayID(Integer.parseInt(filterpayIDCashField.getText()));
+            return c;
+        }return null;
+    }
+
+    public Boolean checkCreditFieldData() {
+        try {
+            Integer.parseInt(filterpayIDCreditField.getText());
+            if (filterpayIDCreditField.getText().length()>3) {
+                JOptionPane.showMessageDialog(null, "The pay ID can only be max 3 numbers long");
+                return false;
+            }
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(null, "The pay ID can only be a number");
+            return false;
+        }
+
+        try {
+            Integer.parseInt(filterdIDCreditField.getText());
+            if (filterdIDCreditField.getText().length() > 6) {
+                JOptionPane.showMessageDialog(null, "The delivery ID can only be max 6 numbers long");
+                return false;
+            }
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(null, "The delivery ID can only be a number");
+            return false;
+        }
+
+        return true;
     }
 
     private CreditCard getCreditFieldData() {
-        CreditCard c = new CreditCard();
-        c.setdID(Integer.parseInt(filterdIDCreditField.getText()));
-        c.setPayID(Integer.parseInt(filterpayIDCreditField.getText()));
-        //c.setType(creditTypeField.getText());
-        //c.setOnDate(dateTypeField.getText());
-        return c;
+        if (checkCreditFieldData()) {
+            CreditCard c = new CreditCard();
+            c.setdID(Integer.parseInt(filterdIDCreditField.getText()));
+            c.setPayID(Integer.parseInt(filterpayIDCreditField.getText()));
+            //c.setType(creditTypeField.getText());
+            //c.setOnDate(dateTypeField.getText());
+            return c;
+        }
+        return null;
     }
 
     public JPanel initCashTable(String sql, String tableName) {
@@ -151,6 +208,9 @@ public class CashCreditUI extends JPanel{
 
             switch (e.getActionCommand()) {
                 case "Filter cash transactions by delivery ID:":
+                    if (filterdIDCashField.getText().trim().equals("0")){
+                        JOptionPane.showMessageDialog(null, "Please enter a valid delivery ID");
+                    }
                     frame.add(initCashTable("SELECT * " +
                                     "FROM cash " +
                                     "LEFT JOIN delivery " +
@@ -160,6 +220,9 @@ public class CashCreditUI extends JPanel{
                     frame.setVisible(true);
                     break;
                 case "Filter cash transactions by payID:":
+                    if (filterpayIDCashField.getText().trim().equals("0")){
+                        JOptionPane.showMessageDialog(null, "Please enter a valid pay ID");
+                    }
                     frame.add(initCashTable("SELECT * " +
                                     "FROM cash " +
                                     "WHERE cash.payID='" + c.getPayID() + "'",
@@ -167,6 +230,9 @@ public class CashCreditUI extends JPanel{
                     frame.setVisible(true);
                     break;
                 case "Filter credit card transactions by delivery ID:":
+                    if (filterdIDCreditField.getText().trim().equals("0")){
+                        JOptionPane.showMessageDialog(null, "Please enter a valid delivery ID");
+                    }
                     frame.add(initCreditTable("SELECT * " +
                                     "FROM credit_card " +
                                     "LEFT JOIN delivery " +
@@ -176,6 +242,9 @@ public class CashCreditUI extends JPanel{
                     frame.setVisible(true);
                     break;
                 case "Filter credit card transactions by payID:":
+                    if (filterpayIDCreditField.getText().trim().equals("0")){
+                        JOptionPane.showMessageDialog(null, "Please enter a valid pay ID");
+                    }
                     frame.add(initCreditTable("SELECT * " +
                                     "FROM credit_card " +
                                     "WHERE credit_card.payID='" + cc.getPayID() + "'",

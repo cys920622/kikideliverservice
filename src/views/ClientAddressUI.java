@@ -42,6 +42,7 @@ public class ClientAddressUI extends JPanel{
     private JButton previousButton = new JButton("Previous");
     private JButton nextStepButton = new JButton("Next Step");
     private JButton makePaymentButton = new JButton("Make Payment");
+    private JButton clearButton = new JButton("Clear");
 
     private int clID = new Random().nextInt(Integer.MAX_VALUE);
     private int randdID = 0;
@@ -87,6 +88,8 @@ public class ClientAddressUI extends JPanel{
         if (tabNumber == 1) {
             panel.add(createButton);
             createButton.addActionListener(new ButtonHandler());
+            panel.add(clearButton);
+            clearButton.addActionListener(new ButtonHandler());
             panel.add(firstButton);
             firstButton.addActionListener(new ButtonHandler());
             panel.add(lastButton);
@@ -101,6 +104,8 @@ public class ClientAddressUI extends JPanel{
         else if (tabNumber == 2) {
             panel.add(createButton);
             createButton.addActionListener(new ButtonHandler());
+            panel.add(clearButton);
+            clearButton.addActionListener(new ButtonHandler());
             panel.add(firstButton);
             firstButton.addActionListener(new ButtonHandler());
             panel.add(lastButton);
@@ -109,12 +114,12 @@ public class ClientAddressUI extends JPanel{
             nextButton.addActionListener(new ButtonHandler());
             panel.add(previousButton);
             previousButton.addActionListener(new ButtonHandler());
-            panel.add(nextStepButton);
-            nextStepButton.addActionListener(new ButtonHandler());
         }
         else if(tabNumber == 3) {
             panel.add(updateButton);
             updateButton.addActionListener(new ButtonHandler());
+            panel.add(clearButton);
+            clearButton.addActionListener(new ButtonHandler());
             panel.add(deleteButton);
             deleteButton.addActionListener(new ButtonHandler());
             panel.add(firstButton);
@@ -129,6 +134,8 @@ public class ClientAddressUI extends JPanel{
         else if (tabNumber == 4) {
             panel.add(updateButton);
             updateButton.addActionListener(new ButtonHandler());
+            panel.add(clearButton);
+            clearButton.addActionListener(new ButtonHandler());
             panel.add(deleteButton);
             deleteButton.addActionListener(new ButtonHandler());
             panel.add(firstButton);
@@ -139,6 +146,7 @@ public class ClientAddressUI extends JPanel{
             nextButton.addActionListener(new ButtonHandler());
             panel.add(previousButton);
             previousButton.addActionListener(new ButtonHandler());
+
         }
 
 
@@ -184,26 +192,27 @@ public class ClientAddressUI extends JPanel{
 
     public Boolean checkFieldData() {
         try {
-            Integer.parseInt(clIDField.getText());
             if ( clIDField.getText().length() > 11) {
                 JOptionPane.showMessageDialog(null, "ClID can only be 11 numbers long");
                 return false;
             }
+            Integer.parseInt(clIDField.getText());
         } catch (NumberFormatException e) {
             JOptionPane.showMessageDialog(null, "The Client ID can only be a number");
             return false;
         }
 
         try {
-            Integer.parseInt(house_numField.getText());
             if ( house_numField.getText().length() > 11) {
                 JOptionPane.showMessageDialog(null, "ClID can only be max 11 numbers long");
                 return false;
             }
+            Integer.parseInt(house_numField.getText());
         } catch (NumberFormatException e) {
             JOptionPane.showMessageDialog(null, "The house number can only be a number");
             return false;
         }
+
 
         if (fnameField.getText().length()>30) {
             JOptionPane.showMessageDialog(null, "First name can only be max 30 characters long");
@@ -217,23 +226,15 @@ public class ClientAddressUI extends JPanel{
             JOptionPane.showMessageDialog(null, "Last name can only be max 30 characters long");
             return false;
         }
-
-//        else if (lnameField.getText().matches(".*\\d+.*")) {
-//            JOptionPane.showMessageDialog(null, "First Name cannot include numbers");
-//        }
-
-        if (PCField.getText().length()>7) {
+        if (PCField.getText().trim().length()>7) {
             JOptionPane.showMessageDialog(null, "Postal Code can only be 7 characters long");
             return false;
         }
 
-        if (countryField.getText().length()>20) {
+        if (countryField.getText().trim().length()>20) {
             JOptionPane.showMessageDialog(null, "Postal Code can only be max 20 characters long");
             return false;
         }
-//        if (countryField.getText().matches(".*\\d+.*")) {
-//            JOptionPane.showMessageDialog(null, "First Name cannot include numbers");
-//        }
 
         if (provinceField.getText().length() > 2) {
             JOptionPane.showMessageDialog(null, "Province can only be 2 letters long");
@@ -253,8 +254,8 @@ public class ClientAddressUI extends JPanel{
     }
 
     public ClientAddress getFieldData() {
+        ClientAddress ca = new ClientAddress();
         if (checkFieldData()) {
-            ClientAddress ca = new ClientAddress();
             ca.setClID(Integer.parseInt(clIDField.getText()));
             ca.setFname(fnameField.getText());
             ca.setLname(lnameField.getText());
@@ -288,17 +289,18 @@ public class ClientAddressUI extends JPanel{
     }
 
     private boolean isEmptyFieldData() {
-        return (clIDField.getText().trim().isEmpty()
-                && fnameField.getText().trim().isEmpty()
-                && lnameField.getText().trim().isEmpty()
-                && PCField.getText().trim().isEmpty()
-                && house_numField.getText().trim().isEmpty()
-                && phone_numField.getText().trim().isEmpty()
-                && countryField.getText().trim().isEmpty()
-                && provinceField.getText().trim().isEmpty()
-                && cityField.getText().trim().isEmpty()
-                && street_nameField.getText().trim().isEmpty());
+        return (clIDField.getText().trim().equals("0")
+                || fnameField.getText().trim().isEmpty()
+                || lnameField.getText().trim().isEmpty()
+                || PCField.getText().trim().isEmpty()
+                || house_numField.getText().trim().equals("0")
+                || phone_numField.getText().trim().isEmpty()
+                || countryField.getText().trim().isEmpty()
+                || provinceField.getText().trim().isEmpty()
+                || cityField.getText().trim().isEmpty()
+                || street_nameField.getText().trim().isEmpty());
     }
+
 
     public void setclID(int clID) {
         this.clID = clID;
@@ -313,28 +315,26 @@ public class ClientAddressUI extends JPanel{
         @Override
         public void actionPerformed(ActionEvent e) {
             ClientAddress ca = getFieldData();
+
             switch (e.getActionCommand()) {
-
                 case "Save":
-                    if(clIDField.getText().isEmpty() ||
-                            PCField.getText().isEmpty() ||
-                            house_numField.getText().isEmpty()) {
-                        JOptionPane.showMessageDialog(null,
-                                "Please at least enter a client ID, postal code, and house number");
-
-                    }
                     if (isEmptyFieldData()) {
                         JOptionPane.showMessageDialog(null,
-                                "Cannot create empty client");
+                                "Please fill in remaining fields");
+                        break;
                     }
                     if (bean.create(ca) != null) {
                         JOptionPane.showMessageDialog(null,
                                 "New Client: " + ca.getFname() + " " + ca.getLname() +
                                         " with ClientID " + String.valueOf(ca.getClID())
                                         + " was created successfully.");
+                        createButton.setText("Create");
+                        break;
+                    } else {
+                        JOptionPane.showMessageDialog(null,
+                                "Please check if you have entered a unique Client ID, and a postal code and house number from an existing address");
                         break;
                     }
-
                 case "Create":
                     ca.setClID(clID);
                     ca.setFname("");
@@ -350,26 +350,41 @@ public class ClientAddressUI extends JPanel{
                     createButton.setText("Save");
                     break;
 
+                case "Clear":
+                    ca.setClID(clID);
+                    ca.setFname("");
+                    ca.setLname("");
+                    ca.setPC("");
+                    ca.setHouse_num(0);
+                    ca.setPhone_num("");
+                    ca.setCountry("");
+                    ca.setProvince("");
+                    ca.setCity("");
+                    ca.setStreet_name("");
+                    setFieldData(ca);
+                    break;
+
                 case "Update":
                     if (isEmptyFieldData()) {
                         JOptionPane.showMessageDialog(null,
-                                "Can't update empty record");
+                                "Please fill in missing info");
+                        break;
                     }
                     if (bean.update(ca) != null) {
                         JOptionPane.showMessageDialog(null,
                                 "Client: " + ca.getFname() + " " + ca.getLname() +
                                         " with ClientID " + String.valueOf(ca.getClID())
                                         + " was edited successfully.");
-
+                        break;
                     }
-                    break;
 
                 case "Delete":
                     if (isEmptyFieldData()) {
                         JOptionPane.showMessageDialog(null,
-                                "Can't update empty record");
+                                "Please fill in missing info");
+                        break;
                     }
-                    else if (!bean.delete(ca)) {
+                    if (!bean.delete(ca)) {
                         JOptionPane.showMessageDialog(null,
                                 "Client was successfully deleted.");
                     }
@@ -394,14 +409,13 @@ public class ClientAddressUI extends JPanel{
                     setFieldData(bean.movePrevious());
                     break;
                 case "Next Step":
-                    if(ca.getClID()==0) {
+                    if(isEmptyFieldData()) {
                         JOptionPane.showMessageDialog(null,
-                                "Please at least enter a Client ID");
+                                "Please fill in missing info");
                         break;
                     }
-                    else if (tabNumber == 1){
-                        //setBorder(new TitledBorder(
-                        //        new EtchedBorder(), "Create or Update a Delivery "));
+
+                    if (tabNumber == 1){
                         JFrame tab1_1Frame = new JFrame();
                         tab1_1Frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
                         tab1_1Frame.setSize(1500, 780);
@@ -415,29 +429,31 @@ public class ClientAddressUI extends JPanel{
                         tab1_1.add(panel1.add(showCenters));
 
 
-                        int randreceiver = new Random().nextInt(Integer.MAX_VALUE);
+                        final int randreceiver = new Random().nextInt((999999 - 0) + 1);
 
-                        DeliveryUI deliveryui = new DeliveryUI(false, "select * from delivery");
-                        deliveryui.setRanddID(randdID);
-                        deliveryui.setSender(ca.getClID());
-                        deliveryui.setReceiver(randreceiver);
-                        deliveryui.setPreferredSize(new Dimension(620, 300));
-                        tab1_1.add(panel1.add(deliveryui));
+                        DeliveryUI deliveryui1 = new DeliveryUI(false, "select * from delivery");
+                        ClientAddressUI clientAddressUI1 = new ClientAddressUI(2);
+                        ParcelUI parcelUI1 = new ParcelUI(false, "select * from parcel");
+
+                        deliveryui1.setRanddID(randdID);
+                        deliveryui1.setSender(ca.getClID());
+                        deliveryui1.setReceiver(randreceiver);
+                        deliveryui1.setPreferredSize(new Dimension(620, 300));
+                        tab1_1.add(panel1.add(deliveryui1));
                         panel1.setAlignmentY(TOP_ALIGNMENT);
 
 
                         JPanel panel2 = new JPanel();
 
-                        ClientAddressUI clientAddressUI = new ClientAddressUI(2);
-                        //1 is for tab1, able to create new sender/receiver
-                        clientAddressUI.setclID(randreceiver);
-                        clientAddressUI.setPreferredSize(new Dimension(620, 415));
-                        tab1_1.add(panel2.add(clientAddressUI));
 
-                        ParcelUI parcelUI = new ParcelUI(false, "select * from parcel");
-                        parcelUI.setdID(randdID); //give parcel same dID as delivery
-                        parcelUI.setPreferredSize(new Dimension(400, 400));
-                        tab1_1.add(panel2.add(parcelUI));
+                        clientAddressUI1.setclID(randreceiver);
+                        clientAddressUI1.setPreferredSize(new Dimension(620, 415));
+                        tab1_1.add(panel2.add(clientAddressUI1));
+
+
+                        parcelUI1.setdID(randdID); //give parcel same dID as delivery
+                        parcelUI1.setPreferredSize(new Dimension(400, 400));
+                        tab1_1.add(panel2.add(parcelUI1));
 
                         tab1_1.add(panel2.add(makePaymentButton));
                         makePaymentButton.addActionListener(new ButtonHandler());
@@ -447,6 +463,11 @@ public class ClientAddressUI extends JPanel{
                         tab1_1Frame.setVisible(true);
                     }
                     else if (tabNumber == 3) {
+                        if (ca.getdID()==0) {
+                            JOptionPane.showMessageDialog(null,
+                                    "Please enter a valid delivery ID");
+                            break;
+                        }
                         JFrame tab1_1Frame = new JFrame();
                         tab1_1Frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
                         tab1_1Frame.setSize(1500, 780);
@@ -457,8 +478,7 @@ public class ClientAddressUI extends JPanel{
                         ClerkUI showCenters = new ClerkUI("SELECT * from center", "Valid Centers");
                         tab1_1.add(panel1.add(showCenters));
 
-
-                        int randreceiver = new Random().nextInt(Integer.MAX_VALUE);
+                        final int randreceiver = new Random().nextInt((999999 - 0) + 1);
 
                         DeliveryUI deliveryui = new DeliveryUI(true, "SELECT * " +
                                 "FROM delivery " +
@@ -492,7 +512,13 @@ public class ClientAddressUI extends JPanel{
                     }
                     break;
                 case "Make Payment":
-
+//                    if(clientAddressUI1.isEmptyFieldData() &&
+//                            deliveryui1.isEmptyFieldData()&&
+//                            parcelUI1.isEmptyFieldData()) {
+//                        JOptionPane.showMessageDialog(null,
+//                                "Please fill in missing info");
+//                        break;
+//                    }
                     JFrame tab1_2Frame = new JFrame();
                     tab1_2Frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
                     tab1_2Frame.setSize(1000, 500);

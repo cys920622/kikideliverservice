@@ -45,41 +45,8 @@ public class ClientLoginBean {
 //            rowSet.setPassword(PASS);
 //            rowSet.setCommand("SELECT * FROM clients");
 //            rowSet.execute();
-
             conn = DriverManager.getConnection(DB_URL, USER, PASS);
             stmt = conn.createStatement();
-//            String sql = "SELECT DISTINCT * FROM delivery, clients WHERE delivery.receiver_ID = clients.clID AND sender_ID = "+clientID;
-//            sentDeliveriesRs = stmt.executeQuery(sql);
-//            while (sentDeliveriesRs.next()) {
-//                Delivery d = new Delivery();
-//                d.setdID(sentDeliveriesRs.getInt("dID"));
-//                d.setSender_ID(sentDeliveriesRs.getInt("sender_ID"));
-//                d.setReceiver_ID(sentDeliveriesRs.getInt("receiver_ID"));
-//                d.setType(sentDeliveriesRs.getString("type"));
-//                d.setStatus("TEST");
-//                sentDeliveries.add(d);
-//
-//                Clients c = new Clients();
-//                c.setFname(sentDeliveriesRs.getString("fname"));
-//                senderClients.add(c);
-//            }
-
-//            sql = "SELECT DISTINCT * FROM delivery, clients WHERE delivery.sender_ID = clients.clID AND receiver_ID = " +clientID;
-//            receiveDeliveriesRs = stmt.executeQuery(sql);
-//            while (receiveDeliveriesRs.next()) {
-//                Delivery d = new Delivery();
-//                d.setdID(receiveDeliveriesRs.getInt("dID"));
-//                d.setSender_ID(receiveDeliveriesRs.getInt("sender_ID"));
-//                d.setReceiver_ID(receiveDeliveriesRs.getInt("receiver_ID"));
-//                d.setType(receiveDeliveriesRs.getString("type"));
-//                d.setStatus("TEST");
-//                receivedDeliveries.add(d);
-//
-//                Clients c = new Clients();
-//                c.setFname(receiveDeliveriesRs.getString("fname"));
-//                receiverClients.add(c);
-//            }
-
         } catch (ClassNotFoundException | SQLException e) {
             e.printStackTrace();
         }
@@ -100,20 +67,15 @@ public class ClientLoginBean {
         }
     }
 
-    public JTable getClientIDQueryAsJTable(int clID) {
+    public JTable getQueryAsJTable(int id, String sql) {
         DefaultTableModel model = new DefaultTableModel(new String[]{"Delivery ID", "Delivery type",
-        "Status", "Sender", "Return address", "Receiver", "Destination address", "Parcel weight",
-        "Parcel dimensions"}, 0);
-        String sql = "SELECT DISTINCT * " +
-                "FROM delivery D, clients S, address SA, clients R, address RA, parcel P " +
-                "WHERE D.sender_ID=S.clID AND D.receiver_ID=R.clID AND " +
-                "SA.PC=S.PC AND SA.house_num=S.house_num AND " +
-                "RA.PC=R.PC AND RA.house_num=R.house_num AND " +
-                "P.dID=D.dID AND " +
-                "(S.clID = " + clID + " OR R.clID = " + clID+")";
+                "Status", "Sender", "Return address", "Receiver", "Destination address", "Parcel ID", "Parcel weight",
+                "Parcel dimensions"}, 0);
+        int countObjects = 0;
         try {
             ResultSet rs = stmt.executeQuery(sql);
             while (rs.next()) {
+                countObjects++;
                 model.addRow(new Object[]{
                         rs.getString("D.dID"),
                         rs.getString("D.type"),
@@ -124,6 +86,7 @@ public class ClientLoginBean {
                         rs.getString("R.fname")+" "+rs.getString("R.lname"),
                         rs.getString("RA.house_num")+" "+rs.getString("RA.street_name")+ ", "+
                                 rs.getString("RA.city")+ " "+rs.getString("RA.province")+", "+rs.getString("RA.country"),
+                        rs.getString("P.pID"),
                         rs.getString("P.weight")+"kg",
                         rs.getString("P.length")+ "cm x "+
                                 rs.getString("P.width")+ "cm x "+rs.getString("P.height")+"cm",
@@ -132,11 +95,65 @@ public class ClientLoginBean {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        if (countObjects == 0) {
+//            JOptionPane.showMessageDialog(null,
+//                    "No results.");
+            return null;
+        }
         JTable resultTable = new JTable(model);
         resultTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
         resizeColumnWidth(resultTable);
         return resultTable;
     }
+
+    public JTable getClientIDQueryAsJTable(int clID) {
+        String sql = "SELECT DISTINCT * " +
+                "FROM delivery D, clients S, address SA, clients R, address RA, parcel P " +
+                "WHERE D.sender_ID=S.clID AND D.receiver_ID=R.clID AND " +
+                "SA.PC=S.PC AND SA.house_num=S.house_num AND " +
+                "RA.PC=R.PC AND RA.house_num=R.house_num AND " +
+                "P.dID=D.dID AND " +
+                "(S.clID = " + clID + " OR R.clID = " + clID+")";
+//        try {
+//            ResultSet rs = stmt.executeQuery(sql);
+//            while (rs.next()) {
+//                model.addRow(new Object[]{
+//                        rs.getString("D.dID"),
+//                        rs.getString("D.type"),
+//                        rs.getString("D.status"),
+//                        rs.getString("S.fname") + " " + rs.getString("S.lname"),
+//                        rs.getString("SA.house_num")+" "+rs.getString("SA.street_name")+ ", "+
+//                                rs.getString("SA.city")+ " "+rs.getString("SA.province")+", "+rs.getString("SA.country"),
+//                        rs.getString("R.fname")+" "+rs.getString("R.lname"),
+//                        rs.getString("RA.house_num")+" "+rs.getString("RA.street_name")+ ", "+
+//                                rs.getString("RA.city")+ " "+rs.getString("RA.province")+", "+rs.getString("RA.country"),
+//                        rs.getString("P.weight")+"kg",
+//                        rs.getString("P.length")+ "cm x "+
+//                                rs.getString("P.width")+ "cm x "+rs.getString("P.height")+"cm",
+//                });
+//            }
+//        } catch (SQLException e) {
+//            e.printStackTrace();
+//        }
+//        JTable resultTable = new JTable(model);
+//        resultTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+//        resizeColumnWidth(resultTable);
+//        return resultTable;
+        return getQueryAsJTable(clID, sql);
+    }
+
+    public JTable getDeliveryIDQueryAsJTable(int dID) {
+        String sql = "SELECT DISTINCT * " +
+                "FROM delivery D, clients S, address SA, clients R, address RA, parcel P " +
+                "WHERE D.sender_ID=S.clID AND D.receiver_ID=R.clID AND " +
+                "SA.PC=S.PC AND SA.house_num=S.house_num AND " +
+                "RA.PC=R.PC AND RA.house_num=R.house_num AND " +
+                "P.dID=D.dID AND " +
+                "D.dID = " + dID;
+        return getQueryAsJTable(dID, sql);
+    }
+
+
 
     // http://stackoverflow.com/questions/17627431/auto-resizing-the-jtable-column-widths
     public void resizeColumnWidth(JTable table) {
@@ -146,7 +163,7 @@ public class ClientLoginBean {
             for (int row = 0; row < table.getRowCount(); row++) {
                 TableCellRenderer renderer = table.getCellRenderer(row, column);
                 Component comp = table.prepareRenderer(renderer, row, column);
-                width = Math.max(comp.getPreferredSize().width +20 , width);
+                width = Math.max(comp.getPreferredSize().width +30 , width);
             }
             columnModel.getColumn(column).setPreferredWidth(width);
         }
@@ -186,7 +203,7 @@ public class ClientLoginBean {
                     rs.getString("P.width")+ "cm x "+rs.getString("P.height")+"cm"), "wrap");
 
         } catch (SQLException e) {
-            e.printStackTrace();
+//            e.printStackTrace();
             panel.setLayout(new MigLayout());
             panel.add(new JLabel("No results."), "align label");
         }
@@ -204,43 +221,6 @@ public class ClientLoginBean {
                 "RA.PC=R.PC AND RA.house_num=R.house_num AND " +
                 "P.dID=D.dID AND " +
                 "D.dID = " + dID;
-//        try {
-//            ResultSet rs = stmt.executeQuery(sql);
-//            rs.next();
-//            System.out.println("dID: " + rs.getInt("D.dID") + ", status: " + rs.getString("D.status")
-//            + ", sender: "+rs.getString("S.fname")+" "+rs.getString("S.lname")+ " at: "+rs.getString("SA.city")
-//            + ", receiver: "+rs.getString("R.fname")+" "+rs.getString("R.lname")+ " at: "+rs.getString("RA.city"));
-//            panel.setLayout(new MigLayout());
-//            panel.add(new JLabel("Delivery ID: "), "align label");
-//            panel.add(new JLabel(rs.getString("D.dID")), "wrap");
-//            panel.add(new JLabel("Delivery type: "), "align label");
-//            panel.add(new JLabel(rs.getString("D.type")), "wrap");
-//            panel.add(new JLabel("Status: "), "align label");
-//            panel.add(new JLabel(rs.getString("D.status")), "wrap");
-//            panel.add(new JLabel(" "), "wrap"); // spacer
-//            panel.add(new JLabel("Sender: "), "align label");
-//            panel.add(new JLabel(rs.getString("S.fname")+" "+rs.getString("S.lname")), "wrap");
-//            panel.add(new JLabel("Return address: "), "align label");
-//            panel.add(new JLabel(rs.getString("SA.house_num")+" "+rs.getString("SA.street_name")+ ", "+
-//                    rs.getString("SA.city")+ " "+rs.getString("SA.province")+", "+rs.getString("SA.country")), "wrap");
-//            panel.add(new JLabel(" "), "wrap"); // spacer
-//            panel.add(new JLabel("Receiver: "), "align label");
-//            panel.add(new JLabel(rs.getString("R.fname")+" "+rs.getString("R.lname")), "wrap");
-//            panel.add(new JLabel("Destination address: "), "align label");
-//            panel.add(new JLabel(rs.getString("RA.house_num")+" "+rs.getString("RA.street_name")+ ", "+
-//                    rs.getString("RA.city")+ " "+rs.getString("RA.province")+", "+rs.getString("RA.country")), "wrap");
-//            panel.add(new JLabel(" "), "wrap"); // spacer
-//            panel.add(new JLabel("Parcel weight: "), "align label");
-//            panel.add(new JLabel(rs.getString("P.weight")+"kg"), "wrap");
-//            panel.add(new JLabel("Parcel dimensions: "), "align label");
-//            panel.add(new JLabel(rs.getString("P.length")+ "cm x "+
-//                    rs.getString("P.width")+ "cm x "+rs.getString("P.height")+"cm"), "wrap");
-//
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//            panel.setLayout(new MigLayout());
-//            panel.add(new JLabel("No results."), "align label");
-//        }
         populateJPanel(panel, sql);
         return panel;
     }
@@ -251,7 +231,7 @@ public class ClientLoginBean {
 //        "Parcel dimensions", "Payment"}, 0);
         JPanel panel = new JPanel();
         panel.setBorder(new TitledBorder(
-                new EtchedBorder(), "Query result"));
+                new EtchedBorder(), "Query result for parcel ID: "+pID));
         String sql = "SELECT DISTINCT * " +
                 "FROM delivery D, clients S, address SA, clients R, address RA, parcel P " +
                 "WHERE D.sender_ID=S.clID AND D.receiver_ID=R.clID AND " +
@@ -266,7 +246,7 @@ public class ClientLoginBean {
     public JPanel getPaymentAsPanel(int dID) {
         JPanel panel = new JPanel();
         panel.setBorder(new TitledBorder(
-                new EtchedBorder(), "Query result"));
+                new EtchedBorder(), "Payment details for delivery "+dID));
         String sql = "SELECT DISTINCT * " +
                 "FROM delivery D, cash C " +
                 "WHERE D.dID=C.dID AND " +
@@ -315,7 +295,7 @@ public class ClientLoginBean {
                 panel.add(new JLabel(rs.getString("C.type")), "wrap");
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+//            e.printStackTrace();
             panel.setLayout(new MigLayout());
             panel.add(new JLabel("No results."), "align label");
         }

@@ -51,6 +51,7 @@ public class CashBean {
                 cash = null;
             } catch (SQLException e1) {
                 e1.printStackTrace();
+                return null;
             }
 
             e.printStackTrace();

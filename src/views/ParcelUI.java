@@ -33,8 +33,10 @@ public class ParcelUI extends JPanel{
     private JButton lastButton = new JButton("Last");
     private JButton nextButton = new JButton("Next");
     private JButton previousButton = new JButton("Previous");
+    private JButton clearButton = new JButton("Clear");
 
     private int dID = new Random().nextInt((999999-0) +1);
+    private final int randpID = new Random().nextInt((999-0) +1);
 
     private ParcelBean bean;
     private Boolean isUpdateable = false;
@@ -53,10 +55,10 @@ public class ParcelUI extends JPanel{
 
 
         pIDField.setText(String.valueOf(0));
-        lengthField.setText(String.valueOf(0.0));
-        widthField.setText(String.valueOf(0.0));
-        heightField.setText(String.valueOf(0.0));
-        weightField.setText(String.valueOf(0.0));
+        lengthField.setText(String.valueOf(0));
+        widthField.setText(String.valueOf(0));
+        heightField.setText(String.valueOf(0));
+        weightField.setText(String.valueOf(0));
         dIDField.setText(String.valueOf(0));
         cIDField.setText("");
         next_cIDField.setText("");
@@ -84,6 +86,8 @@ public class ParcelUI extends JPanel{
         if (!isUpdateable) {
             panel.add(createButton);
             createButton.addActionListener(new ButtonHandler());
+            panel.add(clearButton);
+            clearButton.addActionListener(new ButtonHandler());
         }
         return panel;
     }
@@ -110,17 +114,83 @@ public class ParcelUI extends JPanel{
         return panel;
     }
 
+    private Boolean checkFieldData() {
+        try {
+            if (pIDField.getText().length()>3) {
+                JOptionPane.showMessageDialog(null, "The parcel ID can only be max 3 numbers long");
+                return false;
+            }
+            Integer.parseInt(pIDField.getText());
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(null, "The parcel ID can only be a number");
+            return false;
+        }
+
+        try {
+            Float.parseFloat(lengthField.getText());
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(null, "The length can only be a decimal number");
+            return false;
+        }
+
+        try {
+            Float.parseFloat(widthField.getText());
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(null, "The width can only be a decimal number");
+            return false;
+        }
+
+        try {
+            Float.parseFloat(heightField.getText());
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(null, "The height can only be a decimal number");
+            return false;
+        }
+
+        try {
+            Float.parseFloat(weightField.getText());
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(null, "The weight can only be a decimal number");
+            return false;
+        }
+
+        try {
+            if (dIDField.getText().length() > 6) {
+                JOptionPane.showMessageDialog(null, "The delivery ID can only be max 6 numbers long");
+                return false;
+            }
+            Integer.parseInt(dIDField.getText());
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(null, "The delivery ID can only be a number");
+            return false;
+        }
+
+        if(cIDField.getText().length()>30) {
+            JOptionPane.showMessageDialog(null, "The center ID can only max 30 characters long");
+            return false;
+        }
+
+        if(next_cIDField.getText().length()>30) {
+            JOptionPane.showMessageDialog(null, "The next center ID can only max 30 characters long");
+            return false;
+        }
+        return true;
+    }
+
     private Parcel getFieldData() {
-        Parcel p = new Parcel();
-        p.setpID(Integer.parseInt(pIDField.getText()));
-        p.setLength(Float.parseFloat(lengthField.getText()));
-        p.setWidth(Float.parseFloat(weightField.getText()));
-        p.setHeight(Float.parseFloat(heightField.getText()));
-        p.setWeight(Float.parseFloat(weightField.getText()));
-        p.setdID(Integer.parseInt(dIDField.getText()));
-        p.setcID(cIDField.getText());
-        p.setNextcID(next_cIDField.getText());
-        return p;
+        if(checkFieldData()) {
+            Parcel p = new Parcel();
+            p.setpID(Integer.parseInt(pIDField.getText()));
+            p.setLength(Float.parseFloat(lengthField.getText()));
+            p.setWidth(Float.parseFloat(weightField.getText()));
+            p.setHeight(Float.parseFloat(heightField.getText()));
+            p.setWeight(Float.parseFloat(weightField.getText()));
+            p.setdID(Integer.parseInt(dIDField.getText()));
+            p.setcID(cIDField.getText());
+            p.setNextcID(next_cIDField.getText());
+            return p;
+        }
+        return null;
     }
 
     private void setFieldData(Parcel p) {
@@ -134,15 +204,15 @@ public class ParcelUI extends JPanel{
         next_cIDField.setText(p.getNextcID());
     }
 
-    private boolean isEmptyFieldData() {
-        return (pIDField.getText().trim().isEmpty()
-                && lengthField.getText().trim().isEmpty()
-                && widthField.getText().trim().isEmpty()
-                && heightField.getText().trim().isEmpty()
-                && weightField.getText().trim().isEmpty()
-                && dIDField.getText().trim().isEmpty()
-                && cIDField.getText().trim().isEmpty()
-                && next_cIDField.getText().trim().isEmpty());
+    public boolean isEmptyFieldData() {
+        return (pIDField.getText().trim().equals("0")
+                || lengthField.getText().trim().equals("0.0")
+                || widthField.getText().trim().equals("0.0")
+                || heightField.getText().trim().equals("0.0")
+                || weightField.getText().trim().equals("0.0")
+                || dIDField.getText().trim().equals("0")
+                || cIDField.getText().trim().isEmpty()
+                || next_cIDField.getText().trim().isEmpty());
     }
 
     public void setdID(int dID) {
@@ -157,10 +227,10 @@ public class ParcelUI extends JPanel{
                 case "Save":
                     if (isEmptyFieldData()) {
                         JOptionPane.showMessageDialog(null,
-                                "Cannot create empty record");
+                                "Please fill in remaining fields");
                         break;
                     }
-                    if (bean.create(p, p.getcID(), p.getNextcID()) != null) {
+                    if (bean.create(p) != null) {
                         JOptionPane.showMessageDialog(null,
                                 "New Parcel " + String.valueOf(p.getpID()) +
                                         " was created for Delivery " + String.valueOf(p.getdID())
@@ -170,11 +240,11 @@ public class ParcelUI extends JPanel{
                     }
                     else {
                         JOptionPane.showMessageDialog(null,
-                                "invalid Center ID was submitted");
+                                "Please check if you have entered a unique Parcel ID, and an existing center ID and delivery ID");
                         break;
                     }
                 case "New...":
-                    p.setpID(new Random().nextInt((999999-0) +1));
+                    p.setpID(randpID);
                     p.setLength(0);
                     p.setWidth(0);
                     p.setHeight(0);
@@ -184,6 +254,18 @@ public class ParcelUI extends JPanel{
                     p.setNextcID("");
                     setFieldData(p);
                     createButton.setText("Save");
+                    break;
+
+                case "Clear":
+                    p.setpID(randpID);
+                    p.setLength(0);
+                    p.setWidth(0);
+                    p.setHeight(0);
+                    p.setWeight(0);
+                    p.setdID(dID);
+                    p.setcID("");
+                    p.setNextcID("");
+                    setFieldData(p);
                     break;
 
                 case "Update":

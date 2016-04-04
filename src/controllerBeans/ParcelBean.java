@@ -6,6 +6,7 @@ import entityClasses.Center;
 import entityClasses.Parcel;
 
 import javax.sql.rowset.JdbcRowSet;
+import javax.swing.*;
 import java.sql.*;
 
 /**
@@ -32,63 +33,47 @@ public class ParcelBean {
             rowSet.setUsername(USER);
             rowSet.setPassword(PASS);
             rowSet.setCommand(sql);
-            //rowSet.setCommand("select * from parcel");
             rowSet.execute();
 
             conn = DriverManager.getConnection(DB_URL, USER, PASS);
             stmt = conn.createStatement();
             rsCenter = stmt.executeQuery("select * from center");
-
-//            rowSetCenter = new JdbcRowSetImpl();
-//            rowSetCenter.setUrl(DB_URL);
-//            rowSetCenter.setUsername(USER);
-//            rowSetCenter.setPassword(PASS);
-//            rowSetCenter.setCommand("select * from center");
-//            rowSetCenter.execute();
-
-            conn = DriverManager.getConnection(DB_URL, USER, PASS);
-            stmt = conn.createStatement();
-
-
         } catch (ClassNotFoundException | SQLException e) {
             e.printStackTrace();
         }
     }
 
-    public Parcel create(Parcel parcel, String centerMatch, String nextCenterMatch) {
+    public Parcel create(Parcel parcel) {
         try {
-            Boolean isValidCenter = false;
-            Boolean isValidNextCenter = false;
-            while (rsCenter.next() && (!isValidCenter || !isValidNextCenter) ) {
-                if (centerMatch.equals(rsCenter.getString("cID"))) {
-                    isValidCenter = true;
-                }
-                if (nextCenterMatch.equals(rsCenter.getString("cID"))) {
-                    isValidNextCenter = true;
-                }
-            }
-            if (isValidCenter && isValidNextCenter) {
-                rowSet.moveToInsertRow();
-                rowSet.updateInt("pID", parcel.getpID());
-                rowSet.updateFloat("width", parcel.getWidth());
-                rowSet.updateFloat("length", parcel.getLength());
-                rowSet.updateFloat("height", parcel.getHeight());
-                rowSet.updateFloat("weight", parcel.getWeight());
-                rowSet.updateInt("dID", parcel.getdID());
-                rowSet.updateString("cID", parcel.getcID());
-                rowSet.updateString("next_cID", parcel.getNextcID());
-                rowSet.insertRow();
-                rowSet.moveToCurrentRow();
-            } else return null;
-
+            rowSet.moveToInsertRow();
+            rowSet.updateInt("pID", parcel.getpID());
+            rowSet.updateFloat("width", parcel.getWidth());
+            rowSet.updateFloat("length", parcel.getLength());
+            rowSet.updateFloat("height", parcel.getHeight());
+            rowSet.updateFloat("weight", parcel.getWeight());
+            rowSet.updateInt("dID", parcel.getdID());
+            rowSet.updateString("cID", parcel.getcID());
+            rowSet.updateString("next_cID", parcel.getNextcID());
+            rowSet.insertRow();
+            rowSet.moveToCurrentRow();
+//
+//            rs.moveToInsertRow();
+//            rs.updateInt("pID", parcel.getpID());
+//            rs.updateFloat("width", parcel.getWidth());
+//            rs.updateFloat("length", parcel.getLength());
+//            rs.updateFloat("height", parcel.getHeight());
+//            rs.updateFloat("weight", parcel.getWeight());
+//            rs.updateInt("dID", parcel.getdID());
+//            rs.updateString("cID", parcel.getcID());
+//            rs.updateString("next_cID", parcel.getNextcID());
         } catch (SQLException e) {
             try {
                 rowSet.rollback();
                 parcel = null;
             } catch (SQLException e1) {
                 e1.printStackTrace();
+                return null;
             }
-
             e.printStackTrace();
         }
         return parcel;
@@ -197,6 +182,7 @@ public class ParcelBean {
             parcel.setNextcID(rowSet.getString("next_cID"));
         } catch (SQLException e) {
             e.printStackTrace();
+
         }
         return parcel;
     }

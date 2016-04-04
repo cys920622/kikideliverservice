@@ -49,6 +49,7 @@ public class ClientsBean {
                 cl = null;
             } catch (SQLException e1) {
                 e1.printStackTrace();
+                return null;
             }
 
             e.printStackTrace();

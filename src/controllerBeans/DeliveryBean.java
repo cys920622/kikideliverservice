@@ -39,12 +39,15 @@ public class DeliveryBean {
             rowSet.updateString("status", d.getStatus());
             rowSet.updateInt("sender_ID", d.getSender_ID());
             rowSet.updateInt("receiver_ID", d.getReceiver_ID());
+            rowSet.insertRow();
+            rowSet.moveToCurrentRow();
         } catch (SQLException e) {
             try {
                 rowSet.rollback();
                 d = null;
             } catch (SQLException e1) {
                 e1.printStackTrace();
+                return null;
             }
             e.printStackTrace();
         }

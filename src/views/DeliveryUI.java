@@ -30,6 +30,7 @@ public class DeliveryUI extends JPanel {
     private JButton lastButton = new JButton("Last");
     private JButton nextButton = new JButton("Next");
     private JButton previousButton = new JButton("Previous");
+    private JButton clearButton = new JButton("Clear");
 
     private DeliveryBean bean;
     private int randdID = new Random().nextInt((999999-0) +1);
@@ -60,6 +61,8 @@ public class DeliveryUI extends JPanel {
         if(isUpdateable) {
             panel.add(updateButton);
             updateButton.addActionListener(new ButtonHandler());
+            panel.add(clearButton);
+            clearButton.addActionListener(new ButtonHandler());
             panel.add(deleteButton);
             deleteButton.addActionListener(new ButtonHandler());
             panel.add(deleteButton);
@@ -76,6 +79,8 @@ public class DeliveryUI extends JPanel {
         if (!isUpdateable) {
             panel.add(createButton);
             createButton.addActionListener(new ButtonHandler());
+            panel.add(clearButton);
+            clearButton.addActionListener(new ButtonHandler());
         }
         return panel;
     }
@@ -95,14 +100,64 @@ public class DeliveryUI extends JPanel {
         panel.add(receiver_IDField, "wrap");
         return panel;
     }
+    private Boolean checkFieldData() {
+        try {
+            if (dIDField.getText().length()>6) {
+                JOptionPane.showMessageDialog(null, "The delivery ID can only be max 6 numbers long");
+                return false;
+            }
+            Integer.parseInt(dIDField.getText());
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(null, "The delivery ID can only be a number");
+            return false;
+        }
+
+        try {
+            if (sender_IDField.getText().length() > 6) {
+                JOptionPane.showMessageDialog(null, "The sender ID can only be max 6 numbers long");
+                return false;
+            }
+            Integer.parseInt(sender_IDField.getText());
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(null, "The sender ID can only be a number");
+            return false;
+        }
+
+        try {
+            if ( receiver_IDField.getText().length() > 6) {
+                JOptionPane.showMessageDialog(null, "The receiver ID can only be max 6 numbers long");
+                return false;
+            }
+            Integer.parseInt(receiver_IDField.getText());
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(null, "The receiver ID can only be a number");
+            return false;
+        }
+
+        String type = typeField.getText().toLowerCase();
+        if(type.length()>20) {
+            JOptionPane.showMessageDialog(null, "The delivery type can only max 20 characters long");
+            return false;
+        }
+
+        String status = statusField.getText().toLowerCase();
+        if(status.length()>20) {
+            JOptionPane.showMessageDialog(null, "The delivery status can only max 20 characters long");
+            return false;
+        }
+        return true;
+    }
 
     private Delivery getFieldData() {
         Delivery d = new Delivery();
-        d.setdID(Integer.parseInt(dIDField.getText()));
-        d.setType(typeField.getText());
-        d.setStatus(statusField.getText());
-        d.setSender_ID(Integer.parseInt(sender_IDField.getText()));
-        d.setReceiver_ID(Integer.parseInt(receiver_IDField.getText()));
+        if (checkFieldData()) {
+            d.setdID(Integer.parseInt(dIDField.getText()));
+            d.setType(typeField.getText());
+            d.setStatus(statusField.getText());
+            d.setSender_ID(Integer.parseInt(sender_IDField.getText()));
+            d.setReceiver_ID(Integer.parseInt(receiver_IDField.getText()));
+            return d;
+        }
         return d;
     }
 
@@ -114,12 +169,12 @@ public class DeliveryUI extends JPanel {
         receiver_IDField.setText(String.valueOf(d.getReceiver_ID()));
     }
 
-    private boolean isEmptyFieldData() {
-        return (dIDField.getText().trim().isEmpty()
-                && typeField.getText().trim().isEmpty()
-                && statusField.getText().trim().isEmpty()
-                && sender_IDField.getText().trim().isEmpty()
-                && receiver_IDField.getText().trim().isEmpty());
+    public boolean isEmptyFieldData() {
+        return (dIDField.getText().trim().equals("0")
+                || typeField.getText().trim().isEmpty()
+                || statusField.getText().trim().isEmpty()
+                || sender_IDField.getText().trim().equals("0")
+                || receiver_IDField.getText().trim().equals("0"));
     }
 
     public void setRanddID (int rand) {
@@ -138,16 +193,34 @@ public class DeliveryUI extends JPanel {
         @Override
         public void actionPerformed(ActionEvent e) {
             Delivery d = getFieldData();
+            String type = d.getType().toLowerCase();
+            String status = d.getStatus().toLowerCase();
+            // = typeField.getText().toLowerCase();
+            //String status = statusField.getText().toLowerCase();
             switch (e.getActionCommand()) {
                 case "Save":
                     if (isEmptyFieldData()) {
                         JOptionPane.showMessageDialog(null,
-                                "Cannot create empty record");
+                                "Please fill in missing info");
+                        break;
+                    }
+                    if(!type.equals("standard")&&!type.equals("expedited")&&!type.equals("express")) {
+                        JOptionPane.showMessageDialog(null, "The valid delivery types are: standard, expedited, express");
+                        break;
+                    }
+                    if(!status.equals("in transit")&&!status.equals("delivered")&&!status.equals("just left")) {
+
+                        JOptionPane.showMessageDialog(null, "The valid delivery statuses are: in transit, delivered, just left");
+                        break;
                     }
                     if (bean.create(d) != null) {
                         JOptionPane.showMessageDialog(null,
-                                "New delivery created :"+ String.valueOf(d.getdID()));
+                                "New delivery created :" + String.valueOf(d.getdID()));
                         createButton.setText("Start");
+                        break;
+                    }else {
+                        JOptionPane.showMessageDialog(null,
+                                "Please check if you have entered a unique delivery ID and an existing sender/receiver");
                         break;
                     }
                 case "Start":
@@ -159,10 +232,28 @@ public class DeliveryUI extends JPanel {
                     setFieldData(d);
                     createButton.setText("Save");
                     break;
+
+                case "Clear":
+                    d.setdID(randdID); //TODO: should use a counter here
+                    d.setType(""); //TODO: should use a radio button
+                    d.setStatus("");
+                    d.setSender_ID(sender);
+                    d.setReceiver_ID(receiver);
+                    setFieldData(d);
+                    break;
                 case "Update":
                     if (isEmptyFieldData()) {
                         JOptionPane.showMessageDialog(null,
-                                "Can't update empty record");
+                                "Please fill in missing info");
+                        break;
+                    }
+                    if(!type.equals("standard")&&!type.equals("expedited")&&!type.equals("express")) {
+                        JOptionPane.showMessageDialog(null, "The valid delivery types are: standard, expedited, express");
+                        break;
+                    }
+                    if(!status.equals("in transit")&&!type.equals("delivered")&&!type.equals("just left")) {
+                        JOptionPane.showMessageDialog(null, "The valid delivery statuses are: in transit, delivered, just left");
+                        break;
                     }
                     if (bean.update(d) != null) {
                         JOptionPane.showMessageDialog(null,
@@ -173,7 +264,16 @@ public class DeliveryUI extends JPanel {
                 case "Delete":
                     if (isEmptyFieldData()) {
                         JOptionPane.showMessageDialog(null,
-                                "Can't delete empty record");
+                                "Please fill in missing info");
+                        break;
+                    }
+                    if(!type.equals("standard")&&!type.equals("expedited")&&!type.equals("express")) {
+                        JOptionPane.showMessageDialog(null, "The valid delivery types are: standard, expedited, express");
+                        break;
+                    }
+                    if(!status.equals("in transit")&&!type.equals("delivered")&&!type.equals("just left")) {
+                        JOptionPane.showMessageDialog(null, "The valid delivery statuses are: in transit, delivered, just left");
+                        break;
                     }
                     d = bean.getCurrent();
                     bean.delete();

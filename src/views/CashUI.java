@@ -32,10 +32,13 @@ public class CashUI extends JPanel{
     private JButton lastButton = new JButton("Last");
     private JButton nextButton = new JButton("Next");
     private JButton previousButton = new JButton("Previous");
+    private JButton clearButton = new JButton("Clear");
 
     private CashBean bean = new CashBean();
+    private final int payID = new Random().nextInt(999);
 
     private Boolean isClerkView = false;
+
 
     private int dID = 0;
 
@@ -47,7 +50,7 @@ public class CashUI extends JPanel{
         add(initFields(), BorderLayout.NORTH);
         add(initButtons(), BorderLayout.CENTER);
 
-        amountField.setText(String.valueOf(0.0));
+        amountField.setText(String.valueOf(0));
         payIDField.setText(String.valueOf(0));
         dIDField.setText(String.valueOf(0));
 
@@ -61,6 +64,8 @@ public class CashUI extends JPanel{
         if (!isClerkView) {
             panel.add(createButton);
             createButton.addActionListener(new ButtonHandler());
+            panel.add(clearButton);
+            clearButton.addActionListener(new ButtonHandler());
             panel.add(updateButton);
             updateButton.addActionListener(new ButtonHandler());
             panel.add(deleteButton);
@@ -78,6 +83,8 @@ public class CashUI extends JPanel{
         if (isClerkView){
             panel.add(createButton);
             createButton.addActionListener(new ButtonHandler());
+            panel.add(clearButton);
+            clearButton.addActionListener(new ButtonHandler());
         }
         return panel;
     }
@@ -98,40 +105,48 @@ public class CashUI extends JPanel{
 
     private Boolean checkFieldData() {
         try {
-            Integer.parseInt(payIDField.getText());
             if (payIDField.getText().length()>3) {
                 JOptionPane.showMessageDialog(null, "The pay ID can only be max 3 numbers long");
                 return false;
             }
+            Integer.parseInt(payIDField.getText());
         } catch (NumberFormatException e) {
             JOptionPane.showMessageDialog(null, "The delivery ID can only be a number");
             return false;
         }
 
         try {
-            Integer.parseInt(amountField.getText());
-            if (amountField.getText().length()>6) {
-                JOptionPane.showMessageDialog(null, "The delivery ID can only be max 6 numbers long");
-                return false;
-            }
+            Float.parseFloat(amountField.getText());
         } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(null, "The delivery ID can only be a number");
+            JOptionPane.showMessageDialog(null, "The amount needs to be a decimal number");
             return false;
         }
 
+        try {
+            Integer.parseInt(dIDField.getText());
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(null, "The delivery ID needs to be a number");
+            return false;
+        }
 
-
+        if (onDateField.getText().length()>10) {
+            JOptionPane.showMessageDialog(null, "The Date has to be exactly 10 characters long");
+            return false;
+        }
 
         return true;
     }
 
     private Cash getFieldData() {
-        Cash c = new Cash();
-        c.setPayID(Integer.parseInt(payIDField.getText()));
-        c.setAmount(Float.parseFloat(amountField.getText()));
-        c.setOnDate(onDateField.getText());
-        c.setdID(Integer.parseInt(dIDField.getText()));
-        return c;
+        if (checkFieldData()) {
+            Cash c = new Cash();
+            c.setPayID(Integer.parseInt(payIDField.getText()));
+            c.setAmount(Float.parseFloat(amountField.getText()));
+            c.setOnDate(onDateField.getText());
+            c.setdID(Integer.parseInt(dIDField.getText()));
+            return c;
+        }
+        return null;
     }
 
     private void setFieldData(Cash c) {
@@ -142,10 +157,10 @@ public class CashUI extends JPanel{
     }
 
     private boolean isEmptyFieldData() {
-        return (payIDField.getText().trim().isEmpty()
-                && amountField.getText().trim().isEmpty()
-                && onDateField.getText().trim().isEmpty()
-                && dIDField.getText().trim().isEmpty());
+        return (payIDField.getText().trim().equals("0")
+                || amountField.getText().trim().equals("0.0")
+                || onDateField.getText().trim().isEmpty()
+                || dIDField.getText().trim().equals("0"));
     }
 
     public void setdID(int dID) {
@@ -162,8 +177,19 @@ public class CashUI extends JPanel{
                 case "Submit":
                     if (isEmptyFieldData()) {
                         JOptionPane.showMessageDialog(null,
-                                "Cannot create empty record");
+                                "Please fill in remaining fields");
+                        break;
                     }
+                    if (c.getOnDate().length()<10) {
+                        JOptionPane.showMessageDialog(null, "The Date has to be exactly 10 characters long");
+                        break;
+                    }
+                    if (!c.getOnDate().trim().substring(2, 3).equals("/") ||
+                            !c.getOnDate().trim().substring(5, 6).equals("/")){
+                        JOptionPane.showMessageDialog(null, "Please write the transaction date in the format: dd/mm/yyyy");
+                        break;
+                    }
+
                     if (bean.create(c) != null) {
                         JOptionPane.showMessageDialog(null,
                                 "Cash transaction " + String.valueOf(c.getPayID()) +
@@ -172,8 +198,13 @@ public class CashUI extends JPanel{
                         createButton.setText("Start");
                         break;
                     }
+                    else {
+                        JOptionPane.showMessageDialog(null,
+                                "Please check if you have entered a unique Pay ID and an existing delivery ID");
+                        break;
+                    }
                 case "Start":
-                    c.setPayID(new Random().nextInt(999));
+                    c.setPayID(payID);
                     c.setOnDate("");
                     c.setAmount(0);
                     c.setdID(dID);
@@ -181,10 +212,28 @@ public class CashUI extends JPanel{
                     createButton.setText("Submit");
                     break;
 
+                case "Clear":
+                    c.setPayID(payID);
+                    c.setOnDate("");
+                    c.setAmount(0);
+                    c.setdID(dID);
+                    setFieldData(c);
+                    break;
+
                 case "Update":
                     if (isEmptyFieldData()) {
                         JOptionPane.showMessageDialog(null,
-                                "Can't update empty record");
+                                "Please fill in missing info");
+                        break;
+                    }
+                    if (c.getOnDate().length()<10) {
+                        JOptionPane.showMessageDialog(null, "The Date has to be exactly 10 characters long");
+                        break;
+                    }
+                    if (!c.getOnDate().trim().substring(2, 3).equals("/") ||
+                            !c.getOnDate().trim().substring(5, 6).equals("/")){
+                        JOptionPane.showMessageDialog(null, "Please write the transaction date in the format: dd/mm/yyyy");
+                        break;
                     }
                     if (bean.update(c) != null) {
                         JOptionPane.showMessageDialog(null,
@@ -196,7 +245,17 @@ public class CashUI extends JPanel{
                 case "Delete":
                     if (isEmptyFieldData()) {
                         JOptionPane.showMessageDialog(null,
-                                "Can't delete empty record");
+                                "Please fill in missing info");
+                        break;
+                    }
+                    if (c.getOnDate().length()<10) {
+                        JOptionPane.showMessageDialog(null, "The Date has to be exactly 10 characters long");
+                        break;
+                    }
+                    if (!c.getOnDate().trim().substring(2, 3).equals("/") ||
+                            !c.getOnDate().trim().substring(5, 6).equals("/")){
+                        JOptionPane.showMessageDialog(null, "Please write the transaction date in the format: dd/mm/yyyy");
+                        break;
                     }
                     c = bean.getCurrent();
                     bean.delete();
@@ -219,7 +278,7 @@ public class CashUI extends JPanel{
                     break;
                 default:
                     JOptionPane.showMessageDialog(null,
-                            "Invaild command");
+                            "Invalid command");
             }
         }
     }
