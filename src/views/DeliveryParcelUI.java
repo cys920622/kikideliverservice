@@ -185,7 +185,6 @@ public class DeliveryParcelUI extends JPanel{
         @Override
         public void actionPerformed(ActionEvent e) {
             JFrame frame = new JFrame();
-
             frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
             frame.setSize(900, 400);
             DeliveryParcel dp = getFieldData();
@@ -221,6 +220,7 @@ public class DeliveryParcelUI extends JPanel{
                 case "Filter deliveries by delivery ID:":
                     if (filterdIDField.getText().trim().equals("0")){
                         JOptionPane.showMessageDialog(null, "Please enter a valid delivery ID");
+                        break;
                     }
                     frame.add(initTable("SELECT * " +
                             "FROM delivery " +
@@ -298,7 +298,7 @@ public class DeliveryParcelUI extends JPanel{
                         JOptionPane.showMessageDialog(null,
                                 bean.Calculate("SELECT count(*) " +
                                         "FROM parcel "+
-                                        "WHERE parcel.dID='"+dp.getTotalpID()+"'"));
+                                        "WHERE parcel.pID='"+dp.getTotalpID()+"'"));
                     break;
                 case "Calculate total deliveries with type:":
                     String totaltype = totaltypeField.getText().toLowerCase();
