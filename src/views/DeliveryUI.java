@@ -20,8 +20,8 @@ public class DeliveryUI extends JPanel {
     private JTextField dIDField = new JTextField(6);
     private JTextField typeField = new JTextField(20);
     private JTextField statusField = new JTextField(20);
-    private JTextField sender_IDField = new JTextField(6);
-    private JTextField receiver_IDField = new JTextField(6);
+    private JTextField sender_IDField = new JTextField(11);
+    private JTextField receiver_IDField = new JTextField(11);
 
     private JButton createButton = new JButton("Start");
     private JButton updateButton = new JButton("Update");
@@ -113,7 +113,7 @@ public class DeliveryUI extends JPanel {
         }
 
         try {
-            if (sender_IDField.getText().length() > 6) {
+            if (sender_IDField.getText().length() > 11) {
                 JOptionPane.showMessageDialog(null, "The sender ID can only be max 6 numbers long");
                 return false;
             }
@@ -150,14 +150,14 @@ public class DeliveryUI extends JPanel {
 
     private Delivery getFieldData() {
         Delivery d = new Delivery();
-        if (checkFieldData()) {
+//        if (checkFieldData()) {
             d.setdID(Integer.parseInt(dIDField.getText()));
             d.setType(typeField.getText());
             d.setStatus(statusField.getText());
             d.setSender_ID(Integer.parseInt(sender_IDField.getText()));
             d.setReceiver_ID(Integer.parseInt(receiver_IDField.getText()));
-            return d;
-        }
+//            return d;
+//        }
         return d;
     }
 
@@ -193,8 +193,8 @@ public class DeliveryUI extends JPanel {
         @Override
         public void actionPerformed(ActionEvent e) {
             Delivery d = getFieldData();
-            String type = d.getType().toLowerCase();
-            String status = d.getStatus().toLowerCase();
+            //String type = d.getType().toLowerCase();
+            //String status = d.getStatus().toLowerCase();
             // = typeField.getText().toLowerCase();
             //String status = statusField.getText().toLowerCase();
             switch (e.getActionCommand()) {
@@ -204,11 +204,11 @@ public class DeliveryUI extends JPanel {
                                 "Please fill in missing info");
                         break;
                     }
-                    if(!type.equals("standard")&&!type.equals("expedited")&&!type.equals("express")) {
+                    if(!d.getType().equals("standard")&&!d.getType().equals("expedited")&&!d.getType().equals("express")) {
                         JOptionPane.showMessageDialog(null, "The valid delivery types are: standard, expedited, express");
                         break;
                     }
-                    if(!status.equals("in transit")&&!status.equals("delivered")&&!status.equals("just left")) {
+                    if(!d.getStatus().equals("in transit")&&!d.getStatus().equals("delivered")&&!d.getStatus().equals("just left")) {
 
                         JOptionPane.showMessageDialog(null, "The valid delivery statuses are: in transit, delivered, just left");
                         break;
@@ -247,11 +247,11 @@ public class DeliveryUI extends JPanel {
                                 "Please fill in missing info");
                         break;
                     }
-                    if(!type.equals("standard")&&!type.equals("expedited")&&!type.equals("express")) {
+                    if(!d.getType().equals("standard")&&!d.getType().equals("expedited")&&!d.getType().equals("express")) {
                         JOptionPane.showMessageDialog(null, "The valid delivery types are: standard, expedited, express");
                         break;
                     }
-                    if(!status.equals("in transit")&&!type.equals("delivered")&&!type.equals("just left")) {
+                    if(!d.getStatus().equals("in transit")&&!d.getStatus().equals("delivered")&&!d.getStatus().equals("just left")) {
                         JOptionPane.showMessageDialog(null, "The valid delivery statuses are: in transit, delivered, just left");
                         break;
                     }
@@ -267,15 +267,15 @@ public class DeliveryUI extends JPanel {
                                 "Please fill in missing info");
                         break;
                     }
-                    if(!type.equals("standard")&&!type.equals("expedited")&&!type.equals("express")) {
+                    if(!d.getType().equals("standard")&&!d.getType().equals("expedited")&&!d.getType().equals("express")) {
                         JOptionPane.showMessageDialog(null, "The valid delivery types are: standard, expedited, express");
                         break;
                     }
-                    if(!status.equals("in transit")&&!type.equals("delivered")&&!type.equals("just left")) {
+                    if(!d.getStatus().equals("in transit")&&!d.getStatus().equals("delivered")&&!d.getStatus().equals("just left")) {
                         JOptionPane.showMessageDialog(null, "The valid delivery statuses are: in transit, delivered, just left");
                         break;
                     }
-                    d = bean.getCurrent();
+                    //d = bean.getCurrent();
                     bean.delete();
                     JOptionPane.showMessageDialog(null,
                             "Delivery " + String.valueOf(d.getdID())

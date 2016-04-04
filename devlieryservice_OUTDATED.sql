@@ -1,4 +1,4 @@
-USE `Kiki's_DeliveryService` ;
+USE `kiki's` ;
 set foreign_key_checks=0;
 
 drop table if exists address;
@@ -171,8 +171,8 @@ insert into cash
 	values ('53.45' , '902' , '2016-09-15' , '394857');
 
 insert into credit_card
-	values ('123' , '15.39' , '2000-02-28' , '4520 3450 2234 1988' , 
-		'456' , 'Stella Fang' , '09/18' , 'Visa' , '123456');
+    values ('123' , '15.39' , '2000-02-28' , '4520 3450 2234 1988' ,
+    '456' , 'Stella Fang' , '09/18' , 'Visa' , '123456');
 
 insert into credit_card
 	values ('234' , '45.22' , '1993-01-01' , '5198 2352 3451 9870' , 

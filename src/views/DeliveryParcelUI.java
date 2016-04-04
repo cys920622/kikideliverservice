@@ -190,31 +190,47 @@ public class DeliveryParcelUI extends JPanel{
             DeliveryParcel dp = getFieldData();
             switch (e.getActionCommand()) {
                 case "max":
-                    frame.add(initTable("SELECT MAX(weight) " +
-                                    "FROM parcel " +
-                                    "LEFT JOIN center " +
-                                    "ON parcel.cID = center.cID " +
-                                    "WHERE parcel.weight IN (" +
-                                    "SELECT AVG(weight)" +
-                                    "FROM parcel " +
-                                    "LEFT JOIN center " +
-                                    "ON parcel.cID=center.cID " +
-                                    "GROUP BY center.cID)",
-                            "The maximum of average weight of parcels from every center"));
-                    frame.setVisible(true);
-                    break;
-                case "min":
-                    frame.add(initTable("SELECT MIN(weight) " +
-                                    "FROM parcel " +
-                                    "LEFT JOIN center " +
-                                    "ON parcel.cID = center.cID " +
-                                    "WHERE parcel.weight IN (" +
-                                    "SELECT AVG(weight)" +
+                    frame.add(initTable("SELECT MAX(avgweight) " +
+                                    "FROM (" +
+                                    "SELECT AVG(weight) as avgweight " +
                                     "FROM parcel "+
                                     "LEFT JOIN center " +
                                     "ON parcel.cID=center.cID " +
-                                    "GROUP BY center.cID)",
+                                    "GROUP BY center.cID) as avgtable",
+                            "The maximum of average weight of parcels from every center"));
+//                    frame.add(initTable("SELECT MAX(weight) " +
+//                                    "FROM parcel " +
+//                                    "LEFT JOIN center " +
+//                                    "ON parcel.cID = center.cID " +
+//                                    "WHERE parcel.weight IN (" +
+//                                    "SELECT AVG(weight) " +
+//                                    "FROM parcel " +
+//                                    "LEFT JOIN center " +
+//                                    "ON parcel.cID=center.cID " +
+//                                    "GROUP BY center.cID)",
+//                            "The maximum of average weight of parcels from every center"));
+                    frame.setVisible(true);
+                    break;
+                case "min":
+                    frame.add(initTable("SELECT MIN(avgweight) " +
+                                    "FROM (" +
+                                    "SELECT AVG(weight) as avgweight " +
+                                    "FROM parcel "+
+                                    "LEFT JOIN center " +
+                                    "ON parcel.cID=center.cID " +
+                                    "GROUP BY center.cID) as avgtable",
                             "The minimum of average weight of parcels from every center"));
+//                    frame.add(initTable("SELECT MIN(weight) " +
+//                                    "FROM parcel " +
+//                                    "LEFT JOIN center " +
+//                                    "ON parcel.cID = center.cID " +
+//                                    "WHERE parcel.weight IN (" +
+//                                    "SELECT AVG(weight) " +
+//                                    "FROM parcel "+
+//                                    "LEFT JOIN center " +
+//                                    "ON parcel.cID=center.cID " +
+//                                    "GROUP BY center.cID)",
+//                            "The minimum of average weight of parcels from every center"));
                     frame.setVisible(true);
                     break;
                 case "Filter deliveries by delivery ID:":

@@ -1,4 +1,4 @@
-USE `Kiki's_DeliveryService` ;
+USE `kiki's` ;
 set foreign_key_checks=0;
 
 drop table if exists address;
