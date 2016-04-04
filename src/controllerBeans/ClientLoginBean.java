@@ -21,10 +21,12 @@ import java.util.ArrayList;
  */
 public class ClientLoginBean {
     static final String JDBC_DRIVER = "com.mysql.jdbc.Driver";
-//    static final String DB_URL = "jdbc:mysql://localhost:3306/Kiki's_DeliveryService";
-    static final String DB_URL = "jdbc:mysql://127.0.0.1:3306/kiki's";
+//    static final String DB_URL = "jdbc:mysql://127.0.0.1:3306/kiki's";
+//    static final String USER = "root";
+//    static final String PASS = "password";
+    static final String DB_URL = "jdbc:mysql://localhost/Kiki's_DeliveryService?&useSSL=false";
     static final String USER = "root";
-    static final String PASS = "password";
+    static final String PASS = "Iloveme711";
     private JdbcRowSet rowSet = null;
 
     private Connection conn;
@@ -70,7 +72,7 @@ public class ClientLoginBean {
     public JTable getQueryAsJTable(int id, String sql) {
         DefaultTableModel model = new DefaultTableModel(new String[]{"Delivery ID", "Delivery type",
                 "Status", "Sender", "Return address", "Receiver", "Destination address", "Parcel ID", "Parcel weight",
-                "Parcel dimensions"}, 0);
+                "Parcel dimensions", "Last distribution center location"}, 0);
         int countObjects = 0;
         try {
             ResultSet rs = stmt.executeQuery(sql);
@@ -81,15 +83,16 @@ public class ClientLoginBean {
                         rs.getString("D.type"),
                         rs.getString("D.status"),
                         rs.getString("S.fname") + " " + rs.getString("S.lname"),
-                        rs.getString("SA.house_num")+" "+rs.getString("SA.street_name")+ ", "+
-                                rs.getString("SA.city")+ " "+rs.getString("SA.province")+", "+rs.getString("SA.country"),
-                        rs.getString("R.fname")+" "+rs.getString("R.lname"),
-                        rs.getString("RA.house_num")+" "+rs.getString("RA.street_name")+ ", "+
-                                rs.getString("RA.city")+ " "+rs.getString("RA.province")+", "+rs.getString("RA.country"),
+                        rs.getString("SA.house_num") + " " + rs.getString("SA.street_name") + ", " +
+                                rs.getString("SA.city") + " " + rs.getString("SA.province") + ", " + rs.getString("SA.country"),
+                        rs.getString("R.fname") + " " + rs.getString("R.lname"),
+                        rs.getString("RA.house_num") + " " + rs.getString("RA.street_name") + ", " +
+                                rs.getString("RA.city") + " " + rs.getString("RA.province") + ", " + rs.getString("RA.country"),
                         rs.getString("P.pID"),
-                        rs.getString("P.weight")+"kg",
-                        rs.getString("P.length")+ "cm x "+
-                                rs.getString("P.width")+ "cm x "+rs.getString("P.height")+"cm",
+                        rs.getString("P.weight") + "kg",
+                        rs.getString("P.length") + "cm x " +
+                                rs.getString("P.width") + "cm x " + rs.getString("P.height") + "cm",
+                        rs.getString("C.center_addr")
                 });
             }
         } catch (SQLException e) {
@@ -108,46 +111,23 @@ public class ClientLoginBean {
 
     public JTable getClientIDQueryAsJTable(int clID) {
         String sql = "SELECT DISTINCT * " +
-                "FROM delivery D, clients S, address SA, clients R, address RA, parcel P " +
+                "FROM delivery D, clients S, address SA, clients R, address RA, parcel P, center C " +
                 "WHERE D.sender_ID=S.clID AND D.receiver_ID=R.clID AND " +
                 "SA.PC=S.PC AND SA.house_num=S.house_num AND " +
                 "RA.PC=R.PC AND RA.house_num=R.house_num AND " +
+                "P.cID=C.cID AND " +
                 "P.dID=D.dID AND " +
                 "(S.clID = " + clID + " OR R.clID = " + clID+")";
-//        try {
-//            ResultSet rs = stmt.executeQuery(sql);
-//            while (rs.next()) {
-//                model.addRow(new Object[]{
-//                        rs.getString("D.dID"),
-//                        rs.getString("D.type"),
-//                        rs.getString("D.status"),
-//                        rs.getString("S.fname") + " " + rs.getString("S.lname"),
-//                        rs.getString("SA.house_num")+" "+rs.getString("SA.street_name")+ ", "+
-//                                rs.getString("SA.city")+ " "+rs.getString("SA.province")+", "+rs.getString("SA.country"),
-//                        rs.getString("R.fname")+" "+rs.getString("R.lname"),
-//                        rs.getString("RA.house_num")+" "+rs.getString("RA.street_name")+ ", "+
-//                                rs.getString("RA.city")+ " "+rs.getString("RA.province")+", "+rs.getString("RA.country"),
-//                        rs.getString("P.weight")+"kg",
-//                        rs.getString("P.length")+ "cm x "+
-//                                rs.getString("P.width")+ "cm x "+rs.getString("P.height")+"cm",
-//                });
-//            }
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//        }
-//        JTable resultTable = new JTable(model);
-//        resultTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-//        resizeColumnWidth(resultTable);
-//        return resultTable;
         return getQueryAsJTable(clID, sql);
     }
 
     public JTable getDeliveryIDQueryAsJTable(int dID) {
         String sql = "SELECT DISTINCT * " +
-                "FROM delivery D, clients S, address SA, clients R, address RA, parcel P " +
+                "FROM delivery D, clients S, address SA, clients R, address RA, parcel P, center C " +
                 "WHERE D.sender_ID=S.clID AND D.receiver_ID=R.clID AND " +
                 "SA.PC=S.PC AND SA.house_num=S.house_num AND " +
                 "RA.PC=R.PC AND RA.house_num=R.house_num AND " +
+                "P.cID=C.cID AND " +
                 "P.dID=D.dID AND " +
                 "D.dID = " + dID;
         return getQueryAsJTable(dID, sql);
@@ -173,9 +153,9 @@ public class ClientLoginBean {
         try {
             ResultSet rs = stmt.executeQuery(sql);
             rs.next();
-            System.out.println("dID: " + rs.getInt("D.dID") + ", status: " + rs.getString("D.status")
-                    + ", sender: "+rs.getString("S.fname")+" "+rs.getString("S.lname")+ " at: "+rs.getString("SA.city")
-                    + ", receiver: "+rs.getString("R.fname")+" "+rs.getString("R.lname")+ " at: "+rs.getString("RA.city"));
+//            System.out.println("dID: " + rs.getInt("D.dID") + ", status: " + rs.getString("D.status")
+//                    + ", sender: "+rs.getString("S.fname")+" "+rs.getString("S.lname")+ " at: "+rs.getString("SA.city")
+//                    + ", receiver: "+rs.getString("R.fname")+" "+rs.getString("R.lname")+ " at: "+rs.getString("RA.city"));
             panel.setLayout(new MigLayout());
             panel.add(new JLabel("Delivery ID: "), "align label");
             panel.add(new JLabel(rs.getString("D.dID")), "wrap");
@@ -201,7 +181,11 @@ public class ClientLoginBean {
             panel.add(new JLabel("Parcel dimensions: "), "align label");
             panel.add(new JLabel(rs.getString("P.length")+ "cm x "+
                     rs.getString("P.width")+ "cm x "+rs.getString("P.height")+"cm"), "wrap");
-
+            panel.add(new JLabel(" "), "wrap"); // spacer
+            panel.add(new JLabel("Current center: "), "align label");
+            panel.add(new JLabel(rs.getString("C.center_addr")), "wrap");
+            panel.add(new JLabel("Next center: "), "align label");
+            panel.add(new JLabel(rs.getString("NC.center_addr")), "wrap");
         } catch (SQLException e) {
 //            e.printStackTrace();
             panel.setLayout(new MigLayout());
@@ -210,20 +194,20 @@ public class ClientLoginBean {
         return panel;
     }
 
-    public JPanel getDeliveryQueryAsJPanel(int dID) {
-        JPanel panel = new JPanel();
-        panel.setBorder(new TitledBorder(
-                new EtchedBorder(), "Query result"));
-        String sql = "SELECT DISTINCT * " +
-                "FROM delivery D, clients S, address SA, clients R, address RA, parcel P " +
-                "WHERE D.sender_ID=S.clID AND D.receiver_ID=R.clID AND " +
-                "SA.PC=S.PC AND SA.house_num=S.house_num AND " +
-                "RA.PC=R.PC AND RA.house_num=R.house_num AND " +
-                "P.dID=D.dID AND " +
-                "D.dID = " + dID;
-        populateJPanel(panel, sql);
-        return panel;
-    }
+//    public JPanel getDeliveryQueryAsJPanel(int dID) {
+//        JPanel panel = new JPanel();
+//        panel.setBorder(new TitledBorder(
+//                new EtchedBorder(), "Query result"));
+//        String sql = "SELECT DISTINCT * " +
+//                "FROM delivery D, clients S, address SA, clients R, address RA, parcel P " +
+//                "WHERE D.sender_ID=S.clID AND D.receiver_ID=R.clID AND " +
+//                "SA.PC=S.PC AND SA.house_num=S.house_num AND " +
+//                "RA.PC=R.PC AND RA.house_num=R.house_num AND " +
+//                "P.dID=D.dID AND " +
+//                "D.dID = " + dID;
+//        populateJPanel(panel, sql);
+//        return panel;
+//    }
 
     public JPanel getParcelQueryAsJPanel(int pID) {
 //        DefaultTableModel model = new DefaultTableModel(new String[]{"Delivery ID", "Delivery type",
@@ -233,10 +217,12 @@ public class ClientLoginBean {
         panel.setBorder(new TitledBorder(
                 new EtchedBorder(), "Query result for parcel ID: "+pID));
         String sql = "SELECT DISTINCT * " +
-                "FROM delivery D, clients S, address SA, clients R, address RA, parcel P " +
+                "FROM delivery D, clients S, address SA, clients R, address RA, parcel P, center C, center NC " +
                 "WHERE D.sender_ID=S.clID AND D.receiver_ID=R.clID AND " +
                 "SA.PC=S.PC AND SA.house_num=S.house_num AND " +
                 "RA.PC=R.PC AND RA.house_num=R.house_num AND " +
+                "P.cID=C.cID AND " +
+                "P.next_cID=NC.cID AND " +
                 "P.dID=D.dID AND " +
                 "P.pID = " + pID;
         populateJPanel(panel, sql);
